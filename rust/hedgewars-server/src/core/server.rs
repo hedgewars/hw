@@ -471,7 +471,11 @@ impl HwServer {
                         );
                     }
                 } else {
-                    debug_assert!(!client.is_master(), "Lobby client {} has is_master=true", id);
+                    debug_assert!(
+                        !client.is_master(),
+                        "Lobby client {} has is_master=true",
+                        id
+                    );
                     debug_assert!(!client.is_ready(), "Lobby client {} has is_ready=true", id);
                     debug_assert!(
                         !client.is_in_game(),
@@ -502,12 +506,9 @@ impl HwServer {
                     .filter(|(_, c)| c.room_id == Some(room_id))
                     .count();
                 debug_assert_eq!(
-                    room.players_number as usize,
-                    actual_players,
+                    room.players_number as usize, actual_players,
                     "Room {} players_number ({}) != actual players ({})",
-                    room_id,
-                    room.players_number,
-                    actual_players
+                    room_id, room.players_number, actual_players
                 );
                 if let Some(master_id) = room.master_id {
                     debug_assert!(
@@ -1194,7 +1195,9 @@ impl<'a> HwRoomControl<'a> {
         let client_id = self.client_id;
         let is_admin = self.server.clients[client_id].is_admin();
         if let Some(ref mut voting) = self.room_mut().voting {
-            if (vote.is_forced && !is_admin) || (!vote.is_forced && !voting.voters.contains(&client_id)) {
+            if (vote.is_forced && !is_admin)
+                || (!vote.is_forced && !voting.voters.contains(&client_id))
+            {
                 Err(NotEntitled)
             } else if vote.is_forced || voting.votes.iter().all(|(id, _)| client_id != *id) {
                 voting.votes.push((client_id, vote.is_pro));
@@ -1203,9 +1206,7 @@ impl<'a> HwRoomControl<'a> {
                 let contra = i.filter(|(_, v)| !*v).count();
                 let success_quota = voting.voters.len() / 2 + 1;
 
-                if vote.is_forced && !vote.is_pro
-                    || contra > voting.voters.len() - success_quota
-                {
+                if vote.is_forced && !vote.is_pro || contra > voting.voters.len() - success_quota {
                     self.room_mut().voting = None;
                     Ok(Failed)
                 } else if vote.is_forced && vote.is_pro || pro >= success_quota {
@@ -1745,14 +1746,38 @@ mod tests {
             difficulty: 0,
             hedgehogs_number: 4,
             hedgehogs: [
-                HedgehogInfo { name: "h1".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h2".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h3".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h4".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h5".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h6".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h7".to_string(), hat: "NoHat".to_string() },
-                HedgehogInfo { name: "h8".to_string(), hat: "NoHat".to_string() },
+                HedgehogInfo {
+                    name: "h1".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h2".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h3".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h4".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h5".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h6".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h7".to_string(),
+                    hat: "NoHat".to_string(),
+                },
+                HedgehogInfo {
+                    name: "h8".to_string(),
+                    hat: "NoHat".to_string(),
+                },
             ],
         })
     }
@@ -1777,7 +1802,9 @@ mod tests {
 
         // 2. Fixed room: master sets restricted join, fixes room, leaves;
         // flag must be reset so new client can join fixed room without master
-        let (_, room) = server.create_room(0, "fixed_room".to_string(), None).unwrap();
+        let (_, room) = server
+            .create_room(0, "fixed_room".to_string(), None)
+            .unwrap();
         let fixed_room_id = room.id;
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
             ctrl.toggle_flag(super::super::room::RoomFlags::RESTRICTED_JOIN);
@@ -1805,7 +1832,9 @@ mod tests {
         // 3. Voting & mid-game leave with ClientId reuse
         server.add_client(1, make_anteroom_client("p1", false));
         server.add_client(2, make_anteroom_client("p2", false));
-        let (_, room) = server.create_room(1, "game_room".to_string(), None).unwrap();
+        let (_, room) = server
+            .create_room(1, "game_room".to_string(), None)
+            .unwrap();
         let game_room_id = room.id;
         let _ = server.join_room(2, game_room_id, None).unwrap();
 
@@ -1819,7 +1848,11 @@ mod tests {
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
             ctrl.start_game().unwrap();
             ctrl.start_vote(VoteType::Pause).unwrap();
-            ctrl.vote(Vote { is_pro: true, is_forced: false }).unwrap();
+            ctrl.vote(Vote {
+                is_pro: true,
+                is_forced: false,
+            })
+            .unwrap();
         }
         server.assert_invariants();
 
@@ -1839,15 +1872,13 @@ mod tests {
         assert!(!server.client(1).is_master());
         assert_eq!(server.client(1).teams_in_game, 0);
         assert_eq!(server.room(game_room_id).client_teams(1).count(), 0);
-        assert!(
-            !server
-                .room(game_room_id)
-                .voting
-                .as_ref()
-                .unwrap()
-                .voters
-                .contains(&1)
-        );
+        assert!(!server
+            .room(game_room_id)
+            .voting
+            .as_ref()
+            .unwrap()
+            .voters
+            .contains(&1));
     }
 
     #[test]
@@ -1860,7 +1891,9 @@ mod tests {
         unreg.is_registered = false;
         server.add_client(1, unreg);
 
-        let (_, room) = server.create_room(0, "unreg_replay_room".to_string(), None).unwrap();
+        let (_, room) = server
+            .create_room(0, "unreg_replay_room".to_string(), None)
+            .unwrap();
         let room_id = room.id;
         let _ = server.join_room(1, room_id, None).unwrap();
 
@@ -1875,7 +1908,14 @@ mod tests {
         // Start game with an unregistered player -> game_info.all_players_registered is false
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
             ctrl.start_game().unwrap();
-            assert!(!ctrl.room().game_info.as_ref().unwrap().all_players_registered);
+            assert!(
+                !ctrl
+                    .room()
+                    .game_info
+                    .as_ref()
+                    .unwrap()
+                    .all_players_registered
+            );
         }
 
         server.set_record_unregistered_replays(false);
@@ -1890,13 +1930,16 @@ mod tests {
         server.add_client(0, make_anteroom_client("master", false));
         server.add_client(1, make_anteroom_client("player2", false));
 
-        let (_, room) = server.create_room(0, "cfg_replay_room".to_string(), None).unwrap();
+        let (_, room) = server
+            .create_room(0, "cfg_replay_room".to_string(), None)
+            .unwrap();
         let room_id = room.id;
         let _ = server.join_room(1, room_id, None).unwrap();
 
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
             ctrl.set_config(GameCfg::Theme("Snow".to_string())).unwrap();
-            ctrl.set_config(GameCfg::MapType("+rnd+".to_string())).unwrap();
+            ctrl.set_config(GameCfg::MapType("+rnd+".to_string()))
+                .unwrap();
             ctrl.set_config(GameCfg::MapGenerator(0)).unwrap();
             ctrl.add_team(dummy_team("t1", 0)).unwrap();
         }
@@ -1908,8 +1951,10 @@ mod tests {
         if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
             ctrl.start_game().unwrap();
             // Master changes room config mid-game (or new master sends CFG after old master leaves)
-            ctrl.set_config(GameCfg::Theme("EarthRise".to_string())).unwrap();
-            ctrl.set_config(GameCfg::MapType("2Cshoppa".to_string())).unwrap();
+            ctrl.set_config(GameCfg::Theme("EarthRise".to_string()))
+                .unwrap();
+            ctrl.set_config(GameCfg::MapType("2Cshoppa".to_string()))
+                .unwrap();
             ctrl.set_config(GameCfg::MapGenerator(5)).unwrap();
 
             let replay = ctrl.room().game_info.as_ref().unwrap().to_replay();

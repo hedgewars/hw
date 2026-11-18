@@ -2,7 +2,6 @@ use super::{
     actions::{Destination, DestinationGroup},
     Response,
 };
-use log::*;
 use crate::core::{
     anteroom::HwAnteroom,
     flood::{FloodAction, FloodEvent},
@@ -23,13 +22,13 @@ use crate::{
 };
 use hedgewars_network_protocol::{
     messages::{
-        add_flags, remove_flags, server_chat,
-        HwProtocolMessage,
+        add_flags, remove_flags, server_chat, HwProtocolMessage,
         HwServerMessage::{self, *},
         ProtocolFlags as Flags,
     },
     types::{RoomConfig, TeamInfo, VoteType, MAX_HEDGEHOGS_PER_TEAM},
 };
+use log::*;
 use rand::{seq::SliceRandom, thread_rng};
 use std::iter::once;
 
@@ -408,7 +407,10 @@ pub fn remove_client_by_id(
     }
 
     let nick = server.client(client_id).nick.clone();
-    info!("Client '{}' (id: {}) quit the server: {}", nick, client_id, msg);
+    info!(
+        "Client '{}' (id: {}) quit the server: {}",
+        nick, client_id, msg
+    );
     anteroom.forget_nick(&nick);
 
     if let HwRoomOrServer::Room(mut control) = server.get_room_control(client_id) {
@@ -450,7 +452,10 @@ pub fn register_flood_event(
         FloodAction::Warn(msg) => response.warn(msg),
         FloodAction::Bye(msg) => {
             let nick = server.client(client_id).nick.clone();
-            warn!("Client '{}' (id: {}) kicked from server for flood: {}", nick, client_id, msg);
+            warn!(
+                "Client '{}' (id: {}) kicked from server for flood: {}",
+                nick, client_id, msg
+            );
             remove_client_by_id(server, anteroom, client_id, response, msg.to_string())
         }
     }
@@ -462,7 +467,11 @@ pub fn protocol_cmd_name(message: &HwProtocolMessage) -> &str {
         Ping => "PING",
         Pong => "PONG",
         Quit(_) => "QUIT",
-        Global(_) | Watch(_) | ToggleServerRegisteredOnly | SuperPower | Help
+        Global(_)
+        | Watch(_)
+        | ToggleServerRegisteredOnly
+        | SuperPower
+        | Help
         | RestartServerConfirm => "CMD",
         Info(_) => "INFO",
         Nick(_, _) => "NICK",
@@ -734,7 +743,10 @@ pub fn handle_vote(
             VoteEffect::Kicked(kicked_id, leave_result) => {
                 let kicked_nick = room_control.server().client(kicked_id).nick.clone();
                 let room_name = room_control.room().name.clone();
-                info!("Client '{}' was kicked from room '{}' by vote", kicked_nick, room_name);
+                info!(
+                    "Client '{}' was kicked from room '{}' by vote",
+                    kicked_nick, room_name
+                );
                 response.add(Kicked.send(kicked_id));
                 get_room_leave_result_for_client(
                     room_control.server(),

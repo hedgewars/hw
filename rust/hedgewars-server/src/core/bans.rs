@@ -1,5 +1,5 @@
 use super::no_anon::IpNet;
-use chrono::{DateTime, Duration, NaiveDateTime, offset::Utc};
+use chrono::{offset::Utc, DateTime, Duration, NaiveDateTime};
 use log::warn;
 use regex::{Regex, RegexBuilder};
 use std::net::IpAddr;
@@ -307,7 +307,9 @@ impl BanCollection {
         let now = Utc::now();
         self.prune_expired(now);
         self.entries.iter().find_map(|entry| match entry {
-            BanEntry::ByIp { net, reason, .. } if net.as_ref().is_some_and(|n| n.contains(addr)) => {
+            BanEntry::ByIp { net, reason, .. }
+                if net.as_ref().is_some_and(|n| n.contains(addr)) =>
+            {
                 Some(reason.clone())
             }
             _ => None,
@@ -447,7 +449,11 @@ mod tests {
     #[test]
     fn test_nick_ban_regex_matching() {
         let mut bans = BanCollection::new();
-        bans.add_nick_ban("^troll_[0-9]+$".to_string(), "troll pattern".to_string(), 60);
+        bans.add_nick_ban(
+            "^troll_[0-9]+$".to_string(),
+            "troll pattern".to_string(),
+            60,
+        );
         bans.add_nick_ban("bot|spammer".to_string(), "bot pattern".to_string(), 60);
         bans.add_nick_ban("[invalid".to_string(), "broken regex".to_string(), 60);
         bans.add_nick_ban("".to_string(), "empty".to_string(), 60);
@@ -503,7 +509,9 @@ mod tests {
         // Haskell roundtrip compiles IP masks upon load
         let serialized = bans.to_haskell_str();
         let mut reloaded = BanCollection::from_haskell_str(&serialized);
-        assert!(reloaded.find_ip_ban("192.168.5.1".parse().unwrap()).is_some());
+        assert!(reloaded
+            .find_ip_ban("192.168.5.1".parse().unwrap())
+            .is_some());
         assert!(reloaded.find_ip_ban("10.0.0.10".parse().unwrap()).is_none());
     }
 }

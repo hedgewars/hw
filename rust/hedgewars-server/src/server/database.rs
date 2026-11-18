@@ -371,7 +371,10 @@ impl Database {
                         .map(|s| s.parse::<i32>().unwrap_or(0))
                         .collect();
                     let row: Option<mysql_async::Row> = connection
-                        .exec_first(GET_BEST_TIME_QUERY, params! { "location" => &best_location })
+                        .exec_first(
+                            GET_BEST_TIME_QUERY,
+                            params! { "location" => &best_location },
+                        )
                         .await
                         .ok()
                         .flatten();
@@ -435,6 +438,9 @@ mod tests {
     fn test_extract_min_prev_handles_null_and_none() {
         assert_eq!(extract_min_prev(None), i32::MAX);
         assert_eq!(from_value_opt::<Option<i32>>(Value::NULL).unwrap(), None);
-        assert_eq!(from_value_opt::<Option<i32>>(Value::Int(4200)).unwrap(), Some(4200));
+        assert_eq!(
+            from_value_opt::<Option<i32>>(Value::Int(4200)).unwrap(),
+            Some(4200)
+        );
     }
 }

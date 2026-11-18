@@ -62,7 +62,7 @@ impl ProtocolDecoder {
             Err(nom::Err::Incomplete(_)) => {
                 if self.buffer.len() > 128 * 1024 {
                     self.buffer.clear();
-                    
+
                     Some(HwProtocolMessage::Quit(Some(
                         "Protocol violation".to_owned(),
                     )))

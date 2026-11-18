@@ -13,7 +13,7 @@ use tokio::{
     io::{AsyncRead, AsyncWrite, AsyncWriteExt, ReadBuf},
     net::{TcpListener, TcpStream},
     sync::mpsc::{unbounded_channel, UnboundedReceiver, UnboundedSender},
-    time::{Instant, timeout},
+    time::{timeout, Instant},
 };
 #[cfg(feature = "tls-connections")]
 use tokio_native_tls::{TlsAcceptor, TlsStream};

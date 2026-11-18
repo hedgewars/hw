@@ -43,7 +43,8 @@ impl FromStr for Ipv4Net {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let s = s.trim();
         if let Some((ip_part, mask_part)) = s.split_once('/') {
-            let ip = Ipv4Addr::from_str(ip_part.trim()).map_err(|e| format!("Invalid IP: {}", e))?;
+            let ip =
+                Ipv4Addr::from_str(ip_part.trim()).map_err(|e| format!("Invalid IP: {}", e))?;
             let mask_part = mask_part.trim();
             if let Ok(prefix) = mask_part.parse::<u8>() {
                 Ipv4Net::new(ip, prefix).ok_or_else(|| format!("Invalid prefix length: {}", prefix))

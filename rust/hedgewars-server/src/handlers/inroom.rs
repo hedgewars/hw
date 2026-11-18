@@ -1,5 +1,4 @@
 use super::{common::rnd_reply, strings::*, Response};
-use std::net::IpAddr;
 use crate::core::server::{AddTeamError, SetTeamCountError};
 use crate::handlers::actions::ToPendingMessage;
 use crate::{
@@ -8,8 +7,8 @@ use crate::{
         flood::FloodEvent,
         room::{HwRoom, RoomFlags, MAX_TEAMS_IN_ROOM},
         server::{
-            ChangeMasterError, ChangeMasterResult, HwRoomControl, LeaveRoomResult,
-            ModifyTeamError, StartGameError,
+            ChangeMasterError, ChangeMasterResult, HwRoomControl, LeaveRoomResult, ModifyTeamError,
+            StartGameError,
         },
         types::{ClientId, RoomId},
     },
@@ -24,6 +23,7 @@ use hedgewars_network_protocol::{
     types::{self, GameCfg, Vote, VoteType, MAX_HEDGEHOGS_PER_TEAM},
 };
 use log::*;
+use std::net::IpAddr;
 use std::{cmp::min, iter::once};
 
 #[derive(Clone)]
@@ -732,8 +732,11 @@ pub fn handle(
                             ban_nick, ban_host, room_name, master_nick
                         );
                         response.add(
-                            server_chat(format!("Player '{}' was banned from this room.", ban_nick))
-                                .send_self(),
+                            server_chat(format!(
+                                "Player '{}' was banned from this room.",
+                                ban_nick
+                            ))
+                            .send_self(),
                         );
                         kick_target_from_room(&mut room_control, ban_id, response);
                     }
@@ -963,7 +966,10 @@ mod tests {
         anteroom: &mut HwAnteroom,
         client_id: ClientId,
         msg: HwProtocolMessage,
-    ) -> Vec<(Vec<ClientId>, hedgewars_network_protocol::messages::HwServerMessage)> {
+    ) -> Vec<(
+        Vec<ClientId>,
+        hedgewars_network_protocol::messages::HwServerMessage,
+    )> {
         let mut response = Response::new(client_id);
         let HwRoomOrServer::Room(room_control) = server.get_room_control(client_id) else {
             panic!("client {} is not in room", client_id);
@@ -990,7 +996,9 @@ mod tests {
 
         assert!(server.client(1).room_id.is_none());
         assert!(server.room(room_id).bans.contains(&"10.0.0.2".to_string()));
-        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(msgs
+            .iter()
+            .any(|(targets, m)| targets == &vec![1] && *m == Kicked));
         // Master should not be shown the banned user's IP address
         for (_, m) in &msgs {
             if let ChatMsg { msg, .. } = m {
@@ -1021,7 +1029,9 @@ mod tests {
 
         assert!(server.client(1).room_id.is_none());
         assert!(server.room(room_id).bans.contains(&"10.0.0.3".to_string()));
-        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(msgs
+            .iter()
+            .any(|(targets, m)| targets == &vec![1] && *m == Kicked));
         assert!(matches!(
             server.join_room(1, room_id, None),
             Err(JoinRoomError::RoomBanned)
@@ -1042,8 +1052,13 @@ mod tests {
         );
 
         assert!(server.client(1).room_id.is_none());
-        assert!(server.room(room_id).bans.contains(&"2001:db8::1".to_string()));
-        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(server
+            .room(room_id)
+            .bans
+            .contains(&"2001:db8::1".to_string()));
+        assert!(msgs
+            .iter()
+            .any(|(targets, m)| targets == &vec![1] && *m == Kicked));
         assert!(matches!(
             server.join_room(1, room_id, None),
             Err(JoinRoomError::RoomBanned)
@@ -1069,15 +1084,12 @@ mod tests {
             .any(|(_, m)| matches!(m, Warning(s) if s == NOT_MASTER)));
 
         // Ensure there is no BANLIST or ban-review command in rooms
-        let banlist_msgs = dispatch_in_room(
-            &mut server,
-            &mut anteroom,
-            0,
-            HwProtocolMessage::BanList,
-        );
-        assert!(banlist_msgs
-            .iter()
-            .all(|(_, m)| !matches!(m, hedgewars_network_protocol::messages::HwServerMessage::BanList(_))));
+        let banlist_msgs =
+            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::BanList);
+        assert!(banlist_msgs.iter().all(|(_, m)| !matches!(
+            m,
+            hedgewars_network_protocol::messages::HwServerMessage::BanList(_)
+        )));
 
         let cmd_banlist_msgs = dispatch_in_room(
             &mut server,
@@ -1085,9 +1097,10 @@ mod tests {
             0,
             HwProtocolMessage::Malformed(vec!["CMD".to_string(), "BAN_LIST".to_string()]),
         );
-        assert!(cmd_banlist_msgs
-            .iter()
-            .all(|(_, m)| !matches!(m, hedgewars_network_protocol::messages::HwServerMessage::BanList(_))));
+        assert!(cmd_banlist_msgs.iter().all(|(_, m)| !matches!(
+            m,
+            hedgewars_network_protocol::messages::HwServerMessage::BanList(_)
+        )));
     }
 
     #[test]
@@ -1103,7 +1116,9 @@ mod tests {
         );
 
         assert!(server.client(1).room_id.is_none());
-        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(msgs
+            .iter()
+            .any(|(targets, m)| targets == &vec![1] && *m == Kicked));
         assert!(server.room(room_id).bans.contains(&"10.0.0.4".to_string()));
         assert!(matches!(
             server.join_room(1, room_id, None),
@@ -1115,8 +1130,7 @@ mod tests {
     fn test_kick_after_one_second_does_not_autoban() {
         let (mut server, mut anteroom, room_id) = setup_room_with_master();
         add_joined_client(&mut server, 1, "normal", "10.0.0.5", room_id, false);
-        server.client_mut(1).room_joined_at =
-            Instant::now().checked_sub(Duration::from_secs(2));
+        server.client_mut(1).room_joined_at = Instant::now().checked_sub(Duration::from_secs(2));
 
         let msgs = dispatch_in_room(
             &mut server,
@@ -1126,7 +1140,9 @@ mod tests {
         );
 
         assert!(server.client(1).room_id.is_none());
-        assert!(msgs.iter().any(|(targets, m)| targets == &vec![1] && *m == Kicked));
+        assert!(msgs
+            .iter()
+            .any(|(targets, m)| targets == &vec![1] && *m == Kicked));
         assert!(!server.room(room_id).bans.contains(&"10.0.0.5".to_string()));
         assert!(server.join_room(1, room_id, None).is_ok());
     }
@@ -1146,9 +1162,9 @@ mod tests {
 
         assert_eq!(server.client(1).room_id, Some(room_id));
         assert!(server.room(room_id).bans.is_empty());
-        assert!(msgs
-            .iter()
-            .any(|(_, m)| matches!(m, Warning(s) if s == "This player is protected from being kicked.")));
+        assert!(msgs.iter().any(
+            |(_, m)| matches!(m, Warning(s) if s == "This player is protected from being kicked.")
+        ));
     }
 
     #[test]
@@ -1218,7 +1234,12 @@ mod tests {
             1,
             HwProtocolMessage::AddTeam(make_team("T1", 1)),
         );
-        dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::ToggleReady);
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::ToggleReady,
+        );
         dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
 
         // Mid-game spectator joins while game is in progress
@@ -1226,9 +1247,18 @@ mod tests {
         assert!(server.client(2).is_in_game());
 
         // Playing clients finish the round before spectator sends RoundFinished
-        dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::RoundFinished);
-        let end_msgs =
-            dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::RoundFinished);
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoundFinished,
+        );
+        let end_msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::RoundFinished,
+        );
 
         // Round ended, but spectator's engine is still running until spectator sends RoundFinished
         assert!(server.client(2).is_in_game());
@@ -1248,8 +1278,12 @@ mod tests {
         assert!(!blocked_msgs.iter().any(|(_, m)| matches!(m, RunGame)));
 
         // Spectator's engine finishes and sends RoundFinished (after room.game_info became None)
-        let spec_msgs =
-            dispatch_in_room(&mut server, &mut anteroom, 2, HwProtocolMessage::RoundFinished);
+        let spec_msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            2,
+            HwProtocolMessage::RoundFinished,
+        );
         assert!(!server.client(2).is_in_game());
         assert!(spec_msgs.iter().any(|(targets, m)| {
             targets.contains(&0)
@@ -1308,7 +1342,12 @@ mod tests {
             1,
             HwProtocolMessage::AddTeam(make_team("TeamBob", 1)),
         );
-        dispatch_in_room(&mut server, &mut anteroom, 1, HwProtocolMessage::ToggleReady);
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            1,
+            HwProtocolMessage::ToggleReady,
+        );
         dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
 
         // Bob times out mid-game -> TeamBob removed from room and recorded in GameInfo::left_teams
@@ -1319,7 +1358,10 @@ mod tests {
             &mut timeout_resp,
             "Ping timeout".to_string(),
         );
-        assert!(server.room(room_id).find_team(|t| t.name == "TeamBob").is_none());
+        assert!(server
+            .room(room_id)
+            .find_team(|t| t.name == "TeamBob")
+            .is_none());
 
         // Charlie joins mid-game after Bob timed out -> receives original_teams including TeamBob
         let (charlie_cl, charlie_host) = make_client("charlie", "10.0.0.3", false);
@@ -1339,12 +1381,17 @@ mod tests {
         );
         let join_msgs: Vec<_> = join_resp.extract_messages(&server).collect();
         assert!(join_msgs.iter().any(|(targets, m)| {
-            targets == &vec![2] && matches!(m, TeamAdd(t) if t.first().map(String::as_str) == Some("TeamBob"))
+            targets == &vec![2]
+                && matches!(m, TeamAdd(t) if t.first().map(String::as_str) == Some("TeamBob"))
         }));
 
         // Master finishes round -> Charlie (joined mid-game) must receive REMOVE_TEAM TeamBob, not master
-        let end_msgs =
-            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::RoundFinished);
+        let end_msgs = dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::RoundFinished,
+        );
         assert!(end_msgs.iter().any(|(targets, m)| {
             targets == &vec![2] && matches!(m, TeamRemove(name) if name == "TeamBob")
         }));

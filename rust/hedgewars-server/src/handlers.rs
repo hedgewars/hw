@@ -16,8 +16,7 @@ use crate::{
     utils,
 };
 use hedgewars_network_protocol::messages::{
-    global_chat, server_chat, HwProtocolMessage,
-    HwServerMessage, HwServerMessage::*,
+    global_chat, server_chat, HwProtocolMessage, HwServerMessage, HwServerMessage::*,
 };
 
 use crate::core::digest::Sha1Digest;
@@ -302,10 +301,16 @@ pub fn handle(
                         let host = client.host_string();
                         state.server.add_client(client_id, client);
                         if !is_checker {
-                            info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
+                            info!(
+                                "Client '{}' (id: {}, host: {}) joined the server",
+                                nick, client_id, host
+                            );
                             common::get_lobby_join_data(&state.server, response);
                         } else {
-                            info!("Checker '{}' (id: {}, proto: {}) joined the server", nick, client_id, proto);
+                            info!(
+                                "Checker '{}' (id: {}, proto: {}) joined the server",
+                                nick, client_id, proto
+                            );
                         }
                     }
                     LoginResult::Exit => {
@@ -504,7 +509,10 @@ pub fn handle_ping_sent(state: &mut ServerState, client_id: ClientId) {
 pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response: &mut Response) {
     if let Some(c) = state.anteroom.remove_client(client_id) {
         let nick_str = c.nick.as_deref().unwrap_or("<unnamed>");
-        info!("Client '{}' (id: {}) disconnected from anteroom", nick_str, client_id);
+        info!(
+            "Client '{}' (id: {}) disconnected from anteroom",
+            nick_str, client_id
+        );
     } else {
         common::remove_client(
             &mut state.server,
@@ -556,14 +564,28 @@ pub fn handle_io_result(
                 .no_anon
                 .matches_opt(state.anteroom.get_client(client_id).ip_addr);
             if !is_registered && is_no_anon {
-                let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
+                let nick = state
+                    .anteroom
+                    .get_client(client_id)
+                    .nick
+                    .clone()
+                    .unwrap_or_default();
                 warn!("Client '{}' (id: {}) failed to join server: registered account required from this IP", nick, client_id);
                 state.anteroom.remove_client(client_id);
-                response.error("Registered account is required when logging in from this IP address");
+                response
+                    .error("Registered account is required when logging in from this IP address");
                 response.remove_client(client_id);
             } else if !is_registered && state.server.is_registered_only() {
-                let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
-                warn!("Client '{}' (id: {}) failed to join server: registration required", nick, client_id);
+                let nick = state
+                    .anteroom
+                    .get_client(client_id)
+                    .nick
+                    .clone()
+                    .unwrap_or_default();
+                warn!(
+                    "Client '{}' (id: {}) failed to join server: registration required",
+                    nick, client_id
+                );
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
                 response.remove_client(client_id);
@@ -580,7 +602,10 @@ pub fn handle_io_result(
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
                 let nick = client.nick.clone().unwrap_or_default();
                 let host = client.host_string();
-                info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
+                info!(
+                    "Client '{}' (id: {}, host: {}) joined the server",
+                    nick, client_id, host
+                );
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
             }
@@ -589,8 +614,16 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
-            let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
-            warn!("Client '{}' (id: {}) failed to join server: authentication failed", nick, client_id);
+            let nick = state
+                .anteroom
+                .get_client(client_id)
+                .nick
+                .clone()
+                .unwrap_or_default();
+            warn!(
+                "Client '{}' (id: {}) failed to join server: authentication failed",
+                nick, client_id
+            );
             state.anteroom.remove_client(client_id);
             response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
             response.remove_client(client_id);
@@ -609,7 +642,10 @@ pub fn handle_io_result(
                 client.is_contributor = info.is_contributor;
                 let nick = client.nick.clone().unwrap_or_default();
                 let host = client.host_string();
-                info!("Client '{}' (id: {}, host: {}) joined the server", nick, client_id, host);
+                info!(
+                    "Client '{}' (id: {}, host: {}) joined the server",
+                    nick, client_id, host
+                );
                 state.server.add_client(client_id, client);
                 common::get_lobby_join_data(&state.server, response);
                 if proto < 48 && info.is_admin {
@@ -624,20 +660,34 @@ pub fn handle_io_result(
             if !state.anteroom.has_client(client_id) {
                 return;
             }
-            let nick = state.anteroom.get_client(client_id).nick.clone().unwrap_or_default();
+            let nick = state
+                .anteroom
+                .get_client(client_id)
+                .nick
+                .clone()
+                .unwrap_or_default();
             if !is_registered {
-                warn!("Checker '{}' (id: {}) failed to join server: authentication failed", nick, client_id);
+                warn!(
+                    "Checker '{}' (id: {}) failed to join server: authentication failed",
+                    nick, client_id
+                );
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(AUTHENTICATION_FAILED.to_string()).send_self());
                 response.remove_client(client_id);
             } else if !is_admin {
-                warn!("Checker '{}' (id: {}) failed to join server: no checker rights", nick, client_id);
+                warn!(
+                    "Checker '{}' (id: {}) failed to join server: no checker rights",
+                    nick, client_id
+                );
                 state.anteroom.remove_client(client_id);
                 response.add(Bye(NO_CHECKER_RIGHTS.to_string()).send_self());
                 response.remove_client(client_id);
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
                 let proto = client.protocol_number.map_or(0, |p| p.get());
-                info!("Checker '{}' (id: {}, proto: {}) joined the server", nick, client_id, proto);
+                info!(
+                    "Checker '{}' (id: {}, proto: {}) joined the server",
+                    nick, client_id, proto
+                );
                 state.server.add_client(client_id, client);
                 response.add(LogonPassed.send_self());
             }
@@ -714,17 +764,26 @@ mod test {
         let mut state = ServerState::new(16, 16);
         let v6_ip: IpAddr = "2001:db8::42".parse().unwrap();
         let mut resp = Response::new(1);
-        assert!(handle_client_accept(&mut state, 1, &mut resp, v6_ip, v6_ip.is_loopback()));
+        assert!(handle_client_accept(
+            &mut state,
+            1,
+            &mut resp,
+            v6_ip,
+            v6_ip.is_loopback()
+        ));
         assert_eq!(state.anteroom.get_client(1).host_string(), "2001:db8::42");
         assert!(!state.anteroom.get_client(1).is_local_admin);
 
         // IPv6 subnet ban rejects subsequent connect from matching subnet
-        state
-            .anteroom
-            .bans
-            .add_ip_ban("2001:db8::/32".to_string(), "v6 subnet ban".to_string(), 60);
+        state.anteroom.bans.add_ip_ban(
+            "2001:db8::/32".to_string(),
+            "v6 subnet ban".to_string(),
+            60,
+        );
         let v6_ip2: IpAddr = "2001:db8::99".parse().unwrap();
         let mut resp2 = Response::new(2);
-        assert!(!handle_client_accept(&mut state, 2, &mut resp2, v6_ip2, false));
+        assert!(!handle_client_accept(
+            &mut state, 2, &mut resp2, v6_ip2, false
+        ));
     }
 }

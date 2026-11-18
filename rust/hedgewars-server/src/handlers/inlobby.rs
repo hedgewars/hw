@@ -1,11 +1,11 @@
 use super::{common::rnd_reply, strings::*};
-use crate::handlers::actions::ToPendingMessage;
 use crate::core::{
     anteroom::HwAnteroom,
     flood::FloodEvent,
     server::{CreateRoomError, HwServer},
     types::ClientId,
 };
+use crate::handlers::actions::ToPendingMessage;
 use hedgewars_network_protocol::{
     messages::{
         add_flags, HwProtocolMessage,
@@ -35,15 +35,24 @@ pub fn handle(
             let all_protocols = server.all_client_protocols();
             match server.create_room(client_id, name.clone(), password) {
                 Err(CreateRoomError::InvalidName) => {
-                    warn!("Client {} failed to create room: invalid name '{}'", client_id, name);
+                    warn!(
+                        "Client {} failed to create room: invalid name '{}'",
+                        client_id, name
+                    );
                     response.warn(ILLEGAL_ROOM_NAME);
                 }
                 Err(CreateRoomError::AlreadyExists) => {
-                    warn!("Client {} failed to create room: room '{}' already exists", client_id, name);
+                    warn!(
+                        "Client {} failed to create room: room '{}' already exists",
+                        client_id, name
+                    );
                     response.warn(ROOM_EXISTS);
                 }
                 Ok((client, room)) => {
-                    info!("Room '{}' created by '{}' (id: {})", room.name, client.nick, client_id);
+                    info!(
+                        "Room '{}' created by '{}' (id: {})",
+                        room.name, client.nick, client_id
+                    );
                     info!("Client '{}' joined room '{}'", client.nick, room.name);
                     response.add(RoomJoined(vec![client.nick.clone()]).send_self());
                     response.add(
@@ -77,15 +86,7 @@ pub fn handle(
         Chat(msg) => {
             let nick = server.client(client_id).nick.clone();
             info!("Lobby chat <{}>: {}", nick, msg);
-            response.add(
-                ChatMsg {
-                    nick,
-                    msg,
-                }
-                .send_all()
-                .in_lobby()
-                .but_self(),
-            );
+            response.add(ChatMsg { nick, msg }.send_all().in_lobby().but_self());
             super::common::register_flood_event(
                 server,
                 anteroom,
@@ -99,7 +100,10 @@ pub fn handle(
             let client_nick = server.client(client_id).nick.clone();
             let joined = match server.join_room_by_name(client_id, &name, password.as_deref()) {
                 Err(error) => {
-                    warn!("Client '{}' failed to join room '{}': {:?}", client_nick, name, error);
+                    warn!(
+                        "Client '{}' failed to join room '{}': {:?}",
+                        client_nick, name, error
+                    );
                     super::common::get_room_join_error(error, response);
                     false
                 }
@@ -135,12 +139,18 @@ pub fn handle(
                     let client_nick = server.client(client_id).nick.clone();
                     let joined = match server.join_room(client_id, room_id, None) {
                         Err(error) => {
-                            warn!("Client '{}' failed to follow into room '{}': {:?}", client_nick, room_name, error);
+                            warn!(
+                                "Client '{}' failed to follow into room '{}': {:?}",
+                                client_nick, room_name, error
+                            );
                             super::common::get_room_join_error(error, response);
                             false
                         }
                         Ok((client, master, room, room_clients)) => {
-                            info!("Client '{}' joined room '{}' (following '{}')", client.nick, room.name, nick);
+                            info!(
+                                "Client '{}' joined room '{}' (following '{}')",
+                                client.nick, room.name, nick
+                            );
                             super::common::get_room_join_data(
                                 &mut protocols.into_iter(),
                                 client,
@@ -239,7 +249,10 @@ pub fn handle(
                 if let Some(target) = server.find_client(&nick) {
                     let target_id = target.id;
                     if target_id != client_id {
-                        info!("Admin '{}' kicked client '{}' (id: {}) from server", admin_nick, nick, target_id);
+                        info!(
+                            "Admin '{}' kicked client '{}' (id: {}) from server",
+                            admin_nick, nick, target_id
+                        );
                         let host = target.host.clone();
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
@@ -272,7 +285,10 @@ pub fn handle(
                             "Admin '{}' banned player '{}' (ip: {}, duration: {}s): {}",
                             admin_nick, nick, host, time, reason
                         );
-                        info!("Admin '{}' kicked client '{}' (id: {}) from server (banned)", admin_nick, nick, target_id);
+                        info!(
+                            "Admin '{}' kicked client '{}' (id: {}) from server (banned)",
+                            admin_nick, nick, target_id
+                        );
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
                                 host.clone(),
@@ -325,7 +341,8 @@ pub fn handle(
         }
         HwProtocolMessage::BanList => {
             if server.is_admin(client_id) {
-                response.add(HwServerMessage::BanList(anteroom.bans.to_protocol_list()).send_self());
+                response
+                    .add(HwServerMessage::BanList(anteroom.bans.to_protocol_list()).send_self());
             }
         }
         Unban(entry) => {
@@ -335,8 +352,19 @@ pub fn handle(
                 anteroom.bans.unban(&entry);
             }
         }
-        Delegate(_) | RoomBan(_) | SaveRoom(_) | LoadRoom(_) | Save(_, _) | Delete(_) | Fix
-        | Unfix | Greeting(_) | CallVote(_) | Vote(_) | ForceVote(_) | MaxTeams(_) => {
+        Delegate(_)
+        | RoomBan(_)
+        | SaveRoom(_)
+        | LoadRoom(_)
+        | Save(_, _)
+        | Delete(_)
+        | Fix
+        | Unfix
+        | Greeting(_)
+        | CallVote(_)
+        | Vote(_)
+        | ForceVote(_)
+        | MaxTeams(_) => {
             response.warn("This command is only available in rooms.");
         }
         Malformed(lines) => {
