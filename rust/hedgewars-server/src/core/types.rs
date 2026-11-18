@@ -4,10 +4,16 @@ pub type CheckerId = usize;
 pub type ClientId = usize;
 pub type RoomId = usize;
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct ReplayTeam {
+    pub info: TeamInfo,
+    pub is_owner_registered: bool,
+}
+
 #[derive(Debug)]
 pub struct Replay {
     pub config: RoomConfig,
-    pub teams: Vec<TeamInfo>,
+    pub teams: Vec<ReplayTeam>,
     pub message_log: Vec<String>,
 }
 

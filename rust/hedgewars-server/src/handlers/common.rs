@@ -597,7 +597,7 @@ where
 pub fn get_active_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
     match room.game_info {
         Some(ref info) => get_teams(
-            info.original_teams.iter().map(|(_, team)| team),
+            info.original_teams.iter().map(|(_, team)| &team.info),
             destination,
             response,
         ),

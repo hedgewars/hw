@@ -1,4 +1,7 @@
-use crate::{core::types::Replay, server::haskell::HaskellValue};
+use crate::{
+    core::types::{Replay, ReplayTeam},
+    server::haskell::HaskellValue,
+};
 use hedgewars_network_protocol::types::{
     Ammo, GameCfg, HedgehogInfo, RoomConfig, Scheme, TeamInfo,
 };
@@ -165,7 +168,8 @@ pub fn replay_to_demo(replay: &Replay) -> (Option<GameDetails>, Vec<String>) {
     }
 
     let init_health = &scheme[27];
-    for team in &replay.teams {
+    for replay_team in &replay.teams {
+        let team = &replay_team.info;
         msgs.extend(ammo_msgs.iter().cloned());
         msgs.push(em(&format!(
             "eaddteam <hash> {} {}",
@@ -402,8 +406,10 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
     use HaskellValue as Hs;
 
     let mut teams = Vec::with_capacity(replay.teams.len());
-    for team in replay.teams {
+    for replay_team in replay.teams {
         let mut fields = HashMap::<String, HaskellValue>::new();
+        let is_owner_registered = replay_team.is_owner_registered;
+        let team = replay_team.info;
 
         fields.insert("teamowner".to_string(), Hs::String(team.owner));
         fields.insert("teamname".to_string(), Hs::String(team.name));
@@ -412,7 +418,10 @@ fn replay_to_haskell(mut replay: Replay) -> HaskellValue {
         fields.insert("teamfort".to_string(), Hs::String(team.fort));
         fields.insert("teamvoicepack".to_string(), Hs::String(team.voice_pack));
         fields.insert("teamflag".to_string(), Hs::String(team.flag));
-        fields.insert("isOwnerRegistered".to_string(), Hs::Boolean(false));
+        fields.insert(
+            "isOwnerRegistered".to_string(),
+            Hs::Boolean(is_owner_registered),
+        );
         fields.insert("difficulty".to_string(), Hs::Number(team.difficulty));
         fields.insert("hhnum".to_string(), Hs::Number(team.hedgehogs_number));
 
@@ -506,6 +515,7 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
         let (_, mut fields) = team.into_struct()?;
 
         let mut team_info = TeamInfo::default();
+        let mut is_owner_registered = false;
         for (name, value) in fields.drain() {
             match &name[..] {
                 "teamowner" => team_info.owner = value.into_string()?,
@@ -515,6 +525,7 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
                 "teamfort" => team_info.fort = value.into_string()?,
                 "teamvoicepack" => team_info.voice_pack = value.into_string()?,
                 "teamflag" => team_info.flag = value.into_string()?,
+                "isOwnerRegistered" => is_owner_registered = value.into_bool()?,
                 "difficulty" => team_info.difficulty = value.into_number()?,
                 "hhnum" => team_info.hedgehogs_number = value.into_number()?,
                 "hedgehogs" => {
@@ -535,7 +546,10 @@ fn haskell_to_replay(value: HaskellValue) -> Option<Replay> {
                 _ => (),
             }
         }
-        teams.push(team_info)
+        teams.push(ReplayTeam {
+            info: team_info,
+            is_owner_registered,
+        })
     }
 
     for item in map_config {
@@ -655,17 +669,36 @@ mod tests {
             .collect(),
         };
 
+        let mut unreg_team = TeamInfo::default();
+        unreg_team.owner = "guest".to_string();
+        unreg_team.name = "Guest team".to_string();
+        unreg_team.color = 1;
+        unreg_team.hedgehogs_number = 4;
+
         let replay = Replay {
             config,
-            teams: vec![team],
+            teams: vec![
+                ReplayTeam {
+                    info: team,
+                    is_owner_registered: true,
+                },
+                ReplayTeam {
+                    info: unreg_team,
+                    is_owner_registered: false,
+                },
+            ],
             message_log: vec!["A0ZIZQ==".to_string()],
         };
 
         let serialized = format!("{}", replay_to_haskell(replay));
+        assert!(serialized.contains("isOwnerRegistered = True"));
+        assert!(serialized.contains("isOwnerRegistered = False"));
         let (_, parsed_hs) = super::super::haskell::parse(serialized.as_bytes()).unwrap();
         let loaded = haskell_to_replay(parsed_hs).unwrap();
-        assert_eq!(loaded.teams[0].hedgehogs[0].name, "Absalomжббдь0230");
-        assert_eq!(loaded.teams[0].name, "He \"test\" \\team");
+        assert!(loaded.teams[0].is_owner_registered);
+        assert!(!loaded.teams[1].is_owner_registered);
+        assert_eq!(loaded.teams[0].info.hedgehogs[0].name, "Absalomжббдь0230");
+        assert_eq!(loaded.teams[0].info.name, "He \"test\" \\team");
 
         let (_, demo_msgs) = replay_to_demo(&loaded);
         let em = |s: &str| crate::utils::to_engine_msg(s.bytes());
@@ -691,6 +724,9 @@ mod tests {
         let legacy = serialized.replace("\\140\\&0230", "\\1400230");
         let (_, legacy_hs) = super::super::haskell::parse(legacy.as_bytes()).unwrap();
         let legacy_loaded = haskell_to_replay(legacy_hs).unwrap();
-        assert_eq!(legacy_loaded.teams[0].hedgehogs[0].name, "Absalomжббдь0230");
+        assert_eq!(
+            legacy_loaded.teams[0].info.hedgehogs[0].name,
+            "Absalomжббдь0230"
+        );
     }
 }

@@ -32,6 +32,13 @@ pub enum HaskellValue {
 }
 
 impl HaskellValue {
+    pub fn into_bool(self) -> Option<bool> {
+        match self {
+            HaskellValue::Boolean(value) => Some(value),
+            _ => None,
+        }
+    }
+
     pub fn to_number(&self) -> Option<u8> {
         match self {
             HaskellValue::Number(value) => Some(*value),

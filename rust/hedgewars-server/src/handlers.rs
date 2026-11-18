@@ -706,7 +706,11 @@ pub fn handle_io_result(
             response.add(start_msg.send_self());
 
             common::get_room_config_impl(&replay.config, Destination::ToSelf, response);
-            common::get_teams(replay.teams.iter(), Destination::ToSelf, response);
+            common::get_teams(
+                replay.teams.iter().map(|t| &t.info),
+                Destination::ToSelf,
+                response,
+            );
             response.add(RunGame.send_self());
             response.add(ForwardEngineMessage(replay.message_log).send_self());
 

@@ -299,7 +299,7 @@ impl HwServer {
         let teams = replay
             .teams
             .iter()
-            .map(|t| (t.name.clone(), t.owner.clone()))
+            .map(|t| (t.info.name.clone(), t.info.owner.clone()))
             .collect();
         if let Some(c) = self.checkers.get_mut(checker_id) {
             c.set_is_ready(false);
@@ -1678,12 +1678,13 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     if can_rejoin {
         if let Some(ref mut info) = room.game_info {
             let mut restored_teams = Vec::new();
-            for (owner_nick, team_info) in &info.original_teams {
+            for (owner_nick, team) in &info.original_teams {
                 if *owner_nick == client.nick {
                     restored_teams.push(super::room::OwnedTeam {
                         owner_id: client.id,
                         owner_nick: owner_nick.clone(),
-                        info: team_info.clone(),
+                        is_owner_registered: team.is_owner_registered,
+                        info: team.info.clone(),
                     });
                 }
             }
@@ -1967,6 +1968,39 @@ mod tests {
 
             let _ = ctrl.end_game();
             assert_eq!(ctrl.room().config().theme, "EarthRise");
+        };
+    }
+
+    #[test]
+    fn test_replay_records_team_owner_registration_status() {
+        let mut server = HwServer::new(16, 16);
+        server.add_client(0, make_anteroom_client("reg_master", false));
+        let mut guest = make_anteroom_client("unreg_player", false);
+        guest.is_registered = false;
+        server.add_client(1, guest);
+
+        let (_, room) = server
+            .create_room(0, "reg_replay_room".to_string(), None)
+            .unwrap();
+        let room_id = room.id;
+        let _ = server.join_room(1, room_id, None).unwrap();
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.add_team(dummy_team("t_reg", 0)).unwrap();
+        }
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(1) {
+            ctrl.add_team(dummy_team("t_unreg", 1)).unwrap();
+            ctrl.toggle_ready();
+        }
+
+        if let HwRoomOrServer::Room(mut ctrl) = server.get_room_control(0) {
+            ctrl.start_game().unwrap();
+            let replay = ctrl.room().game_info.as_ref().unwrap().to_replay();
+            assert_eq!(replay.teams.len(), 2);
+            assert_eq!(replay.teams[0].info.name, "t_reg");
+            assert!(replay.teams[0].is_owner_registered);
+            assert_eq!(replay.teams[1].info.name, "t_unreg");
+            assert!(!replay.teams[1].is_owner_registered);
         };
     }
 }

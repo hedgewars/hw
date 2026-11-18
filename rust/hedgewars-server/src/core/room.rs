@@ -1,6 +1,6 @@
 use super::{
     client::HwClient,
-    types::{ClientId, RoomId, Voting},
+    types::{ClientId, ReplayTeam, RoomId, Voting},
 };
 use bitflags::*;
 use hedgewars_network_protocol::types::{GameCfg, RoomConfig, TeamInfo, MAX_HEDGEHOGS_PER_TEAM};
@@ -15,6 +15,7 @@ pub const MAX_HEDGEHOGS_IN_ROOM: u8 = MAX_TEAMS_IN_ROOM * MAX_HEDGEHOGS_PER_TEAM
 pub struct OwnedTeam {
     pub owner_id: ClientId,
     pub owner_nick: String,
+    pub is_owner_registered: bool,
     pub info: TeamInfo,
 }
 
@@ -29,7 +30,7 @@ fn client_teams_impl(
 }
 
 pub struct GameInfo {
-    pub original_teams: Vec<(String, TeamInfo)>,
+    pub original_teams: Vec<(String, ReplayTeam)>,
     pub left_teams: Vec<String>,
     pub rejoined_teams: Vec<String>,
     pub msg_log: Vec<String>,
@@ -42,7 +43,7 @@ pub struct GameInfo {
 
 impl GameInfo {
     fn new(
-        teams: Vec<(String, TeamInfo)>,
+        teams: Vec<(String, ReplayTeam)>,
         config: RoomConfig,
         all_players_registered: bool,
     ) -> GameInfo {
@@ -93,7 +94,7 @@ impl GameInfo {
             teams: self
                 .original_teams
                 .iter()
-                .map(|(_, info)| info.clone())
+                .map(|(_, team)| team.clone())
                 .collect(),
             message_log: self.msg_log.clone(),
         }
@@ -195,6 +196,7 @@ impl HwRoom {
         self.teams.push(OwnedTeam {
             owner_id: owner.id,
             owner_nick: owner.nick.clone(),
+            is_owner_registered: owner.is_registered(),
             info: team,
         });
         &self.teams.last().unwrap().info
@@ -292,7 +294,15 @@ impl HwRoom {
             self.game_info = Some(GameInfo::new(
                 self.teams
                     .iter()
-                    .map(|t| (t.owner_nick.clone(), t.info.clone()))
+                    .map(|t| {
+                        (
+                            t.owner_nick.clone(),
+                            ReplayTeam {
+                                info: t.info.clone(),
+                                is_owner_registered: t.is_owner_registered,
+                            },
+                        )
+                    })
                     .collect(),
                 self.config.clone(),
                 all_players_registered,
