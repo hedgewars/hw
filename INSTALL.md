@@ -45,14 +45,15 @@ For some additional features, you can optionally install these dependencies:
 - For video recording:
     - FFmpeg or Libav
 - For the Hedgewars Server:
-    - GHC >= 6.10
-    - Various Haskell packages (see below)
+    - Rust toolchain (`rustc` and `cargo`)
+    - TLS development headers (e.g. OpenSSL), if building with `tls-connections` or `official-server` features
 
 Lua will be automatically built if not found.
 
 ### Hedgewars Server dependencies
 
-The Hedgewars Server is an **optional** separate application.
+The Hedgewars Server (`hedgewars-server` in `rust/hedgewars-server`) is an
+**optional** separate application.
 It provides the online lobby and allows players to create rooms.
 You will also be able to launch the server from the frontend
 (network play → local network → start server).
@@ -61,30 +62,16 @@ You will also be able to launch the server from the frontend
 
 To compile it, you need:
 
-- Glasgow Haskell Compiler (GHC) >= 6.10
-- These Haskell packages:
-    - `containers`
-    - `vector`
-    - `bytestring`
-    - `network` >= 2.3
-    - `random`
-    - `time`
-    - `mtl` >= 2
-    - `sandi`
-    - `hslogger`
-    - `process`
-    - `deepseq`
-    - `utf8-string`
-    - `SHA`
-    - `entropy`
-    - `zlib` >= 0.5.3 and < 0.7
-    - `regex-tdfa`
-    - `binary` >= 0.8.5.1
+- Rust toolchain (`rustc` and `cargo`)
 
-If you use the `Cabal` based build process:
-    - `zlib` is not needed.
-    - `network` >= 3.0
-    - `network-bsd` >= 2.8.1
+Crate dependencies are declared in `rust/hedgewars-server/Cargo.toml` (pinned
+in `rust/Cargo.lock`) and fetched automatically by `cargo` unless building
+offline (`-DBUILD_OFFLINE=ON`).
+
+Optional Cargo features:
+
+- `tls-connections`: enables TLS support (`tokio-native-tls`; requires system TLS development libraries on Unix)
+- `official-server`: enables official-server database and replay-checker support (`mysql_async`, `sha1`, and `tls-connections`)
 
 Building
 --------
@@ -123,7 +110,9 @@ Important CMake options:
 - `CMAKE_INSTALL_PREFIX`: Installation directory
 - `NOSERVER`: Set to `ON` to *not* build the server
 - `NOVIDEOREC`: Set to `ON` to *not* build the video recorder
-- `GHC_DYNAMIC`: Set to `ON` to build dynamically-linked haskell object files and executables (needed for some distributions)
+- `BUILD_OFFICIAL_SERVER`: Set to `ON` to build the server with the `official-server` Cargo feature
+- `BUILD_OFFLINE`: Set to `ON` to pass `--offline` to `cargo`
+- `CARGO_FLAGS`: Additional flags to pass to `cargo`
 
 ### Step 2: Make
 
@@ -147,13 +136,18 @@ That's all! Enjoy!
 
 ### Building the Hedgewars Server only
 
-The Hedgewars Server can also be built separately using `Cabal`. All necessary
-files, including the `hedgewars-server.cabal`, are in the `gameServer`
-subdirectory.
-For most users, the server isn't needed, and this possibility is targeted
-primarily at packagers. If you don't know how to build Haskell projects with
-`Cabal`, this option is likely not for you. Instead use the `cmake` based
-instructions above.
+The Hedgewars Server can also be built separately using `cargo` from the
+repository root (or inside `rust/hedgewars-server`):
+
+    $ cargo build --release --manifest-path rust/hedgewars-server/Cargo.toml
+
+To enable official-server features (database support, TLS, and replay checking):
+
+    $ cargo build --release --manifest-path rust/hedgewars-server/Cargo.toml --features official-server
+
+The resulting executable is written to `rust/target/release/hedgewars-server`.
+For most users, building the server separately is not needed; use the `cmake`
+instructions above instead.
 
 Troubleshooting
 ---------------
@@ -169,14 +163,15 @@ If this happens, set the following CMake option:
 If this didn't work, make sure you have the correct Qt version
 (see above).
 
-### Broken/missing Haskell dependencies
+### Issues building the Hedgewars Server (Rust / Cargo)
 
-First, try to obtain the missing Haskell packages and make sure GHC
-is up-to date, then try again. Read the error messages carefully
-to figure out missing package names.
+Make sure `rustc` and `cargo` are installed and available in your `PATH`.
+If you are building in an environment without network access, pre-fetch or
+vendor the Cargo dependencies and pass `-DBUILD_OFFLINE=ON` to CMake (or
+`--offline` to `cargo`).
 
-If everything fails and you don't need the server, set the CMake
-option `NOSERVER=ON` so the server isn't built at all.
+If you don't need the server, set the CMake option `NOSERVER=ON` so the
+server isn't built at all.
 
 ### Error messages related to libavcodec / libavformat
 
