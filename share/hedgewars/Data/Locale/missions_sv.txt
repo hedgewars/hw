@@ -1,0 +1,98 @@
+Basic_Training_-_Movement.name=Grundläggande rörelseträning
+Basic_Training_-_Movement.desc="Här börjar gröngölingarna! Lär dig att ta dig fram i olika slags terräng och att byta igelkott."
+
+Basic_Training_-_Bazooka.name=Grundläggande raketgevärsträning
+Basic_Training_-_Bazooka.desc="Lär dig att använda raketgeväret, ta hänsyn till vinden och förstöra alla måltavlor."
+
+Basic_Training_-_Grenade.name=Grundläggande granatträning
+Basic_Training_-_Grenade.desc="Lär dig allt du behöver veta om granater och förstör alla måltavlor. Kom ihåg: Dra ur sprinten OCH kasta!"
+
+Basic_Training_-_Rope.name=Grundläggande repträning
+Basic_Training_-_Rope.desc="Repet är ett av de mest mångsidiga verktygen du kan få, men det kräver mycket övning. Här lär du dig grunderna i att använda rep."
+
+Basic_Training_-_Flying_Saucer.name=Grundläggande träning med flygande tefat
+Basic_Training_-_Flying_Saucer.desc="Med ett flygande tefat kan du nå nästan vart som helst, om du vet hur det fungerar. Lär dig att flyga, anfalla från tefatet och till och med utföra häftiga trick."
+
+User_Mission_-_Dangerous_Ducklings.name=Farliga ankungar
+User_Mission_-_Dangerous_Ducklings.desc="Okej, rekryt! Dags att omsätta det vi lärde oss under grundträningen i praktiken!"
+
+User_Mission_-_Diver.name=Dykare
+User_Mission_-_Diver.desc="Det här med amfibieanfall är svårare än det ser ut."
+
+User_Mission_-_Teamwork.name=Lagarbete
+User_Mission_-_Teamwork.desc="En defekt cyborg vaktar en värdefull militär hemlighet. Led en specialstyrka med två igelkottar som ska förgöra fienden för att komma åt den! Det är helt avgörande för våra framtida insatser att båda igelkottarna överlever."
+
+User_Mission_-_Teamwork_2.name=Lagarbete 2
+User_Mission_-_Teamwork_2.desc="Vi har hittat en hemlig utpost som tillhör Robotriket och bara bevakas av en harmlös vaktrobot. Led din specialstyrka för att förstöra den så att vi kan ta över basen. Precis som förut måste båda igelkottarna överleva!"
+
+User_Mission_-_Spooky_Tree.name=Spökträdet
+User_Mission_-_Spooky_Tree.desc="Här finns gott om lådor. Jag hoppas verkligen att den där fågeln inte är hungrig."
+
+User_Mission_-_Bamboo_Thicket.name=Bambusnåret
+User_Mission_-_Bamboo_Thicket.desc="En cyborg terroriserar bambusnåret och anfaller alla inom synhåll med nästan fullständig träffsäkerhet. Planera i förväg, rör dig snabbt och slå ut fienden kvickt!"
+
+User_Mission_-_That_Sinking_Feeling.name=Den sjunkande känslan
+User_Mission_-_That_Sinking_Feeling.desc="Vattnet stiger snabbt och tiden är knapp. Många har försökt och misslyckats. Kan du rädda alla?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Newton och hängmattan
+User_Mission_-_Newton_and_the_Hammock.desc="Kom ihåg, små igelkottar: En kropps hastighet förblir oförändrad om den inte påverkas av en yttre kraft!"
+
+User_Mission_-_The_Great_Escape.name=Den stora flykten
+User_Mission_-_The_Great_Escape.desc="Fly från ditt fängelse och ta hämnd!"
+
+User_Mission_-_Rope_Knock_Challenge.name=Repknuffar
+User_Mission_-_Rope_Knock_Challenge.desc="Använd repet för att knuffa alla dina fiender mot deras undergång."
+
+User_Mission_-_Nobody_Laugh.name=Ingen skrattar
+User_Mission_-_Nobody_Laugh.desc="Åh, de här clownerna tycker att de är så roliga! De må vara fler än vi, men vi har gott om tid på varje tur. Slå ut de här wannabekomikerna en efter en tills ingen finns kvar som kan skratta."
+
+User_Mission_-_RCPlane_Challenge.name=Utmaning med radiostyrda flygplan
+User_Mission_-_RCPlane_Challenge.desc="Använd radiostyrda flygplan för att samla alla lådor. Försök använda så få flygplan som möjligt för att förbättra din rang. Har du vad som krävs för att bli en elitpilot i toppklass?"
+
+Big_Armory.name=Stora vapenförrådet
+Big_Armory.desc="Du är ensam, har ett fullt vapenförråd och måste besegra 8 igelkottar innan tiden är ute."
+
+Bazooka_Battlefield.name=Raketgevärsslaget
+Bazooka_Battlefield.desc="Dina lojala igelkottar har lagt sig i bakhåll för fienden. Förgör fienderna med enbart raketgevär! Men dröj inte för länge, vattnet stiger snart."
+
+Tentacle_Terror.name=Tentakelskräck
+Tentacle_Terror.desc="Din fiende gömmer sig fegt under ett fasansfullt monster och kommer att anfalla dig från luften så snart du lämnar ditt skydd. Visa honom vem som bestämmer i helvetet! Men du måste vara djävulskt bra med repet för att ens ha en chans."
+
+ClimbHome.name=Klättra hem
+ClimbHome.desc="Du är långt hemifrån och vattnet stiger. Klättra så högt du kan!"
+
+portal.name=Portalernas tankenöt
+portal.desc="Använd portalen för att ta dig fram snabbt och långt. Använd den för att döda. Använd den med försiktighet!"
+
+Target_Practice_-_Bazooka_easy.name=Skjutövning: Raketgevär (lätt)
+Target_Practice_-_Bazooka_easy.desc="Okej, soldat, spräng måltavlorna så snabbt du kan!"
+
+Target_Practice_-_Bazooka_hard.name=Skjutövning: Raketgevär (svår)
+Target_Practice_-_Bazooka_hard.desc="Kan du träffa måltavlorna även när de är riktigt långt borta?"
+
+Target_Practice_-_Cluster_Bomb.name=Skjutövning: Splittergranat
+Target_Practice_-_Cluster_Bomb.desc="Någon behöver en varm dusch! Med splittergranater!"
+
+Target_Practice_-_Shotgun.name=Skjutövning: Hagelgevär
+Target_Practice_-_Shotgun.desc="Skjut först, fråga sedan!"
+
+Basic_Training_-_Sniper_Rifle.name=Skjutövning: Prickskyttegevär
+Basic_Training_-_Sniper_Rifle.desc="Det här är den perfekta skjutbanan för prickskyttar! Förstör alla måltavlor så snabbt och träffsäkert du kan och bli en legend!"
+
+Target_Practice_-_Homing_Bee.name=Skjutövning: Målsökande bi
+Target_Practice_-_Homing_Bee.desc="Att använda det målsökande biet är knepigare än det verkar."
+
+Target_Practice_-_Grenade_easy.name=Skjutövning: Granat (lätt)
+Target_Practice_-_Grenade_easy.desc="Uppvärmning för den blivande grenadjären."
+
+Target_Practice_-_Grenade_hard.name=Skjutövning: Granat (svår)
+Target_Practice_-_Grenade_hard.desc="Det här är inget för gröngölingar! Vi placerar måltavlorna på riktigt knepiga ställen."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Tidsutmaning: Shoppa-kärlek
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Visa din kärlek till repsvingning och samla några lådor på en liten karta."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Tidsutmaning: Rep och lådor
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Ta ditt rep och samla alla lådor på den här medelstora kartan."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Tidsutmaning: Kunden är kung
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Visa att du är en sann kung och samla alla lådor så snabbt som möjligt på den här stora kartan."

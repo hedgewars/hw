@@ -1,0 +1,91 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Välj samma färg som en vän för att spela tillsammans i en klan. Ni styr fortfarande era egna igelkottar, men vinner eller förlorar tillsammans.</tip>
+    <tip>Vissa vapen gör liten skada men kan vara förödande i rätt situation. Prova att använda Desert Eagle för att knuffa flera igelkottar i vattnet.</tip>
+    <tip>Om du är osäker på vad du ska göra och inte vill slösa ammunition kan du hoppa över en tur. Men låt inte för lång tid gå, för snart blir det Plötslig död!</tip>
+    <tip>Vill du spara rep? Släpp repet i luften och skjut sedan ut det igen. Så länge du inte rör marken eller missar ett skott återanvänder du repet utan att förbruka ammunition!</tip>
+    <tip>Om du vill hindra andra från att använda ditt smeknamn på den officiella servern kan du registrera ett konto på <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
+    <tip>Trött på det vanliga spelet? Prova något av uppdragen. De erbjuder olika sätt att spela beroende på vilket du väljer.</tip>
+    <tip>Som standard sparas det senast spelade spelet alltid som en demo. Välj ”Lokalt spel” och sedan knappen ”Demofiler” i nedre högra hörnet för att spela upp eller hantera dem.</tip>
+    <tip>Hedgewars är fri programvara med öppen källkod som vi utvecklar på fritiden. Om du får problem kan du fråga på vårt forum eller besöka vår IRC-kanal!</tip>
+    <tip>Hedgewars är fri programvara med öppen källkod som vi utvecklar på fritiden. Om du gillar spelet får du gärna hjälpa oss med en liten donation eller egna bidrag!</tip>
+    <tip>Hedgewars är fri programvara med öppen källkod som vi utvecklar på fritiden. Dela gärna spelet med familj och vänner!</tip>
+    <tip>Hedgewars är fri programvara med öppen källkod som vi utvecklar på fritiden, bara för att det är roligt! Träffa utvecklarna i <a href="irc://irc.libera.chat/hedgewars">#hedgewars</a>!</tip>
+    <tip>Då och då anordnas officiella turneringar. Kommande evenemang meddelas på <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> några dagar i förväg.</tip>
+    <tip>Hedgewars finns på många språk. Kontakta oss gärna om översättningen till ditt språk saknas eller verkar föråldrad!</tip>
+    <tip>Hedgewars kan köras på många olika operativsystem, däribland Microsoft Windows, macOS och GNU/Linux.</tip>
+    <tip>Kom ihåg att du kan skapa egna spel både lokalt och över nätverk eller internet. Du är inte begränsad till alternativet ”Enkelt spel”.</tip>
+    <tip>Anslut en eller flera handkontroller innan du startar spelet för att kunna tilldela deras knappar till dina lag.</tip>
+    <tip>Ta gärna en kort paus minst en gång i timmen för att undvika att bli ansträngd av spelandet.</tip>
+    <tip>Om ditt grafikkort saknar stöd för maskinvaruaccelererad OpenGL kan du prova att aktivera läget för låg kvalitet för bättre prestanda.</tip>
+    <tip>Om ditt grafikkort saknar stöd för maskinvaruaccelererad OpenGL kan du prova att uppdatera dess drivrutiner.</tip>
+    <tip>Vi tar gärna emot förslag och konstruktiv återkoppling. Berätta om det är något du inte gillar eller om du har en bra idé!</tip>
+    <tip>För allas trivsel ber vi dig vara artig och vänlig när du spelar på vår server. Tänk också på att en del spelare är minderåriga!</tip>
+    <tip>Särskilda spellägen som ”Vampyrism” och ”Karma” ger dig möjlighet att utveckla helt nya taktiker. Prova dem i ett anpassat spel!</tip>
+    <tip>Installera inte Hedgewars på datorer som du inte äger, till exempel i skolan eller på jobbet, utan tillåtelse. Vi vill inte att du ska råka illa ut.</tip>
+    <tip>Hedgewars passar utmärkt för korta spel under raster. Se bara till att inte lägga till för många igelkottar eller använda en jättestor karta. Det kan också hjälpa att minska tiden och hälsan.</tip>
+    <tip>Inga igelkottar kom till skada under utvecklingen av det här spelet.</tip>
+    <tip>Det finns tre olika hopp. Tryck på [höjdhopp] två gånger för att göra ett mycket högt hopp bakåt.</tip>
+    <tip>Rädd för att ramla ner från en klippa? Håll in [precision] för att vända dig åt [vänster] eller [höger] utan att förflytta dig.</tip>
+    <tip>Vissa vapen kräver särskilda strategier eller mycket träning. Ge inte upp ett verktyg bara för att du missar en fiende en gång.</tip>
+    <tip>De flesta vapen slutar fungera när de hamnar i vattnet. Det målsökande biet och tårtan är undantag.</tip>
+    <tip>Gammal limburger orsakar bara en liten explosion. Men det illaluktande molnet, som påverkas av vinden, kan förgifta många igelkottar på en gång.</tip>
+    <tip>Pianoangreppet gör mest skada av alla luftangrepp. Du förlorar igelkotten som utför det, så det har också en stor nackdel.</tip>
+    <tip>Det målsökande biet kan vara knepigt att använda. Svängradien beror på hastigheten, så prova att skjuta med mindre än full kraft.</tip>
+    <tip>Klisterminor passar perfekt för små kedjereaktioner som knuffar fiendeigelkottar till besvärliga platser … eller ner i vattnet.</tip>
+    <tip>Hammaren är effektivast på broar och balkar. Igelkottar som träffas slås rakt igenom underlaget.</tip>
+    <tip>Om du har fastnat bakom en fiendeigelkott kan du använda hammaren för att komma loss utan att skadas av en explosion.</tip>
+    <tip>Hur långt tårtan kan gå beror på underlaget den passerar. Använd [attack] för att spränga den i förtid.</tip>
+    <tip>Eldkastaren är ett vapen, men den kan också användas för att gräva tunnlar.</tip>
+    <tip>Använd molotovcocktailen eller eldkastaren för att tillfälligt hindra igelkottar från att passera platser som tunnlar och plattformar.</tip>
+    <tip>Gillar du Hedgewars? Bli ett fan på <a href="https://www.facebook.com/Hedgewars">Facebook</a> eller följ oss på <a href="https://twitter.com/hedgewars">Twitter</a>.</tip>
+    <tip>Rita gärna egna gravar, hattar, flaggor eller till och med kartor och teman! Tänk bara på att du måste dela dem med andra för att kunna använda dem online.</tip>
+    <tip>Håll grafikkortets drivrutiner uppdaterade för att undvika problem med spelet.</tip>
+    <tip>Krona eller klave? Skriv ”/rnd” i lobbyn så får du veta. Även ”/rnd sten sax påse” fungerar!</tip>
+    <tip>Du kan koppla Hedgewars-filer, som sparade spel och demofiler, till spelet för att öppna dem direkt från din filhanterare eller webbläsare.</tip>
+    <tip>Blindgångarminor är inte ofarliga. Även om deras timer är trasig kan de fortfarande explodera om de tar tillräckligt med skada!</tip>
+    <tip>Kärleken är het! Använd Förförelse för att tina frusna igelkottar.</tip>
+    <tip>Rök från en tunna visar att den har lite ”hälsa” kvar och att även en liten skada kan få den att explodera.</tip>
+    <tip>Tunnor börjar med 60 i hälsa och tar skada precis som igelkottar. Därför krävs lite åverkan innan de exploderar.</tip>
+    <tip>Behöver du mer studs? Ändra studsstyrkan hos granater, splittergranater, gamla limburgare och minor genom att hålla in [precision] och trycka på en av timerknapparna.</tip>
+    <tip>Har du glömt målen eller de särskilda spelreglerna? Tryck på paus- eller avslutningsknappen för att se dem igen!</tip>
+    <tip>Du kan slå, piska och hamra på andra saker än bara igelkottar. Träffa dem allihop!</tip>
+    <tip>Om inget annat anges exploderar minor normalt efter 3 sekunder.</tip>
+    <tip>I kungaläget börjar kungen med mer hälsa, större styrka och bättre motståndskraft mot skador och knuffar än undersåtarna.</tip>
+    <tip>I kungaläget tar kungen skada varje tur när laget inte har några undersåtar kvar.</tip>
+    <tip>Piskan träffar även igelkottar och föremål bakom en tunn vägg.</tip>
+    <tip>En köttyxa gör mer skada ju snabbare den rör sig.</tip>
+    <tip>Du kan släppa tårtor från klippor, men du måste stå mycket nära kanten, så var försiktig.</tip>
+    <tip>Använd repet för att knuffa undan andra igelkottar, till exempel genom att glida längs marken. Tekniken kallas ”repknuffar”.</tip>
+    <tip>Stå inte stilla i en isig backe, för då glider du iväg. Du kan också hålla in [precision].</tip>
+    <tip>I snö- och jullandskap samlas snön på hög med tiden, om inte marken är oförstörbar.</tip>
+    <tip>Var försiktig i snö- och jullandskap, för där är balkarna gjorda av hal is.</tip>
+    <tip>Hur lång tid du har att dra dig undan beror på vapnet du använde. Var försiktig, vissa vapen avslutar turen direkt utan att ge dig tid att flytta dig!</tip>
+    <tip>Med lite skicklighet kan du knuffa igelkottar genom att hoppa upp underifrån.</tip>
+    <tip>En vältajmad attack med shoryuken, slagborr eller sinusgevär kan förhindra fallskador.</tip>
+    <tip>Din igelkott kolliderar inte med projektiler när den är i luften.</tip>
+    <tip>Hål efter borraketer, prickskyttegevär och Desert Eagle är stora nog att skjuta portaler genom, om du siktar tillräckligt noga.</tip>
+    <tip>Samla en förbandslåda för att bota din förgiftade igelkott.</tip>
+    <tip>Du kan även samla lådor med radiostyrt flygplan, shoryuken, slagborr och kamikaze.</tip>
+    <tip>Var försiktig så att du inte spränger dig själv när du närmar dig en låda med blåslampan.</tip>
+    <tip>Luftminor är passiva under turens första 5 sekunder innan de börjar söka efter igelkottar.</tip>
+    <tip>Håll säkert avstånd till luftminor! När en luftmina börjar jaga dig är det svårt att komma undan utan verktyg.</tip>
+    <tip>Luftminor exploderar efter en fjärdedel av den tid som ställts in för vanliga minor.</tip>
+    <tip>När en köttyxa i landskapet tar minst 30 i skada av en enda träff kan den lossna. Sannolikheten ökar med skadan.</tip>
+    <tip>Håll koll på vinden, för lågor och vissa projektiler påverkas av den.</tip>
+    <tip>Använd blåslampan för att knuffa igelkottar och minor med lång tändtid.</tip>
+    <tip>Att springa in i en tunna med blåslampan är ett explosivt recept på katastrof!</tip>
+    <tip>Skriv ”/help” i chatten för att se en lista över chattkommandon. Med dem kommer du åt särskilda funktioner som hån och omröstningar.</tip>
+    <windows-only>
+        <tip>Du hittar inställningsfilerna för Hedgewars i ”My Documents\Hedgewars”. Säkerhetskopiera eller ta med dig filerna, men redigera dem inte för hand.</tip>
+    </windows-only>
+    <mac-only>
+        <tip>Du hittar inställningsfilerna för Hedgewars i ”Library/Application Support/Hedgewars” i din hemkatalog. Säkerhetskopiera eller ta med dig filerna, men redigera dem inte för hand.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>Du hittar inställningsfilerna för Hedgewars i ”.hedgewars” i din hemkatalog. Säkerhetskopiera eller ta med dig filerna, men redigera dem inte för hand.</tip>
+    </linux-only>
+</tips>

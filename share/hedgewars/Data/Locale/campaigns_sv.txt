@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="En klassisk saga"
+
+A_Classic_Fairytale-first_blood.name="Uppdrag 1: Första blodet"
+A_Classic_Fairytale-first_blood.desc="Hjälp Leaks a Lot att slutföra sin träning och bli en riktig igelkottskrigare. Du får lära dig att använda rep, fallskärm, shoryuken och Desert Eagle."
+
+A_Classic_Fairytale-shadow.name="Uppdrag 2: Skuggan faller"
+A_Classic_Fairytale-shadow.desc="Leaks a Lot och Dense Cloud ger sig ut på jakt. Var beredd på farorna som väntar i skogen. Kom ihåg att göra kloka val."
+
+A_Classic_Fairytale-journey.name="Uppdrag 3: Resan tillbaka"
+A_Classic_Fairytale-journey.desc="Leaks a Lot måste ta sig till andra sidan ön. Var snabb och försiktig."
+
+A_Classic_Fairytale-united.name="Uppdrag 4: Enade står vi starka"
+A_Classic_Fairytale-united.desc="Efter sin långa resa är Leaks a Lot äntligen tillbaka i byn. Men det finns ingen tid att vila. Du måste försvara byn mot de rasande kannibalerna."
+
+A_Classic_Fairytale-backstab.name="Uppdrag 5: Ett hugg i ryggen"
+A_Classic_Fairytale-backstab.desc="De fruktansvärda kannibalerna jagar Leaks a Lot och hans vänner. Besegra dem än en gång och skydda dina allierade. Använd dina resurser klokt för att besegra fienderna som närmar sig!"
+
+A_Classic_Fairytale-dragon.name="Uppdrag 6: Drakens håla"
+A_Classic_Fairytale-dragon.desc="Vår hjälte måste ta sig till andra sidan sjön. Bli en mästare med repet och undvik att träffas av fiendens skott."
+
+A_Classic_Fairytale-family.name="Uppdrag 7: Familjeåterförening"
+A_Classic_Fairytale-family.desc="Vår hjälte måste rädda stammen ännu en gång. Slå ut fiendeigelkottarna och befria dina kamrater. Använd dina begränsade resurser med omsorg. Borra hål på rätt ställen och ta dig nära prinsessan."
+
+A_Classic_Fairytale-queen.name="Uppdrag 8: Länge leve drottningen"
+A_Classic_Fairytale-queen.desc="Stammen måste återigen strida. För att vinna måste de bekämpa förrädaren och använda alla tillgängliga resurser. Besegra fienden!"
+
+A_Classic_Fairytale-enemy.name="Uppdrag 9: Min fiendes fiende"
+A_Classic_Fairytale-enemy.desc="Vilken vändning! Leaks a Lot måste strida sida vid sida med … ”kannibalerna” mot den gemensamma fienden: de onda cyborgerna!"
+
+A_Classic_Fairytale-epil.name="Uppdrag 10: Epilog"
+A_Classic_Fairytale-epil.desc="Grattis! Leaks a Lot kan äntligen leva i fred och hyllas av sina nya vänner och sin stam. Var stolt över vad du har åstadkommit! Du kan spela om tidigare uppdrag för att se de andra möjliga sluten."
+
+A_Space_Adventure.name="Ett rymdäventyr"
+A_Space_Adventure-cosmos.name="Meny: Rymdresa"
+A_Space_Adventure-cosmos.desc="Igelkottarnas planet Hogera är på väg att träffas av en gigantisk meteorit. I den här kampen för överlevnad ska du leda en modig igelkott, utsänd av Igelkottarnas planetariska förbund (PAotH), på en rymdresa bland grannplaneterna för att samla alla 4 delar till den sedan länge försvunna antigravitationsapparaten."
+A_Space_Adventure-moon01.name="Huvuduppdrag: Första stoppet"
+A_Space_Adventure-moon01.desc="Vår hjälte har landat på månen för att tanka det flygande tefatet, men professor Hogevil hann dit först och har ordnat ett bakhåll! Rädda de tillfångatagna PAotH-forskarna och driv bort professor Hogevil!"
+A_Space_Adventure-moon02.name="Sidouppdrag: Jakten på den blå igelkotten"
+A_Space_Adventure-moon02.desc="Vår hjälte besöker en eremit, en gammal PAotH-veteran som bor på månen, för att få information om professor Hogevil. Men först måste du besegra eremiten Crazy Runner i en jaktlek!"
+A_Space_Adventure-ice01.name="Huvuduppdrag: Ett iskallt äventyr"
+A_Space_Adventure-ice01.desc="Välkommen till isplaneten. Här är det så kallt att de flesta vapen inte fungerar. Du måste ta den försvunna delen från banditledaren Thanta med hjälp av vapnen du hittar där!"
+A_Space_Adventure-ice02.name="Sidouppdrag: Svår flygning"
+A_Space_Adventure-ice02.desc="Vår hjälte kunde förstås inte besöka isplaneten utan att se den olympiska arenan för tefatsflygning! I det här uppdraget kan du visa dina flygkunskaper och ta din plats bland de bästa!"
+A_Space_Adventure-desert01.name="Huvuduppdrag: Sökande i dammet"
+A_Space_Adventure-desert01.desc="Du har landat på sandplaneten! Vår hjälte måste hitta den saknade delen i de underjordiska tunnlarna. Var försiktig, för hänsynslösa smugglare ligger i bakhåll för att anfalla och råna dig!"
+A_Space_Adventure-desert02.name="Sidouppdrag: Spring för livet"
+A_Space_Adventure-desert02.desc="Vår hjälte letade efter delen i den här tunneln när den plötsligt började svämma över! Ta dig upp till ytan så snabbt som möjligt och akta dig för att utlösa en mina."
+A_Space_Adventure-desert03.name="Sidouppdrag: Precisionsflygning"
+A_Space_Adventure-desert03.desc="Vår hjälte har lite tid över för att roa sig med radiostyrda flygplan. Flyg planet och träffa alla måltavlor! Om du vinner får du bonusammunition till huvuduppdraget."
+A_Space_Adventure-fruit01.name="Huvuduppdrag: Dålig tajming"
+A_Space_Adventure-fruit01.desc="På fruktplaneten står det inte rätt till. Igelkottarna samlar inte frukt utan förbereder sig för strid. Du måste välja om du ska slåss eller fly."
+A_Space_Adventure-fruit02.name="Huvuduppdrag: På väg till apparaten"
+A_Space_Adventure-fruit02.desc="Vår hjälte närmar sig den försvunna delen på fruktplaneten. Kommer kapten Lime att hjälpa dig att få tag på delen eller inte?"
+A_Space_Adventure-fruit03.name="Huvuduppdrag: Precisionsskytte"
+A_Space_Adventure-fruit03.desc="Vår hjälte gick vilse och överfölls av Röda jordgubbarna. Slå ut dem och vinn extra ammunition till uppdraget ”På väg till apparaten”."
+A_Space_Adventure-death01.name="Huvuduppdrag: Det sista mötet"
+A_Space_Adventure-death01.desc="På dödsplaneten, den kargaste planeten i närheten, är vår hjälte mycket nära att få tag på apparatens sista del! Men en obehaglig överraskning väntar ..."
+A_Space_Adventure-death02.name="Sidouppdrag: Slå ut specialisterna"
+A_Space_Adventure-death02.desc="Vår hjälte har återigen hamnat i en svår situation. Besegra de ”5 dödliga igelkottarna” i deras eget spel! Om du vinner får du bonusar till huvuduppdraget."
+A_Space_Adventure-final.name="Huvuduppdrag: Den stora smällen"
+A_Space_Adventure-final.desc="Vår hjälte måste spränga några explosiva föremål som har placerats på meteoriten. Klara uppdraget utan att bli skadad!"
