@@ -424,9 +424,10 @@ void FeedbackDialog::finishedSlot(QNetworkReply *reply) {
 
     return;
   } else {
-    ShowErrorMessage(QStringLiteral("Error: %1\n%2")
-                         .arg(reply->errorString())
-                         .arg(reply->readAll()));
+    const auto body = reply->readAll();
+    qDebug() << reply->errorString() << body;
+    ShowErrorMessage(
+        QStringLiteral("Error: %1\n%2").arg(reply->errorString()).arg(body));
     LoadCaptchaImage();
   }
 }

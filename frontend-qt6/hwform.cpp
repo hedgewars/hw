@@ -2087,7 +2087,8 @@ void HWForm::NetGameMaster() {
     ui.pageNetGame->restrictJoins->disconnect(hwnet);
     ui.pageNetGame->restrictTeamAdds->disconnect(hwnet);
     ui.pageNetGame->restrictUnregistered->disconnect(hwnet);
-    ui.pageNetGame->disconnect(hwnet, SLOT(updateRoomName(const QString &)));
+    disconnect(ui.pageNetGame, &PageNetGame::askForUpdateRoomName, hwnet.data(),
+               &HWNewNet::updateRoomName);
 
     ui.pageNetGame->setRoomName(hwnet->getRoom());
 

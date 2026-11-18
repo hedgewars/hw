@@ -68,7 +68,7 @@ QLayout* PageNetGame::bodyLayoutDefinition() {
   BtnUpdate->setFixedHeight(leRoomName->height() - 0);
   BtnUpdate->setStyleSheet(
       QStringLiteral("border-top-left-radius: 0px; border-bottom-left-radius: "
-                     "0px; padding: auto 4px;"));
+                     "0px; padding: 0px 4px;"));
   roomConfigLayout->addWidget(BtnUpdate, 0);
 
   lblRoomNameReadOnly = new QLabel();
@@ -88,7 +88,7 @@ QLayout* PageNetGame::bodyLayoutDefinition() {
   BtnMaster->setText(tr("Room controls"));
   BtnMaster->setFixedHeight(leRoomName->height() - 0);
   BtnMaster->setStyleSheet(
-      QStringLiteral("QPushButton { padding: auto 4px; } QPushButton:pressed { "
+      QStringLiteral("QPushButton { padding: 0px 4px; } QPushButton:pressed { "
                      "background-color: #ffcc00; border-color: #ffcc00; "
                      "border-bottom-left-radius: 0px; "
                      "border-bottom-right-radius: 0px; color: #11084A; }"));

@@ -97,7 +97,7 @@ KeyBinder::KeyBinder(QWidget* parent, const QString& helpText,
   helpLabel->setText(helpText);
   helpLabel->setStyleSheet(
       QStringLiteral("color: #130F2A; background: #F6CB1C; border: solid 4px "
-                     "#F6CB1C; border-radius: 10px; padding: auto 20px;"));
+                     "#F6CB1C; border-radius: 10px; padding: 0px 20px;"));
   helpLabel->setFixedHeight(24);
   rightLayout->addWidget(helpLabel, 0, Qt::AlignCenter);
   conflictLabel = new QLabel();
@@ -105,7 +105,7 @@ KeyBinder::KeyBinder(QWidget* parent, const QString& helpText,
       tr("Warning: The same key is assigned multiple times!"));
   conflictLabel->setStyleSheet(
       QStringLiteral("color: white; background: #E31A1A; border: solid 4px "
-                     "#E31A1A; border-radius: 10px; padding: auto 20px;"));
+                     "#E31A1A; border-radius: 10px; padding: 0px 20px;"));
   conflictLabel->setFixedHeight(24);
   conflictLabel->setHidden(true);
   rightLayout->addWidget(conflictLabel, 0, Qt::AlignCenter);

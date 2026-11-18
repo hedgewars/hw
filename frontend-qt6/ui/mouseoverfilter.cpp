@@ -27,9 +27,9 @@ bool MouseOverFilter::eventFilter(QObject *dist, QEvent *event) {
 
     abstractpage = qobject_cast<AbstractPage *>(ui->Pages->currentWidget());
 
-    if (widget->whatsThis().isEmpty())
+    if (!widget->whatsThis().isEmpty())
       abstractpage->setButtonDescription(widget->whatsThis());
-    else if (widget->toolTip().isEmpty())
+    else if (!widget->toolTip().isEmpty())
       abstractpage->setButtonDescription(widget->toolTip());
   } else if (event->type() == QEvent::FocusIn) {
     abstractpage = qobject_cast<AbstractPage *>(ui->Pages->currentWidget());
