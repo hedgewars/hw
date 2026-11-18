@@ -1,5 +1,6 @@
 use crate::core::{server::HwServer, types::CheckerId};
 use crate::handlers::actions::ToPendingMessage;
+use crate::server::replaystorage::ReplayDestination;
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage};
 use log::*;
 
@@ -31,7 +32,7 @@ pub fn handle(
                     let teams = std::mem::take(&mut c.current_teams);
                     let details = c.current_details.take();
                     if let Some(ref mut storage) = server.replay_storage {
-                        storage.move_checked_replay(&id).ok();
+                        storage.move_file(ReplayDestination::Checked, &id).ok();
                     }
                     #[cfg(feature = "official-server")]
                     if let Some(game_details) = details {
@@ -58,7 +59,7 @@ pub fn handle(
                         message
                     );
                     if let Some(ref mut storage) = server.replay_storage {
-                        storage.move_failed_replay(&id).ok();
+                        storage.move_file(ReplayDestination::Failed, &id).ok();
                     }
                 }
             }

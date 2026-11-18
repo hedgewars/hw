@@ -76,21 +76,16 @@ impl IoThread {
                     IoTask::GetReplay { id } => {
                         let result = match db.get_replay_name(id) {
                             Ok(Some(filename)) => {
-                                let filename = format!(
-                                    "checked/{}",
-                                    if filename.starts_with("replays/") {
-                                        &filename[8..]
-                                    } else {
-                                        &filename
-                                    }
-                                );
+                                let path =
+                                    crate::server::replaystorage::checked_replay_path(&filename);
 
-                                match crate::core::types::Replay::load(&filename) {
+                                match crate::core::types::Replay::load(&path) {
                                     Ok(replay) => Some(replay),
                                     Err(e) => {
                                         warn!(
                                             "Error while reading replay file \"{}\": {}",
-                                            filename, e
+                                            path.display(),
+                                            e
                                         );
                                         None
                                     }

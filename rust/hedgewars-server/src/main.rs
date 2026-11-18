@@ -61,6 +61,8 @@ async fn main() -> tokio::io::Result<()> {
 
     let mut hw_network = NetworkLayerBuilder::default().with_listener(server).build();
 
+    server::replaystorage::ReplayStorage::reorganize();
+
     hw_network.run().await;
     Ok(())
 }

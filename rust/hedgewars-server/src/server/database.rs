@@ -99,14 +99,15 @@ impl Database {
             IoTask::GetReplay { id } => {
                 let result = match self.get_replay_name(id).await {
                     Ok(Some(filename)) => {
-                        let filename = format!(
-                            "checked/{}",
-                            filename.strip_prefix("replays/").unwrap_or(&filename)
-                        );
-                        match Replay::load(&filename) {
+                        let path = crate::server::replaystorage::checked_replay_path(&filename);
+                        match Replay::load(&path) {
                             Ok(replay) => Some(Box::new(replay)),
                             Err(e) => {
-                                warn!("Error while reading replay file \"{}\": {}", filename, e);
+                                warn!(
+                                    "Error while reading replay file \"{}\": {}",
+                                    path.display(),
+                                    e
+                                );
                                 None
                             }
                         }

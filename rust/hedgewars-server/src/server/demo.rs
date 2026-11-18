@@ -618,7 +618,7 @@ impl Replay {
         Ok(())
     }
 
-    pub fn load(filename: &str) -> io::Result<Self> {
+    pub fn load<P: AsRef<std::path::Path>>(filename: P) -> io::Result<Self> {
         let mut file = fs::File::open(filename)?;
         let mut bytes = vec![];
         file.read_to_end(&mut bytes)?;
