@@ -59,7 +59,17 @@ impl ProtocolDecoder {
                 self.buffer.advance(self.buffer.len() - remaining);
                 Some(message)
             }
-            Err(nom::Err::Incomplete(_)) => None,
+            Err(nom::Err::Incomplete(_)) => {
+                if self.buffer.len() > 128 * 1024 {
+                    self.buffer.clear();
+                    
+                    Some(HwProtocolMessage::Quit(Some(
+                        "Protocol violation".to_owned(),
+                    )))
+                } else {
+                    None
+                }
+            }
             Err(nom::Err::Failure(e) | nom::Err::Error(e)) => {
                 debug!("Invalid message: {:?}", e);
                 match malformed_message(&self.buffer[..]) {
