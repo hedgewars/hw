@@ -247,8 +247,7 @@ impl Database {
         info: &[String],
     ) -> mysql_async::Result<()> {
         let mut connection = self.pool.get_conn().await?;
-        let stripped = filename.strip_prefix("replays/").unwrap_or(filename);
-        let time: String = stripped.chars().take(19).collect();
+        let (filename, time) = replay_db_filename_and_time(filename);
 
         let mut best_location = String::new();
         let mut best_time = i32::MAX;
@@ -412,6 +411,12 @@ impl Database {
     }
 }
 
+fn replay_db_filename_and_time(filename: &str) -> (&str, String) {
+    let bare = filename.rsplit('/').next().unwrap_or(filename);
+    let time: String = bare.chars().take(19).collect();
+    (bare, time)
+}
+
 fn extract_min_prev(row: Option<mysql_async::Row>) -> i32 {
     row.and_then(|mut r| r.take_opt::<Option<i32>, usize>(0))
         .and_then(|res| res.ok())
@@ -442,6 +447,24 @@ mod tests {
         assert_eq!(
             from_value_opt::<Option<i32>>(Value::Int(4200)).unwrap(),
             Some(4200)
+        );
+    }
+
+    #[test]
+    fn test_replay_db_filename_and_time_strips_directory() {
+        assert_eq!(
+            replay_db_filename_and_time("replays/2026-11-18 23:21:44.622467555 UTC-75481.59"),
+            (
+                "2026-11-18 23:21:44.622467555 UTC-75481.59",
+                "2026-11-18 23:21:44".to_string()
+            )
+        );
+        assert_eq!(
+            replay_db_filename_and_time("2026-11-18 23:21:44.622467555 UTC-75481.59"),
+            (
+                "2026-11-18 23:21:44.622467555 UTC-75481.59",
+                "2026-11-18 23:21:44".to_string()
+            )
         );
     }
 }
