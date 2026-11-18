@@ -12,7 +12,7 @@ use crate::{
         },
         types::{ClientId, RoomId},
     },
-    utils::{is_name_illegal, to_engine_msg},
+    utils::{is_name_illegal, loc, to_engine_msg},
 };
 use base64::{decode, encode};
 use hedgewars_network_protocol::{
@@ -115,13 +115,13 @@ fn validate_kick_target(
         response.warn(self_err);
         false
     } else if !(room.game_info.is_none() || not_only_2_players || target_cl.teams_in_game == 0) {
-        response.warn("You can't kick the only other player!");
+        response.warn(loc("You can't kick the only other player!"));
         false
     } else if target_cl.room_id != Some(room.id) {
-        response.warn("The player is not in your room.");
+        response.warn(loc("The player is not in your room."));
         false
     } else if target_cl.has_super_power() {
-        response.warn("This player is protected from being kicked.");
+        response.warn(loc("This player is protected from being kicked."));
         false
     } else {
         true
@@ -139,7 +139,7 @@ fn kick_target_from_room(
         room_control.server(),
         room_control.room(),
         target_id,
-        "kicked",
+        loc("kicked"),
         leave_result,
         response,
     );
@@ -206,7 +206,8 @@ pub fn handle(
         }
         Fix => {
             if room_control.fix_room().is_ok() {
-                response.add(server_chat("This room is now permanent.".to_string()).send_self());
+                response
+                    .add(server_chat(loc("This room is now permanent.").to_string()).send_self());
             }
         }
         Unfix => {
@@ -215,7 +216,8 @@ pub fn handle(
                     response.warn(NOT_MASTER);
                 } else if room_control.unfix_room().is_ok() {
                     response.add(
-                        server_chat("This room is no longer permanent.".to_string()).send_self(),
+                        server_chat(loc("This room is no longer permanent.").to_string())
+                            .send_self(),
                     );
                 }
             }
@@ -223,13 +225,13 @@ pub fn handle(
         Greeting(text) => match room_control.set_room_greeting(text) {
             Ok(is_empty) => {
                 let msg = if is_empty {
-                    "Greeting message cleared."
+                    loc("Greeting message cleared.")
                 } else {
-                    "Greeting message set."
+                    loc("Greeting message set.")
                 };
                 response.add(server_chat(msg.to_string()).send_self());
             }
-            Err(_) => response.warn("You're not the room master or a server admin!"),
+            Err(_) => response.warn(loc("You're not the room master or a server admin!")),
         },
         MaxTeams(count) => {
             use crate::core::server::SetTeamCountError;
@@ -242,7 +244,7 @@ pub fn handle(
                 }
                 Err(SetTeamCountError::NotMaster) => response.warn(NOT_MASTER),
                 Err(SetTeamCountError::InvalidNumber) => {
-                    response.warn("/maxteams: specify number from 2 to 8")
+                    response.warn(loc("/maxteams: specify number from 2 to 8"))
                 }
             };
         }
@@ -333,7 +335,7 @@ pub fn handle(
                 Err(AddTeamError::TooManyHedgehogs) => response.warn(TOO_MANY_HEDGEHOGS),
                 Err(AddTeamError::TeamAlreadyExists) => response.warn(TEAM_EXISTS),
                 Err(AddTeamError::GameInProgress) => {
-                    response.warn("Joining not possible: Round is in progress.")
+                    response.warn(loc("Joining not possible: Round is in progress."))
                 }
                 Err(AddTeamError::Restricted) => response.warn(TEAM_ADD_RESTRICTED),
             }
@@ -446,7 +448,7 @@ pub fn handle(
                     },
                     Err(e) => {
                         warn!("Error while serializing the room configs: {}", e);
-                        response.warn("Unable to serialize the room configs.");
+                        response.warn(loc("Unable to serialize the room configs."));
                     }
                 }
             }
@@ -489,7 +491,7 @@ pub fn handle(
         CallVote(None) => {
             response.add(
                 server_chat(
-                    "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"
+                    loc("Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>")
                         .to_string(),
                 )
                 .send_self(),
@@ -658,7 +660,7 @@ pub fn handle(
                     .in_room(room_id),
                 );
                 response.add(
-                    server_chat("You're the new room master!".to_string()).send(new_master_id),
+                    server_chat(loc("You're the new room master!").to_string()).send(new_master_id),
                 );
                 let room = room_control.room();
                 let master = Some(room_control.server().client(new_master_id));
@@ -671,27 +673,27 @@ pub fn handle(
                 );
             }
             Err(ChangeMasterError::NoAccess) => {
-                response.warn("You're not the room master or a server admin!")
+                response.warn(loc("You're not the room master or a server admin!"))
             }
             Err(ChangeMasterError::AlreadyMaster) => {
-                response.warn("You're already the room master.")
+                response.warn(loc("You're already the room master."))
             }
-            Err(ChangeMasterError::NoClient) => response.warn("Player is not online."),
+            Err(ChangeMasterError::NoClient) => response.warn(loc("Player is not online.")),
             Err(ChangeMasterError::ClientNotInRoom) => {
-                response.warn("The player is not in your room.")
+                response.warn(loc("The player is not in your room."))
             }
         },
         Kick(kick_nick) => {
             if client.is_master() {
                 match room_control.server().find_client(&kick_nick) {
-                    None => response.warn("Player is not online."),
+                    None => response.warn(loc("Player is not online.")),
                     Some(kick_cl) => {
                         let kick_id = kick_cl.id;
                         if validate_kick_target(
                             &room_control,
                             client_id,
                             kick_id,
-                            "You can't kick yourself!",
+                            loc("You can't kick yourself!"),
                             response,
                         ) {
                             let master_nick = room_control.client().nick.clone();
@@ -716,7 +718,7 @@ pub fn handle(
                         &room_control,
                         client_id,
                         ban_id,
-                        "You can't ban yourself!",
+                        loc("You can't ban yourself!"),
                         response,
                     ) {
                         let master_nick = room_control.client().nick.clone();
@@ -750,7 +752,8 @@ pub fn handle(
                         canonical_ip, room_name, master_nick
                     );
                     response.add(
-                        server_chat("IP address added to room ban list.".to_string()).send_self(),
+                        server_chat(loc("IP address added to room ban list.").to_string())
+                            .send_self(),
                     );
                     let not_only_2_players = has_more_than_two_team_owners(room_control.room());
                     let is_in_game = room_control.room().game_info.is_some();
@@ -775,20 +778,20 @@ pub fn handle(
                         kick_target_from_room(&mut room_control, ban_id, response);
                     }
                 } else {
-                    response.warn("Player is not online.");
+                    response.warn(loc("Player is not online."));
                 }
             }
         }
         List => {}
         Stats | RestartServer | RestartServerConfirm => {
-            response.warn("This command is only available in the lobby.");
+            response.warn(loc("This command is only available in the lobby."));
         }
         Malformed(lines) => {
             let refs: Vec<&str> = lines.iter().map(|s| s.as_str()).collect();
             match refs.as_slice() {
-                [] => response.error("Empty command (state: in room)"),
-                ["CFG", _] => response.error("Empty config entry."),
-                ["ADD_TEAM", ..] => response.error("Corrupted hedgehogs info!"),
+                [] => response.error(loc("Empty command (state: in room)")),
+                ["CFG", _] => response.error(loc("Empty config entry.")),
+                ["ADD_TEAM", ..] => response.error(loc("Corrupted hedgehogs info!")),
                 ["HH_NUM", team_name, _] => {
                     if !client.is_master() {
                         response.error(NOT_MASTER);
@@ -802,39 +805,39 @@ pub fn handle(
                     if !client.is_master() {
                         response.warn(NOT_MASTER);
                     } else {
-                        response.warn("/maxteams: specify number from 2 to 8");
+                        response.warn(loc("/maxteams: specify number from 2 to 8"));
                     }
                 }
                 ["CALLVOTE", "KICK"] => {
                     if room.master_id.is_some() {
-                        response.warn(
+                        response.warn(loc(
                             "/callvote kick: This is only allowed in rooms without a room master.",
-                        );
+                        ));
                     } else {
-                        response.warn("/callvote kick: You need to specify a nickname.");
+                        response.warn(loc("/callvote kick: You need to specify a nickname."));
                     }
                 }
                 ["CALLVOTE", "HEDGEHOGS"] | ["CALLVOTE", "HEDGEHOGS", _] => {
-                    response.warn("/callvote hedgehogs: Specify number from 1 to 8.");
+                    response.warn(loc("/callvote hedgehogs: Specify number from 1 to 8."));
                 }
                 ["CALLVOTE", ..] => {
                     response.add(
                         server_chat(
-                            "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"
+                            loc("Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>")
                                 .to_string(),
                         )
                         .send_self(),
                     );
                 }
                 ["VOTE", _, "FORCE"] => {
-                    response.warn("/force: Please use 'yes' or 'no'.");
+                    response.warn(loc("/force: Please use 'yes' or 'no'."));
                 }
                 ["VOTE", _] => {
-                    response.warn("/vote: Please use 'yes' or 'no'.");
+                    response.warn(loc("/vote: Please use 'yes' or 'no'."));
                 }
-                ["CMD"] => response.warn(
+                ["CMD"] => response.warn(loc(
                     "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
-                ),
+                )),
                 ["CMD", params] => {
                     let (cmd, rest) = match params.find(' ') {
                         Some(idx) => (&params[..idx], params[idx + 1..].trim_start_matches(' ')),
@@ -843,24 +846,24 @@ pub fn handle(
                     let cmd_upper = cmd.to_ascii_uppercase();
                     match cmd_upper.as_str() {
                         "STATS" | "RESTART_SERVER" => {
-                            response.warn("This command is only available in the lobby.")
+                            response.warn(loc("This command is only available in the lobby."))
                         }
                         "BAN" => {
                             if !client.is_master() {
                                 response.warn(NOT_MASTER);
                             } else {
-                                response.warn("/ban: specify player nickname or IP address");
+                                response.warn(loc("/ban: specify player nickname or IP address"));
                             }
                         }
                         "MAXTEAMS" => {
                             if !client.is_master() {
                                 response.warn(NOT_MASTER);
                             } else {
-                                response.warn("/maxteams: specify number from 2 to 8");
+                                response.warn(loc("/maxteams: specify number from 2 to 8"));
                             }
                         }
-                        "VOTE" => response.warn("/vote: Please use 'yes' or 'no'."),
-                        "FORCE" => response.warn("/force: Please use 'yes' or 'no'."),
+                        "VOTE" => response.warn(loc("/vote: Please use 'yes' or 'no'.")),
+                        "FORCE" => response.warn(loc("/force: Please use 'yes' or 'no'.")),
                         "CALLVOTE" => {
                             let (sub, sub_arg) = match rest.find(' ') {
                                 Some(idx) => (&rest[..idx], rest[idx + 1..].trim_start_matches(' ')),
@@ -869,20 +872,24 @@ pub fn handle(
                             match sub.to_ascii_uppercase().as_str() {
                                 "KICK" if sub_arg.is_empty() => {
                                     if room.master_id.is_some() {
-                                        response.warn(
+                                        response.warn(loc(
                                             "/callvote kick: This is only allowed in rooms without a room master.",
-                                        );
+                                        ));
                                     } else {
-                                        response.warn("/callvote kick: You need to specify a nickname.");
+                                        response.warn(loc(
+                                            "/callvote kick: You need to specify a nickname.",
+                                        ));
                                     }
                                 }
                                 "HEDGEHOGS" => {
-                                    response.warn("/callvote hedgehogs: Specify number from 1 to 8.");
+                                    response.warn(loc(
+                                        "/callvote hedgehogs: Specify number from 1 to 8.",
+                                    ));
                                 }
                                 _ => {
                                     response.add(
                                         server_chat(
-                                            "Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>"
+                                            loc("Available callvote commands: hedgehogs <number>, pause, newseed, map <name>, kick <player>")
                                                 .to_string(),
                                         )
                                         .send_self(),
@@ -890,9 +897,9 @@ pub fn handle(
                                 }
                             }
                         }
-                        _ => response.warn(
+                        _ => response.warn(loc(
                             "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
-                        ),
+                        )),
                     }
                 }
                 [cmd, ..] => {

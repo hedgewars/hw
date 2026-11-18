@@ -6,6 +6,7 @@ use crate::core::{
     types::ClientId,
 };
 use crate::handlers::actions::ToPendingMessage;
+use crate::utils::loc;
 use hedgewars_network_protocol::{
     messages::{
         add_flags, HwProtocolMessage,
@@ -218,7 +219,9 @@ pub fn handle(
         }
         RestartServerConfirm => {
             if server.is_admin(client_id) {
-                response.warn("Please confirm server restart with '/restart_server yes'.");
+                response.warn(loc(
+                    "Please confirm server restart with '/restart_server yes'.",
+                ));
             }
         }
         RestartServer => {
@@ -257,7 +260,7 @@ pub fn handle(
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
                                 host.clone(),
-                                "60 seconds cooldown after kick".to_string(),
+                                loc("60 seconds cooldown after kick").to_string(),
                                 60,
                             );
                             info!("Auto-ban added: 60s cooldown after kick for IP '{}'", host);
@@ -268,7 +271,7 @@ pub fn handle(
                             anteroom,
                             target_id,
                             response,
-                            "Kicked".to_string(),
+                            loc("Kicked").to_string(),
                         );
                     }
                 }
@@ -292,7 +295,7 @@ pub fn handle(
                         if !host.is_empty() {
                             anteroom.bans.add_ip_ban_raw(
                                 host.clone(),
-                                "60 seconds cooldown after kick".to_string(),
+                                loc("60 seconds cooldown after kick").to_string(),
                                 60,
                             );
                             anteroom.bans.add_ip_ban(host, reason, time);
@@ -303,7 +306,7 @@ pub fn handle(
                             anteroom,
                             target_id,
                             response,
-                            "Kicked".to_string(),
+                            loc("Kicked").to_string(),
                         );
                     }
                 }
@@ -365,15 +368,15 @@ pub fn handle(
         | Vote(_)
         | ForceVote(_)
         | MaxTeams(_) => {
-            response.warn("This command is only available in rooms.");
+            response.warn(loc("This command is only available in rooms."));
         }
         Malformed(lines) => {
             let refs: Vec<&str> = lines.iter().map(|s| s.as_str()).collect();
             match refs.as_slice() {
-                [] => response.error("Empty command (state: in lobby)"),
-                ["CMD"] => response.warn(
+                [] => response.error(loc("Empty command (state: in lobby)")),
+                ["CMD"] => response.warn(loc(
                     "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
-                ),
+                )),
                 ["CMD", params] => {
                     let (cmd, rest) = match params.find(' ') {
                         Some(idx) => (&params[..idx], params[idx + 1..].trim_start_matches(' ')),
@@ -384,21 +387,25 @@ pub fn handle(
                         "DELEGATE" | "BAN" | "SAVEROOM" | "LOADROOM" | "DELETE"
                             if !rest.is_empty() =>
                         {
-                            response.warn("This command is only available in rooms.")
+                            response.warn(loc("This command is only available in rooms."))
                         }
                         "SAVE" if rest.contains(' ') => {
-                            response.warn("This command is only available in rooms.")
+                            response.warn(loc("This command is only available in rooms."))
                         }
                         "FIX" | "UNFIX" | "GREETING" | "CALLVOTE" | "VOTE" | "FORCE"
-                        | "MAXTEAMS" => response.warn("This command is only available in rooms."),
-                        _ => response.warn(
+                        | "MAXTEAMS" => {
+                            response.warn(loc("This command is only available in rooms."))
+                        }
+                        _ => response.warn(loc(
                             "Unknown command or invalid parameters. Say '/help' in chat for a list of commands.",
-                        ),
+                        )),
                     }
                 }
                 ["RESTART_SERVER", _] => {
                     if server.is_admin(client_id) {
-                        response.warn("Please confirm server restart with '/restart_server yes'.");
+                        response.warn(loc(
+                            "Please confirm server restart with '/restart_server yes'.",
+                        ));
                     }
                 }
                 ["SET_SERVER_VAR", "LATEST_PROTO", _] => {}

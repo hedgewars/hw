@@ -2,6 +2,7 @@ use super::{
     bans::BanCollection, indexslab::IndexSlab, joins_monitor::JoinsMonitor, no_anon::NoAnonList,
     types::ClientId,
 };
+use crate::utils::loc;
 use base64::encode;
 use log::*;
 use rand::{thread_rng, RngCore};
@@ -51,7 +52,7 @@ impl HwAnteroom {
     pub fn try_accept(&mut self, addr: Option<IpAddr>) -> Result<(), String> {
         if let Some(ip) = addr {
             if !self.joins_monitor.check_and_record(ip) {
-                return Err("Reconnected too fast".to_string());
+                return Err(loc("Reconnected too fast").to_string());
             }
             if let Some(reason) = self.bans.find_ip_ban(ip) {
                 return Err(reason);

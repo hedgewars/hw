@@ -6,7 +6,7 @@ use crate::{
         server::HwServer,
         types::ClientId,
     },
-    utils::is_name_illegal,
+    utils::{is_name_illegal, loc},
 };
 use hedgewars_network_protocol::messages::{HwProtocolMessage, HwServerMessage::*};
 use log::*;
@@ -110,7 +110,7 @@ fn get_completion_result(
                 "Client {} failed to join server: nickname '{}' already in use",
                 client_id, nick
             );
-            response.add(Bye("Nickname is already in use".to_string()).send_self());
+            response.add(Bye(loc("Nickname is already in use").to_string()).send_self());
             return LoginResult::Exit;
         } else {
             info!(
@@ -158,7 +158,9 @@ fn get_completion_result(
             .matches_opt(anteroom.get_client(client_id).ip_addr)
         {
             warn!("Client '{}' (id: {}) failed to join server: registered account required from this IP", nick, client_id);
-            response.error("Registered account is required when logging in from this IP address");
+            response.error(loc(
+                "Registered account is required when logging in from this IP address",
+            ));
             LoginResult::Exit
         } else if server.is_registered_only() {
             response.add(Bye(REGISTRATION_REQUIRED.to_string()).send_self());
@@ -178,7 +180,7 @@ pub fn handle(
 ) -> LoginResult {
     match message {
         HwProtocolMessage::Quit(msg) => {
-            let msg = msg.unwrap_or_else(|| "bye".to_string());
+            let msg = msg.unwrap_or_else(|| loc("bye").to_string());
             let nick_str = anteroom
                 .get_client(client_id)
                 .nick
@@ -337,7 +339,7 @@ pub fn handle(
         HwProtocolMessage::Malformed(lines) => {
             let refs: Vec<&str> = lines.iter().map(|s| s.as_str()).collect();
             match refs.as_slice() {
-                [] => response.error("Empty command (state: not entered)"),
+                [] => response.error(loc("Empty command (state: not entered)")),
                 ["PROTO", _] => {
                     if anteroom.get_client(client_id).protocol_number.is_some() {
                         warn!(

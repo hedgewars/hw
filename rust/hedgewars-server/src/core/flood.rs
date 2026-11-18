@@ -1,3 +1,4 @@
+use crate::utils::loc;
 use std::time::{Duration, Instant};
 
 #[derive(Clone, Copy, Debug)]
@@ -33,29 +34,29 @@ impl FloodControl {
                 3,
                 (Duration::from_secs(10), 2),
                 (Duration::from_secs(30), 3),
-                "Warning! Chat flood protection activated",
-                "Excess flood",
+                loc("Warning! Chat flood protection activated"),
+                loc("Excess flood"),
             ),
             FloodEvent::RoomNameUpdate => (
                 3,
                 (Duration::from_secs(10), 2),
                 (Duration::from_secs(30), 3),
-                "Warning! Room name change flood protection activated",
-                "Excess flood",
+                loc("Warning! Room name change flood protection activated"),
+                loc("Excess flood"),
             ),
             FloodEvent::RoomJoin => (
                 2,
                 (Duration::from_secs(10), 2),
                 (Duration::from_secs(35), 3),
-                "Warning! Joins flood protection activated",
-                "Excess flood",
+                loc("Warning! Joins flood protection activated"),
+                loc("Excess flood"),
             ),
             FloodEvent::EngineMessage => (
                 8,
                 (Duration::from_secs(10), 4),
                 (Duration::from_secs(25), 5),
-                "Game messages flood detected - 1",
-                "Excess flood",
+                loc("Game messages flood detected - 1"),
+                loc("Excess flood"),
             ),
         };
 

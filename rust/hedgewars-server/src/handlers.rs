@@ -13,7 +13,7 @@ use crate::{
         server::{HwRoomOrServer, HwServer},
         types::{ClientId, Replay, RoomId},
     },
-    utils,
+    utils::{self, loc},
 };
 use hedgewars_network_protocol::messages::{
     global_chat, server_chat, HwProtocolMessage, HwServerMessage, HwServerMessage::*,
@@ -271,14 +271,14 @@ pub fn handle(
             if state.anteroom.has_client(client_id) {
                 let client = state.anteroom.get_client_mut(client_id);
                 if client.pings_queue == 0 {
-                    response.error("Protocol violation");
+                    response.error(loc("Protocol violation"));
                 } else {
                     client.pings_queue -= 1;
                 }
             } else if state.server.has_client(client_id) && !state.server.is_checker(client_id) {
                 let client = state.server.client_mut(client_id);
                 if client.pings_queue == 0 {
-                    response.error("Protocol violation");
+                    response.error(loc("Protocol violation"));
                 } else {
                     client.pings_queue -= 1;
                 }
@@ -334,7 +334,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "bye".to_string(),
+                                loc("bye").to_string(),
                             );
                         }
                         _ => checker::handle(&mut state.server, client_id, response, message),
@@ -354,7 +354,7 @@ pub fn handle(
                                 &mut state.server,
                                 &mut state.anteroom,
                                 response,
-                                "bye".to_string(),
+                                loc("bye").to_string(),
                             );
                         }
                         HwProtocolMessage::Info(nick) => {
@@ -518,7 +518,7 @@ pub fn handle_client_loss(state: &mut ServerState, client_id: ClientId, response
             &mut state.server,
             &mut state.anteroom,
             response,
-            "Connection closed".to_string(),
+            loc("Connection closed").to_string(),
         );
     }
     state.assert_invariants();
@@ -535,14 +535,14 @@ pub fn handle_client_timed_out(
             "Client '{}' (id: {}) timed out in anteroom",
             nick_str, client_id
         );
-        response.add(Bye("Ping timeout".to_string()).send_self());
+        response.add(Bye(loc("Ping timeout").to_string()).send_self());
         response.remove_client(client_id);
     } else {
         common::remove_client(
             &mut state.server,
             &mut state.anteroom,
             response,
-            "Ping timeout".to_string(),
+            loc("Ping timeout").to_string(),
         );
     }
     state.assert_invariants();
@@ -572,8 +572,9 @@ pub fn handle_io_result(
                     .unwrap_or_default();
                 warn!("Client '{}' (id: {}) failed to join server: registered account required from this IP", nick, client_id);
                 state.anteroom.remove_client(client_id);
-                response
-                    .error("Registered account is required when logging in from this IP address");
+                response.error(loc(
+                    "Registered account is required when logging in from this IP address",
+                ));
                 response.remove_client(client_id);
             } else if !is_registered && state.server.is_registered_only() {
                 let nick = state

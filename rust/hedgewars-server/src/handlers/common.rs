@@ -18,7 +18,7 @@ use crate::{
         },
         types::{ClientId, RoomId},
     },
-    utils::to_engine_msg,
+    utils::{loc, to_engine_msg},
 };
 use hedgewars_network_protocol::{
     messages::{
@@ -38,7 +38,7 @@ pub fn rnd_reply(options: &[String]) -> HwServerMessage {
     let (nick, reply) = if options.is_empty() {
         (
             "[random]".to_string(),
-            (["heads", "tails"].choose(&mut rng).unwrap()).to_string(),
+            (*[loc("heads"), loc("tails")].choose(&mut rng).unwrap()).to_string(),
         )
     } else {
         (
@@ -253,7 +253,7 @@ pub fn get_room_join_error(error: JoinRoomError, response: &mut Response) {
         JoinRoomError::Full => response.warn(ROOM_FULL),
         JoinRoomError::Restricted => response.warn(ROOM_JOIN_RESTRICTED),
         JoinRoomError::RegistrationRequired => response.warn(ROOM_REGISTRATION_REQUIRED),
-        JoinRoomError::RoomBanned => response.warn("You are banned from this room."),
+        JoinRoomError::RoomBanned => response.warn(loc("You are banned from this room.")),
     }
 }
 
@@ -351,7 +351,8 @@ pub fn get_room_leave_result_for_client(
                             .in_room(room.id),
                     );
                     response.add(
-                        server_chat("You're the new room master!".to_string()).send(new_master_id),
+                        server_chat(loc("You're the new room master!").to_string())
+                            .send(new_master_id),
                     );
                 }
 
@@ -644,7 +645,7 @@ pub fn check_vote(
             if room.master_id.is_some() {
                 Some((
                     true,
-                    "/callvote kick: This is only allowed in rooms without a room master."
+                    loc("/callvote kick: This is only allowed in rooms without a room master.")
                         .to_string(),
                 ))
             } else if server
@@ -654,14 +655,14 @@ pub fn check_vote(
             {
                 None
             } else {
-                Some((true, "/callvote kick: No such user!".to_string()))
+                Some((true, loc("/callvote kick: No such user!").to_string()))
             }
         }
         VoteType::Map(None) => {
             let mut names: Vec<_> = room.saves.keys().cloned().collect();
             names.sort();
             if names.is_empty() {
-                Some((false, "/callvote map: No maps available.".to_string()))
+                Some((false, loc("/callvote map: No maps available.").to_string()))
             } else {
                 Some((false, format!("/callvote map: {}", names.join(", "))))
             }
@@ -670,14 +671,17 @@ pub fn check_vote(
             if room.saves.contains_key(&name[..]) {
                 None
             } else {
-                Some((true, "/callvote map: No such map!".to_string()))
+                Some((true, loc("/callvote map: No such map!").to_string()))
             }
         }
         VoteType::Pause => {
             if room.game_info.is_some() {
                 None
             } else {
-                Some((true, "/callvote pause: No game in progress!".to_string()))
+                Some((
+                    true,
+                    loc("/callvote pause: No game in progress!").to_string(),
+                ))
             }
         }
         VoteType::NewSeed => None,
@@ -685,7 +689,7 @@ pub fn check_vote(
             1..=MAX_HEDGEHOGS_PER_TEAM => None,
             _ => Some((
                 true,
-                "/callvote hedgehogs: Specify number from 1 to 8.".to_string(),
+                loc("/callvote hedgehogs: Specify number from 1 to 8.").to_string(),
             )),
         },
     };
@@ -710,21 +714,21 @@ pub fn get_vote_data(
 ) {
     match result {
         Ok(VoteResult::Submitted) => {
-            response.add(server_chat("Your vote has been counted.".to_string()).send_self())
+            response.add(server_chat(loc("Your vote has been counted.").to_string()).send_self())
         }
         Ok(VoteResult::Succeeded(_) | VoteResult::Failed) => {
-            response.add(server_chat("Your vote has been counted.".to_string()).send_self());
+            response.add(server_chat(loc("Your vote has been counted.").to_string()).send_self());
             response.add(
-                server_chat("Voting closed.".to_string())
+                server_chat(loc("Voting closed.").to_string())
                     .send_all()
                     .in_room(room_id),
             );
         }
         Err(VoteError::NoVoting) => {
-            response.warn("There's no voting going on.");
+            response.warn(loc("There's no voting going on."));
         }
         Err(VoteError::AlreadyVoted) => {
-            response.warn("You already have voted.");
+            response.warn(loc("You already have voted."));
         }
         Err(VoteError::NotEntitled) => {}
     }
@@ -752,7 +756,7 @@ pub fn handle_vote(
                     room_control.server(),
                     room_control.room(),
                     kicked_id,
-                    "kicked",
+                    loc("kicked"),
                     leave_result,
                     response,
                 );
@@ -780,7 +784,7 @@ pub fn handle_vote(
             }
             VoteEffect::Pause => {
                 response.add(
-                    server_chat("Pause toggled.".to_string())
+                    server_chat(loc("Pause toggled.").to_string())
                         .send_all()
                         .in_room(room_id),
                 );
@@ -830,11 +834,13 @@ pub fn get_start_game_data(
             );
         }
         Err(StartGameError::NotEnoughClans) => {
-            response.warn("The game can't be started with less than two clans!")
+            response.warn(loc("The game can't be started with less than two clans!"))
         }
-        Err(StartGameError::NotReady) => response.warn("Not all players are ready"),
-        Err(StartGameError::AlreadyInGame) => response.warn("The game is already in progress"),
-        Err(StartGameError::PlayersStillInGame) => response.warn("Some players are still in game!"),
+        Err(StartGameError::NotReady) => response.warn(loc("Not all players are ready")),
+        Err(StartGameError::AlreadyInGame) => response.warn(loc("The game is already in progress")),
+        Err(StartGameError::PlayersStillInGame) => {
+            response.warn(loc("Some players are still in game!"))
+        }
     }
 }
 
