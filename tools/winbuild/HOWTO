@@ -2,9 +2,17 @@
 
 > docker build --progress=plain -t win-hedgewarsbe .
 
+or
+
+> podman build --progress=plain -t win-hedgewarsbe .
+
 == To build hedgewars using this image:
 
 > docker-compose run --rm build
+
+or
+
+> podman-compose run --rm build
 
 Collect artifacts in out/ folder
 

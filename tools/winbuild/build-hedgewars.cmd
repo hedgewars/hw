@@ -5,14 +5,13 @@ set ROOTPATH=Z:
 set BUILDDIR=%ROOTPATH%/build-Hedgewars
 set HWREPO=Z:/src
 
-set CMAKE=%ROOTPATH%/cmake-4.2.1-windows-x86_64/bin/cmake.exe
-set CPACK=%ROOTPATH%/cmake-4.2.1-windows-x86_64/bin/cpack.exe
+set CMAKE=%ROOTPATH%/cmake-4.2.8-windows-x86_64/bin/cmake.exe
+set CPACK=%ROOTPATH%/cmake-4.2.8-windows-x86_64/bin/cpack.exe
 
 set PATH=%ROOTPATH%/nsis-3.11;%PATH%
 set PATH=%ROOTPATH%/FPC/bin/i386-win32;%PATH%
 set PATH=%ROOTPATH%/ninja;%PATH%
 set PATH=%ROOTPATH%/RUST/bin;%PATH%
-set PATH=%ROOTPATH%/ghc-9.12.3-x86_64-unknown-mingw32/bin;%PATH%
 set PATH=%ROOTPATH%/w64devkit/bin;%PATH%
 
 set SDL2_DIR=%ROOTPATH%/SDL2-2.32.8/x86_64-w64-mingw32
@@ -55,7 +54,6 @@ echo Configuring...
 cd %BUILDDIR%
 %CMAKE% -G Ninja -DCMAKE_BUILD_TYPE="Release" ^
       -DWIN32_WIN64_CROSS_COMPILE=on ^
-      -DCABAL_FLAGS="-j --project-file=tools/winbuild/cabal.project.local" ^
       -DEXTERNAL_BIN_DIR="%DLLS_DIR%" ^
       %HWREPO%
 

@@ -8,9 +8,9 @@ cd Build
 :: 1. USER CONFIGURATION (EDIT THESE PATHS)
 :: ============================================================
 
-:: Path to the unpacked Qt Source Code (e.g., qt-everywhere-src-6.10.1)
-set "QT_BASE_SRC=Z:/Qt/qtbase-everywhere-src-6.10.1"
-set "QT_TOOLS_SRC=Z:/Qt/qttools-everywhere-src-6.10.1"
+:: Path to the unpacked Qt Source Code (e.g., qt-everywhere-src-6.11.3)
+set "QT_BASE_SRC=Z:/Qt/qtbase-everywhere-src-6.11.3"
+set "QT_TOOLS_SRC=Z:/Qt/qttools-everywhere-src-6.11.3"
 
 :: Path to Qt installation folder
 set "QT_INSTALL_DIR=Z:/Qt/Qt6"
@@ -22,7 +22,7 @@ set "OPENSSL_DIR=Z:/openssl-master"
 set "MINGW_BIN=Z:/w64devkit/bin"
 
 :: Path to your CMake bin directory
-set "CMAKE_ROOT=Z:/cmake-4.2.1-windows-x86_64"
+set "CMAKE_ROOT=Z:/cmake-4.2.8-windows-x86_64"
 
 :: Path to your Ninja directory
 set "NINJA_ROOT=Z:/ninja"

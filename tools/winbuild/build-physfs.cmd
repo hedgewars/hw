@@ -2,7 +2,7 @@
 
 set ROOTPATH=Z:
 
-set CMAKE=%ROOTPATH%/cmake-4.2.1-windows-x86_64/bin/cmake.exe
+set CMAKE=%ROOTPATH%/cmake-4.2.8-windows-x86_64/bin/cmake.exe
 
 set PATH=%ROOTPATH%/w64devkit/bin;%PATH%
 set PATH=%ROOTPATH%/ninja;%PATH%
