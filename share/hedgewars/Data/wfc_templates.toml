@@ -45,8 +45,13 @@ can_flip = false
 
 # Rooms tiles
 [[tiles.Rooms]]
+name = "empty_120.png"
+edges = [ "e", "e", "e", "e" ]
+is_negative = true
+
+[[tiles.Rooms]]
 name = "bend_120.png"
-edges = [ "fee", "eef", "f", "f" ]
+edges = [ "eef", "ffe", "e", "e" ]
 is_negative = true
 can_rotate90 = true
 can_rotate180 = true
@@ -54,7 +59,15 @@ can_rotate270 = true
 
 [[tiles.Rooms]]
 name = "corner_120.png"
-edges = [ "eef", "fee", "e", "e" ]
+edges = [ "ffe", "eff", "f", "f" ]
+is_negative = true
+can_rotate90 = true
+can_rotate180 = true
+can_rotate270 = true
+
+[[tiles.Rooms]]
+name = "door_120.png"
+edges = [ "e", "eff", "fef", "ffe" ]
 is_negative = true
 can_rotate90 = true
 can_rotate180 = true
@@ -62,28 +75,15 @@ can_rotate270 = true
 
 [[tiles.Rooms]]
 name = "corridor_120.png"
-edges = [ "efe", "e", "efe", "e" ]
+edges = [ "fef", "f", "fef", "f" ]
 is_negative = true
 can_rotate90 = true
 can_rotate180 = false
 can_rotate270 = false
 
 [[tiles.Rooms]]
-name = "door_120.png"
-edges = [ "f", "fee", "efe", "eef" ]
-is_negative = true
-can_rotate90 = true
-can_rotate180 = true
-can_rotate270 = true
-
-[[tiles.Rooms]]
-name = "empty_120.png"
-edges = [ "f", "f", "f", "f" ]
-is_negative = true
-
-[[tiles.Rooms]]
 name = "side_120.png"
-edges = [ "e", "eef", "f", "fee" ]
+edges = [ "f", "ffe", "e", "eff" ]
 is_negative = true
 can_rotate90 = true
 can_rotate180 = true
@@ -91,7 +91,7 @@ can_rotate270 = true
 
 [[tiles.Rooms]]
 name = "t_120.png"
-edges = [ "e", "efe", "efe", "efe" ]
+edges = [ "f", "fef", "fef", "fef" ]
 is_negative = true
 can_rotate90 = true
 can_rotate180 = true
@@ -99,7 +99,7 @@ can_rotate270 = true
 
 [[tiles.Rooms]]
 name = "turn_120.png"
-edges = [ "efe", "efe", "e", "e" ]
+edges = [ "fef", "fef", "f", "f" ]
 is_negative = true
 can_mirror = false
 can_flip = false
@@ -109,7 +109,7 @@ can_rotate270 = true
 
 [[tiles.Rooms]]
 name = "wall_120.png"
-edges = [ "e", "e", "e", "e" ]
+edges = [ "f", "f", "f", "f" ]
 is_negative = true
 
 # shoppa tiles
