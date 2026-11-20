@@ -321,6 +321,41 @@ qt_add_executable(hedgewars
     ${CMAKE_CURRENT_BINARY_DIR}/creditsmessages.h
 )
 
+qt_add_translations(hedgewars
+    TS_FILES
+    ../share/hedgewars/Data/Locale/hedgewars_bg.ts
+    ../share/hedgewars/Data/Locale/hedgewars_cs.ts
+    ../share/hedgewars/Data/Locale/hedgewars_da.ts
+    ../share/hedgewars/Data/Locale/hedgewars_de.ts
+    ../share/hedgewars/Data/Locale/hedgewars_el.ts
+    ../share/hedgewars/Data/Locale/hedgewars_en.ts
+    ../share/hedgewars/Data/Locale/hedgewars_es.ts
+    ../share/hedgewars/Data/Locale/hedgewars_fi.ts
+    ../share/hedgewars/Data/Locale/hedgewars_fr.ts
+    ../share/hedgewars/Data/Locale/hedgewars_gd.ts
+    ../share/hedgewars/Data/Locale/hedgewars_gl.ts
+    ../share/hedgewars/Data/Locale/hedgewars_hu.ts
+    ../share/hedgewars/Data/Locale/hedgewars_it.ts
+    ../share/hedgewars/Data/Locale/hedgewars_ja.ts
+    ../share/hedgewars/Data/Locale/hedgewars_ko.ts
+    ../share/hedgewars/Data/Locale/hedgewars_lt.ts
+    ../share/hedgewars/Data/Locale/hedgewars_ms.ts
+    ../share/hedgewars/Data/Locale/hedgewars_nl.ts
+    ../share/hedgewars/Data/Locale/hedgewars_pl.ts
+    ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts
+    ../share/hedgewars/Data/Locale/hedgewars_pt_PT.ts
+    ../share/hedgewars/Data/Locale/hedgewars_ro.ts
+    ../share/hedgewars/Data/Locale/hedgewars_ru.ts
+    ../share/hedgewars/Data/Locale/hedgewars_sk.ts
+    ../share/hedgewars/Data/Locale/hedgewars_sv.ts
+    ../share/hedgewars/Data/Locale/hedgewars_tr_TR.ts
+    ../share/hedgewars/Data/Locale/hedgewars_uk.ts
+    ../share/hedgewars/Data/Locale/hedgewars_zh_CN.ts
+    ../share/hedgewars/Data/Locale/hedgewars_zh_TW.ts
+    QM_FILES_OUTPUT_VARIABLE
+    frontend_qm_localization_files
+)
+
 target_compile_definitions(hedgewars PRIVATE
     HEDGEWARS_DATADIR="${HEDGEWARS_DATADIR}"
     HEDGEWARS_PROTO_VER="${HEDGEWARS_PROTO_VER}"
@@ -362,5 +397,10 @@ include(GNUInstallDirs)
 install(TARGETS hedgewars
     BUNDLE  DESTINATION .
     RUNTIME DESTINATION ${target_binary_install_dir}
+)
+
+install(FILES
+    ${frontend_qm_localization_files}
+    DESTINATION ${HEDGEWARS_DATADIR}Data/Locale
 )
 
