@@ -110,7 +110,7 @@
     </message>
     <message>
         <source>An extended credits list can be found in the CREDITS text file.</source>
-        <translation>Больше титров можно найти в файле CREDITS</translation>
+        <translation>Больше титров можно найти в файле CREDITS.</translation>
     </message>
     <message>
         <source>&lt;a href=&quot;https://visualstudio.microsoft.com&quot;&gt;VC++&lt;/a&gt;: %1</source>
@@ -176,11 +176,11 @@
     </message>
     <message>
         <source>Please specify an IP address.</source>
-        <translation>Укажите IP адрес</translation>
+        <translation>Укажите IP-адрес.</translation>
     </message>
     <message>
         <source>Please specify a nickname.</source>
-        <translation>Укажите псевдоним</translation>
+        <translation>Укажите псевдоним.</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>If you found a bug, you can see if it&apos;s already been reported here: </source>
-        <translation>Если вы нашли ошибку, можете проверить, не было ли уже сообщения о ней здесь:</translation>
+        <translation>Если вы нашли ошибку, можете проверить, не было ли уже сообщения о ней здесь: </translation>
     </message>
     <message>
         <source>Your email address is optional, but necessary if you want us to get back at you.</source>
@@ -504,12 +504,12 @@ Please check your installation!</source>
     <message>
         <source>Hedgewars Demo File</source>
         <comment>File Types</comment>
-        <translation>Файл записи игры hedgewars</translation>
+        <translation>Файл записи игры Hedgewars</translation>
     </message>
     <message>
         <source>Hedgewars Save File</source>
         <comment>File Types</comment>
-        <translation>Файл сохранения игры hedgewars</translation>
+        <translation>Файл сохранения игры Hedgewars</translation>
     </message>
     <message>
         <source>Demo name</source>
@@ -543,7 +543,7 @@ Please pick another nickname:</source>
     </message>
     <message>
         <source>Hedgewars - Nick registered</source>
-        <translation>Hedgewars - Имя пользователя зарегистрировано</translation>
+        <translation>Hedgewars - Псевдоним зарегистрирован</translation>
     </message>
     <message>
         <source>This nick is registered, and you haven&apos;t specified a password.
@@ -551,9 +551,9 @@ Please pick another nickname:</source>
 If this nick isn&apos;t yours, please register your own nick at www.hedgewars.org
 
 Password:</source>
-        <translation>Указанное имя пользователя зарегистрирована, и вы не указали пароль
+        <translation>Указанный псевдоним зарегистрирован, а вы не указали пароль.
 
-Если это имя пользователя не принадлежит вам, пожалуйста, зарегистрируйте другое имя на www.hedgewars.org
+Если этот псевдоним не принадлежит вам, пожалуйста, зарегистрируйте собственный на www.hedgewars.org
 
 Пароль:</translation>
     </message>
@@ -561,7 +561,7 @@ Password:</source>
         <source>Your nickname is not registered.
 To prevent someone else from using it,
 please register it at www.hedgewars.org</source>
-        <translation type="vanished">Ваше имя пользователя не зарегистрировано.
+        <translation type="vanished">Ваш псевдоним не зарегистрирован.
 Чтобы никто другой не воспользовался им,
 зарегистрируйте его на www.hedgewars.org</translation>
     </message>
@@ -569,11 +569,13 @@ please register it at www.hedgewars.org</source>
         <source>
 
 Your password wasn&apos;t saved either.</source>
-        <translation>Ваш пароль не был сохранён.</translation>
+        <translation>
+
+Ваш пароль также не был сохранён.</translation>
     </message>
     <message>
         <source>Hedgewars - Empty nickname</source>
-        <translation>Hedgewars - Пустое имя пользователя</translation>
+        <translation>Hedgewars - Пустой псевдоним</translation>
     </message>
     <message>
         <source>Hedgewars - Wrong password</source>
@@ -638,7 +640,10 @@ Please, enter the password:</source>
 To be able to rejoin games in progress and
 prevent someone else from using your nickname,
 please register it at www.hedgewars.org.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ваш псевдоним не зарегистрирован.
+Чтобы иметь возможность возвращаться в начатые игры
+и не дать другим игрокам использовать ваш псевдоним,
+зарегистрируйте его на www.hedgewars.org.</translation>
     </message>
 </context>
 <context>
@@ -661,9 +666,9 @@ If this keeps happening, please click the &apos;Feedback&apos; button in the mai
 
 Last engine message:
 %1</source>
-        <translation>Произошла фатальная ошибка! - Движку игры пришлось остановить работу.
+        <translation>Произошла фатальная ошибка! Движку игры пришлось остановить работу.
 
-Мы очень сожалеем о произошедем :(
+Мы очень сожалеем о произошедшем :(
 
 Если это продолжает происходить, нажмите кнопку &apos;Отзыв&apos; в главном меню!
 
@@ -875,7 +880,7 @@ Last engine message:
     </message>
     <message>
         <source>WFC</source>
-        <translation type="unfinished"></translation>
+        <translation>Волновая (WFC)</translation>
     </message>
 </context>
 <context>
@@ -953,7 +958,7 @@ Last engine message:
 
 Please check the host name and port settings and/or try again later.</source>
         <translation>Соединение было отклонено хостом или истекло время ожидания. Это могло произойти по одной из следующих причин:
-- В данный момент сервер Hegdewars не запущен на хосте
+- В данный момент сервер Hedgewars не запущен на хосте
 - Указанный неправильный номер порта
 - Произошла временная ошибка сети
 
@@ -1033,7 +1038,7 @@ Last engine message:
     </message>
     <message>
         <source>Choose a hat</source>
-        <translation>Выберите шапку</translation>
+        <translation>Выберите шляпу</translation>
     </message>
 </context>
 <context>
@@ -1051,7 +1056,7 @@ Last engine message:
     </message>
     <message>
         <source>Warning: The same key is assigned multiple times!</source>
-        <translation>Предупреждение: Одна и так же клавиша назначена несколько раз!</translation>
+        <translation>Предупреждение: Одна и та же клавиша назначена несколько раз!</translation>
     </message>
 </context>
 <context>
@@ -1085,12 +1090,12 @@ Last engine message:
     <message>
         <source>Video: %1x%2, %3 FPS, %4</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = frames per second = %4 = decoder name</extracomment>
-        <translation>Видео метаданные. %1 = ширина видео, %2 = высота видео, %3 = кадров в секунду = %4 = название кодека</translation>
+        <translation>Видео: %1×%2, %3 кадр/с, %4</translation>
     </message>
     <message>
         <source>Video: %1x%2, %3</source>
         <extracomment>Video metadata. %1 = video width, %2 = video height, %3 = decoder name</extracomment>
-        <translation>Видео метаданные. %1 = ширина видео, %2 = высота видео, %3 = название кодека</translation>
+        <translation>Видео: %1×%2, %3</translation>
     </message>
     <message>
         <source>Player: %1</source>
@@ -1226,7 +1231,7 @@ Last engine message:
     <name>PageDataDownload</name>
     <message>
         <source>Loading, please wait.</source>
-        <translation>Идёт загрузка пожалуйста, подождите.</translation>
+        <translation>Идёт загрузка, пожалуйста, подождите.</translation>
     </message>
     <message>
         <source>Open packages directory</source>
@@ -1356,7 +1361,7 @@ Last engine message:
     </message>
     <message>
         <source>Random Hats</source>
-        <translation>Случайные шапки</translation>
+        <translation>Случайные шляпы</translation>
     </message>
     <message>
         <source>Random Names</source>
@@ -1368,7 +1373,7 @@ Last engine message:
     </message>
     <message>
         <source>Randomize the grave</source>
-        <translation>Случайное надгробье</translation>
+        <translation>Случайное надгробие</translation>
     </message>
     <message>
         <source>Randomize the flag</source>
@@ -1482,7 +1487,7 @@ Last engine message:
     </message>
     <message>
         <source>With everyone having the same clan color, there was no reason to fight. And so the hedgehogs happily lived in peace ever after.</source>
-        <translation>Когда все имеют один и тот же цвет союза, нет причины воевать. И так ёжики жили долго и и счастливо в мире и согласии.</translation>
+        <translation>Когда все имеют один и тот же цвет союза, нет причины воевать. И так ёжики жили долго и счастливо в мире и согласии.</translation>
     </message>
     <message numerus="yes">
         <source>(%1 point(s))</source>
@@ -1512,11 +1517,11 @@ Last engine message:
     </message>
     <message>
         <source>Save demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить демку</translation>
     </message>
     <message>
         <source>Save demo (unavailable because the /lua command was used)</source>
-        <translation type="unfinished"></translation>
+        <translation>Сохранить демку (недоступно, так как использовалась команда /lua)</translation>
     </message>
 </context>
 <context>
@@ -1623,7 +1628,7 @@ Last engine message:
     </message>
     <message>
         <source>Specify the address and port number of a known server and connect to it directly</source>
-        <translation>Укажите адрес и номер порта известного сервера чтобы подключиться к нему напрямую</translation>
+        <translation>Укажите адрес и номер порта известного сервера, чтобы подключиться к нему напрямую</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -2116,15 +2121,15 @@ Last engine message:
     </message>
     <message>
         <source>How many rounds have to be played before Sudden Death begins</source>
-        <translation>Как много раундов будет до начала Внезапной Смерти</translation>
+        <translation>Сколько раундов будет сыграно до начала внезапной смерти</translation>
     </message>
     <message>
         <source>How much the water rises per turn while in Sudden Death. Set to 0 along with Sudden Death Health Decrease to disable Sudden Death.</source>
-        <translation>Как сильно будет подниматься вода во время Внезапной Смерти. Установите 0 для воды и для здоровья, чтобы отключить Внезапную Смерть.</translation>
+        <translation>Как сильно будет подниматься вода за ход во время внезапной смерти. Установите 0 для воды и для здоровья, чтобы отключить внезапную смерть.</translation>
     </message>
     <message>
         <source>How much health hedgehogs lose per turn while in Sudden Death, down to 1 health. Set to 0 along with Sudden Death Water Rise to disable Sudden Death.</source>
-        <translation>Сколько здоровья будут терять ёжики каждый ход во время Внезапной смерти вплоть до 1. Установите 0 для здоровья и воды, чтобы отключить Внезапную Смерть.</translation>
+        <translation>Сколько здоровья будут терять ёжики каждый ход во время внезапной смерти вплоть до 1. Установите 0 для здоровья и воды, чтобы отключить внезапную смерть.</translation>
     </message>
     <message>
         <source>Maximum rope length in percent</source>
@@ -2192,7 +2197,7 @@ Last engine message:
     </message>
     <message>
         <source>Average number of sentry bots to be placed on a medium-sized island map. This number will be scaled for other maps.</source>
-        <translation type="unfinished"></translation>
+        <translation>Среднее количество сторожевых ботов, расставляемых на островной карте среднего размера. Это число будет масштабировано для других карт.</translation>
     </message>
 </context>
 <context>
@@ -2340,12 +2345,14 @@ Last engine message:
     <message>
         <source>Date: %1
 </source>
-        <translation type="unfinished">Дата: %1</translation>
+        <translation>Дата: %1
+</translation>
     </message>
     <message>
         <source>Size: %1
 </source>
-        <translation type="unfinished">Размер: %1</translation>
+        <translation>Размер: %1
+</translation>
     </message>
     <message>
         <source>Date: %1</source>
@@ -2406,7 +2413,7 @@ Last engine message:
     </message>
     <message>
         <source>Remove friend</source>
-        <translation>Убирать из списка друзей</translation>
+        <translation>Удалить из друзей</translation>
     </message>
     <message>
         <source>Update</source>
@@ -2438,7 +2445,7 @@ Last engine message:
     </message>
     <message>
         <source>Show incompatible</source>
-        <translation type="unfinished"></translation>
+        <translation>несовместимые комнаты</translation>
     </message>
 </context>
 <context>
@@ -2550,7 +2557,7 @@ Last engine message:
     <message>
         <source>Dampen when losing focus</source>
         <extracomment>Checkbox text. If checked, the in-game audio volume is reduced (=dampened) when the game window loses its focus</extracomment>
-        <translation>Приглушить при потере фокуса</translation>
+        <translation>Приглушать при потере фокуса</translation>
     </message>
     <message>
         <source>Reduce the game audio volume if the game window has lost its focus</source>
@@ -2775,7 +2782,7 @@ Last engine message:
     </message>
     <message>
         <source>Sudden Death Timeout</source>
-        <translation>Время до скорой смерти</translation>
+        <translation>Время до внезапной смерти</translation>
     </message>
     <message>
         <source>Scheme Name:</source>
@@ -2866,7 +2873,7 @@ Last engine message:
 Exiting now will abort them.
 Do you really want to quit?</source>
         <translation>Сейчас происходит обработка видео.
-Выход отменить обработку.
+Выход отменит обработку.
 Всё равно выйти?</translation>
     </message>
     <message>
@@ -2883,11 +2890,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Audio codec</source>
-        <translation>Видеокодек</translation>
+        <translation>Аудиокодек</translation>
     </message>
     <message>
         <source>Video codec</source>
-        <translation>Аудиокодек</translation>
+        <translation>Видеокодек</translation>
     </message>
     <message>
         <source>Framerate</source>
@@ -2895,7 +2902,7 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>This development build is &apos;work in progress&apos; and may not be compatible with other versions of the game, while some features might be broken or incomplete!</source>
-        <translation>Эта версия находится в разработке, поэтому может быть не совместима с другими версиями игры и некоторые возможности могут быть не работать!</translation>
+        <translation>Эта версия находится в разработке, поэтому может быть несовместима с другими версиями игры, а некоторые возможности могут быть сломаны или неполны!</translation>
     </message>
     <message>
         <source>Fullscreen</source>
@@ -2981,11 +2988,11 @@ Do you really want to quit?</source>
     </message>
     <message>
         <source>Chat size (%)</source>
-        <translation type="unfinished"></translation>
+        <translation>Размер чата (%)</translation>
     </message>
     <message>
         <source>Sentry Bots</source>
-        <translation type="unfinished"></translation>
+        <translation>Сторожевые боты</translation>
     </message>
 </context>
 <context>
@@ -3112,7 +3119,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Videos - Are you sure?</source>
-        <translation>Видео - вы уверены?</translation>
+        <translation>Видео - Вы уверены?</translation>
     </message>
     <message>
         <source>Do you really want to delete the video &apos;%1&apos;?</source>
@@ -3122,7 +3129,7 @@ Do you still want to join the room?</source>
         <source>Do you really want to remove %1 file(s)?</source>
         <translation>
             <numerusform>Вы действительно хотите удалить %1 файл?</numerusform>
-            <numerusform>Вы действительно хотите удалить %1 файлa?</numerusform>
+            <numerusform>Вы действительно хотите удалить %1 файла?</numerusform>
             <numerusform>Вы действительно хотите удалить %1 файлов?</numerusform>
         </translation>
     </message>
@@ -3156,7 +3163,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Hedgewars - Nick not registered</source>
-        <translation>Hedgewars - Ник не зарегистрирован</translation>
+        <translation>Hedgewars - Псевдоним не зарегистрирован</translation>
     </message>
     <message>
         <source>System Information Preview</source>
@@ -3172,7 +3179,7 @@ Do you still want to join the room?</source>
     </message>
     <message>
         <source>Please fill out all fields. Email is optional.</source>
-        <translation>Пожалуйста заполните все поля. Емейл необязательно.</translation>
+        <translation>Пожалуйста, заполните все поля. Адрес e-mail необязателен.</translation>
     </message>
     <message>
         <source>Hedgewars - Warning</source>
@@ -3202,11 +3209,11 @@ Not all players are ready.</source>
     </message>
     <message>
         <source>Please select a file from the list.</source>
-        <translation>Пожалуйста выберите файл из списка.</translation>
+        <translation>Пожалуйста, выберите файл из списка.</translation>
     </message>
     <message>
         <source>Cannot rename file to %1.</source>
-        <translation>Нельзя переименовать файл %1.</translation>
+        <translation>Невозможно переименовать файл в %1.</translation>
     </message>
     <message>
         <source>Cannot delete file %1.</source>
@@ -3242,7 +3249,7 @@ You seem to be new around here. Would you like to play some training missions fi
     </message>
     <message>
         <source>A weapon scheme with the name &apos;%1&apos; already exists. Changes made to the weapon scheme have been discarded.</source>
-        <translation>Схема с названием &apos;%1&apos; уже существует. Изменения схемы оружия будут сброшены.</translation>
+        <translation>Набор оружия с названием &apos;%1&apos; уже существует. Изменения набора оружия были отменены.</translation>
     </message>
     <message>
         <source>Server redirection</source>
@@ -3362,7 +3369,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Click to copy your unique server URL to your clipboard. Send this link to your friends and they will be able to join you.</source>
-        <translation>Нажмите чтобы скопировать ссылку на сервер в буфер обмена. Отправьте эту ссылку вашим друзьям и они смогут присоединиться к вам.</translation>
+        <translation>Нажмите, чтобы скопировать ссылку на сервер в буфер обмена. Отправьте эту ссылку вашим друзьям, и они смогут присоединиться к вам.</translation>
     </message>
     <message>
         <source>Start private server</source>
@@ -3461,7 +3468,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Version</source>
-        <translation type="unfinished">Версия</translation>
+        <translation>Версия</translation>
     </message>
 </context>
 <context>
@@ -3544,7 +3551,7 @@ Would you like to reconnect securely?</source>
     <message>
         <source>Unable to run engine at %1
 Error code: %2</source>
-        <translation>Ошибка запуска сервера %1
+        <translation>Ошибка запуска движка %1
 Код ошибки: %2</translation>
     </message>
     <message>
@@ -3554,10 +3561,10 @@ Error code: %2</source>
 We are very sorry for the inconvenience :(
 
 If this keeps happening, please click the &apos;%2&apos; button in the main menu!</source>
-        <translation>Движок игры неожиданно упал! .
+        <translation>Движок игры неожиданно упал!
 (код выхода %1)
 
-Мы очень сожалеем о произошедем :(
+Мы очень сожалеем о произошедшем :(
 
 Если это продолжает происходить, нажмите кнопку &apos;%2&apos; в главном меню!</translation>
     </message>
@@ -3812,7 +3819,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>save map as image</source>
-        <translation>сохранить карту, как изображение</translation>
+        <translation>сохранить карту как изображение</translation>
     </message>
     <message>
         <source>show object information</source>
@@ -3902,7 +3909,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>precise + switch + toggle team bars</source>
-        <translation type="unfinished"></translation>
+        <translation>точность + переключить + вкл информацию о командах</translation>
     </message>
 </context>
 <context>
@@ -3969,7 +3976,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Toggle automatic camera / refocus on active hedgehog:</source>
-        <translation>Включить автоматическую камеру / перенести фокус на активного ёжика</translation>
+        <translation>Включить автоматическую камеру / перенести фокус на активного ёжика:</translation>
     </message>
     <message>
         <source>Demo replay:</source>
@@ -4176,11 +4183,11 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Mouse: X1 button </source>
-        <translation>Мышь: клавиша X1</translation>
+        <translation>Мышь: кнопка X1</translation>
     </message>
     <message>
         <source>Mouse: X2 button</source>
-        <translation>Мышь: клавиша X2</translation>
+        <translation>Мышь: кнопка X2</translation>
     </message>
     <message>
         <source>Keypad 0</source>

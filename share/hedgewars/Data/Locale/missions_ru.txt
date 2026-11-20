@@ -1,83 +1,98 @@
-Basic_Training_-_Bazooka.name=Базовое упражнение с базукой
-Basic_Training_-_Bazooka.desc="Ключевой момент - использование ветра с пользой для себя!"
+Basic_Training_-_Movement.name=Базовая тренировка: Передвижение
+Basic_Training_-_Movement.desc="Для новичков! Научитесь передвигаться по разным типам местности и переключаться между ёжиками."
 
-Basic_Training_-_Grenade.name=Базовое упражнение с гранатой
-Basic_Training_-_Grenade.desc="Запомни: выдерни чеку и бросай!"
+Basic_Training_-_Bazooka.name=Базовая тренировка: Базука
+Basic_Training_-_Bazooka.desc="Научитесь пользоваться базукой, учитывать ветер и уничтожьте все цели."
 
-Basic_Training_-_Cluster_Bomb.name=Базовое упражнение с касcетной бомбой
-Basic_Training_-_Cluster_Bomb.desc="Кому-то нужен горячий душ!"
+Basic_Training_-_Grenade.name=Базовая тренировка: Граната
+Basic_Training_-_Grenade.desc="Узнайте всё о гранатах и уничтожьте все цели. Запомните: выдернуть чеку И бросить!"
 
-Basic_Training_-_Shotgun.name=Базовое упражнение с ружьём
-Basic_Training_-_Shotgun.desc="Стреляй, все вопросы потом!"
+Basic_Training_-_Rope.name=Базовая тренировка: Верёвка
+Basic_Training_-_Rope.desc="Верёвка — одно из самых универсальных приспособлений, но требует немало практики. Здесь вы освоите основы."
 
-Basic_Training_-_Sniper_Rifle.name=Базовое упражнение со снайперской винтовкой
-Basic_Training_-_Sniper_Rifle.desc="БАХ, в яблочко!"
+Basic_Training_-_Flying_Saucer.name=Базовая тренировка: Летающая тарелка
+Basic_Training_-_Flying_Saucer.desc="На летающей тарелке можно добраться почти куда угодно, если уметь ею управлять. Научитесь летать, атаковать с тарелки и выполнять крутые трюки."
 
-Basic_Training_-_Rope.name=Базовое упражнение с верёвкой
-Basic_Training_-_Rope.desc="Раскачивайся и цепляйся!"
+User_Mission_-_Dangerous_Ducklings.name=Опасные Утята
+User_Mission_-_Dangerous_Ducklings.desc="Ну что, новобранец! Пора применить на практике то, чему мы научились на базовых тренировках!"
 
-User_Mission_-_Dangerous_Ducklings.name=Миссия: Опасные Утята
-User_Mission_-_Dangerous_Ducklings.desc="Ну что, новобранцы! Пора на практике проверить, чему вы научились на базовых упражнениях!"
+User_Mission_-_Diver.name=Ныряльщик
+User_Mission_-_Diver.desc="Этот «морской десант» сложнее, чем кажется."
 
-User_Mission_-_Diver.name=Миссия: Ныряльщик
-User_Mission_-_Diver.desc="'Морской десант' это сложнее, чем кажется..."
+User_Mission_-_Teamwork.name=Командная работа
+User_Mission_-_Teamwork.desc="Неисправный киборг охраняет ценную военную тайну. Возглавьте отряд спецназа из двух ёжиков и уничтожьте врага, чтобы добыть её! Для дальнейших операций критически важно, чтобы оба ёжика выжили."
 
-User_Mission_-_Teamwork.name=Миссия: Командная работа
-User_Mission_-_Teamwork.desc="Иногда любовь ранит."
+User_Mission_-_Teamwork_2.name=Командная работа 2
+User_Mission_-_Teamwork_2.desc="Мы обнаружили секретный аванпост Кибернетической Империи, который охраняет лишь безобидный сторожевой бот. Возглавьте отряд спецназа и уничтожьте его, чтобы захватить базу. Как и прежде, оба ёжика должны выжить!"
 
-User_Mission_-_Spooky_Tree.name=Миссия: Зловещее дерево
-User_Mission_-_Spooky_Tree.desc="Здесь много ящиков. Конечно, я уверен, что эта птица не голодна."
+User_Mission_-_Spooky_Tree.name=Зловещее дерево
+User_Mission_-_Spooky_Tree.desc="Здесь полно ящиков. Надеюсь, эта птица не проголодалась."
 
-User_Mission_-_Bamboo_Thicket.name=Миссия: Заросли Бамбука
-User_Mission_-_Bamboo_Thicket.desc="Смерть приходит сверху."
+User_Mission_-_Bamboo_Thicket.name=Заросли Бамбука
+User_Mission_-_Bamboo_Thicket.desc="Киборг терроризирует бамбуковую рощу и атакует каждого, кого увидит, с почти идеальной точностью. Планируйте заранее, двигайтесь быстро и поскорее прикончите врага!"
 
-User_Mission_-_That_Sinking_Feeling.name=Миссия: Дед Мазай и Ёжики
-User_Mission_-_That_Sinking_Feeling.desc="Вода быстро поднимается, а время ограничено. Многие пытались без успеха. Сможешь ли ты спасти всех?"
+User_Mission_-_That_Sinking_Feeling.name=Дед Мазай и Ёжики
+User_Mission_-_That_Sinking_Feeling.desc="Вода быстро поднимается, а время ограничено. Многие пытались, но потерпели неудачу. Сможете ли вы спасти их всех?"
 
-User_Mission_-_Newton_and_the_Hammock.name=Миссия: Ньютон и гамак
-User_Mission_-_Newton_and_the_Hammock.desc="Ежата, запомните: Скорость тела остаётся постоянной, пока к нему не применяется внешняя сила!"
+User_Mission_-_Newton_and_the_Hammock.name=Ньютон и гамак
+User_Mission_-_Newton_and_the_Hammock.desc="Ежата, запомните: скорость тела остаётся постоянной, пока на него не подействует внешняя сила!"
 
-User_Mission_-_The_Great_Escape.name=Миссия: Великий Побег
-User_Mission_-_The_Great_Escape.desc="Вы думаете, клетка меня остановит!?"
+User_Mission_-_The_Great_Escape.name=Великий побег
+User_Mission_-_The_Great_Escape.desc="Сбегите из тюрьмы и отомстите!"
 
-User_Mission_-_Rope_Knock_Challenge.name=Испытание: Толчок Верёвкой
-User_Mission_-_Rope_Knock_Challenge.desc="Оглянись!"
+User_Mission_-_Rope_Knock_Challenge.name=Толчок верёвкой
+User_Mission_-_Rope_Knock_Challenge.desc="Используйте верёвку, чтобы сбросить всех врагов на верную гибель."
 
-User_Mission_-_Nobody_Laugh.name=Миссия: Никто не смеётся
-User_Mission_-_Nobody_Laugh.desc="Это не шутка ли."
+User_Mission_-_Nobody_Laugh.name=Никто не смеётся
+User_Mission_-_Nobody_Laugh.desc="О, эти клоуны считают себя такими смешными! Пусть их и больше, зато у нас полно времени на ход. Уберите этих горе-комиков одного за другим, пока смеяться будет некому."
 
 User_Mission_-_RCPlane_Challenge.name=Испытание: Радиоуправляемый самолёт
-User_Mission_-_RCPlane_Challenge.desc="Чувствешь себя довольно уверенно, а, пилотишко?"
+User_Mission_-_RCPlane_Challenge.desc="Используйте радиоуправляемые самолёты, чтобы собрать все ящики. Старайтесь потратить как можно меньше самолётов, чтобы повысить свой ранг. Сможете ли вы стать элитным пилотом высшего класса?"
 
-portal.name=Миссия: Портальная головоломка
-portal.desc="Используй портал для перемещения, используй его для убийства, используй его с осторожностью!"
+Big_Armory.name=Большой арсенал
+Big_Armory.desc="Вы один, у вас полный арсенал, и нужно победить 8 ёжиков, пока не вышло время."
 
-Target_Practice_-_Bazooka_easy.name=Учебная Стрельба: Базука (легко)
+Bazooka_Battlefield.name=Поле боя: Базука
+Bazooka_Battlefield.desc="Ваши верные ёжики устроили врагу засаду. Уничтожьте их одними базуками! Но не затягивайте — скоро поднимется вода."
+
+Tentacle_Terror.name=Ужас из щупалец
+Tentacle_Terror.desc="Под жутким монстром ваш враг трусливо прячется и атакует воздушными ударами, стоит вам потерять укрытие. Покажите ему, кто настоящий хозяин в Аду! Но без дьявольски хорошего владения верёвкой шансов нет."
+
+ClimbHome.name=Дорога домой
+ClimbHome.desc="Вы далеко от дома, а вода поднимается. Заберитесь как можно выше!"
+
+portal.name=Портальная головоломка
+portal.desc="Используйте портал, чтобы перемещаться быстро и далеко. Используйте его для убийств. Используйте его с осторожностью!"
+
+Target_Practice_-_Bazooka_easy.name=Учебная стрельба: Базука (легко)
 Target_Practice_-_Bazooka_easy.desc="Хорошо, солдат, взорви эти цели так быстро, как сможешь!"
 
-Target_Practice_-_Bazooka_hard.name=Учебная Стрельба: Базука (сложно)
-Target_Practice_-_Bazooka_hard.desc="Сможешь ли ты попасть в цели даже если они далеко?"
+Target_Practice_-_Bazooka_hard.name=Учебная стрельба: Базука (сложно)
+Target_Practice_-_Bazooka_hard.desc="Сможете ли вы поразить цели, даже когда они очень далеко?"
 
-Target_Practice_-_Cluster_Bomb.name=Учебная Стрельба: Касcетная бомба
-Target_Practice_-_Cluster_Bomb.desc="Кому-то нужен горячий душ!"
+Target_Practice_-_Cluster_Bomb.name=Учебная стрельба: Кассетная бомба
+Target_Practice_-_Cluster_Bomb.desc="Кому-то нужен горячий душ! Из кассетных бомб!"
 
-Target_Practice_-_Shotgun.name=Учебная Стрельба: Дробовик
+Target_Practice_-_Shotgun.name=Учебная стрельба: Дробовик
 Target_Practice_-_Shotgun.desc="Сначала стреляй, потом спрашивай!"
 
-Target_Practice_-_Homing_Bee.name=Учебная Стрельба: Пчёлка
-Target_Practice_-_Homing_Bee.desc="Использование пчёлки сложнее, чем может показаться на первый взгляд."
+Basic_Training_-_Sniper_Rifle.name=Учебная стрельба: Снайперская винтовка
+Basic_Training_-_Sniper_Rifle.desc="Это идеальное стрельбище для снайперов! Уничтожьте все цели как можно быстрее и точнее и станьте легендой!"
 
-Target_Practice_-_Grenade_easy.name=Учебная Стрельба: Граната (легко)
-Target_Practice_-_Grenade_easy.desc="Разминочная тренировка для чистолюбивого гренадера."
+Target_Practice_-_Homing_Bee.name=Учебная стрельба: Пчёлка
+Target_Practice_-_Homing_Bee.desc="Использование пчёлки сложнее, чем кажется на первый взгляд."
 
-Target_Practice_-_Grenade_hard.name=Учебная Стрельба: Граната (сложно)
-Target_Practice_-_Grenade_hard.desc="Это точно не для молокососов! Мы поместили цели в действительно труднодоступные места."
+Target_Practice_-_Grenade_easy.name=Учебная стрельба: Граната (легко)
+Target_Practice_-_Grenade_easy.desc="Разминочная тренировка для честолюбивого гренадера."
 
-Challenge_-_Speed_Shoppa_-_Hedgelove.name=Испытание: Shoppa Love
-Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Покажите вашу любовь к верёвке и соберите несколько ящиков на маленькой карте."
+Target_Practice_-_Grenade_hard.name=Учебная стрельба: Граната (сложно)
+Target_Practice_-_Grenade_hard.desc="Это точно не для молокососов! Мы разместили цели в действительно хитрых местах."
 
-Challenge_-_Speed_Shoppa_-_Ropes.name=Испытание: Верёвки и Ящики
-Challenge_-_Speed_Shoppa_-_Ropes.desc="Возьмите вашу верёвку и соберите все ящики на этой средних размеров карте."
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=На время: Любовь к Шоппе
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Покажите свою любовь к верёвке и соберите несколько ящиков на маленькой карте."
 
-Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Испытание: Покупатель это Король
-Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Докажите, что вы настоящий король и соберите все ящики на этой огромной карте так быстро, как сможете."
+Challenge_-_Speed_Shoppa_-_Ropes.name=На время: Верёвки и ящики
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Возьмите верёвку и соберите все ящики на этой карте среднего размера."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=На время: Покупатель — король
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Докажите, что вы достойны звания настоящего короля, и соберите все ящики на этой большой карте как можно быстрее."
