@@ -1,0 +1,61 @@
+A_Classic_Fairytale.name="Et klassisk eventyr"
+
+A_Classic_Fairytale-first_blood.name="Oppdrag 1: Første blod"
+A_Classic_Fairytale-first_blood.desc="Hjelp Lekker Mye med å fullføre treningen og bli en ekte pinnsvinkriger. Du får opplæring i tau, fallskjerm, shoryuken og Desert Eagle."
+
+A_Classic_Fairytale-shadow.name="Oppdrag 2: Skyggen faller"
+A_Classic_Fairytale-shadow.desc="Lekker Mye og Tett Sky drar på jakt. Vær forberedt på farene som lurer i skogen. Husk å velge med omhu."
+
+A_Classic_Fairytale-journey.name="Oppdrag 3: Hjemreisen"
+A_Classic_Fairytale-journey.desc="Lekker Mye må komme seg til den andre siden av øya. Vær rask og forsiktig."
+
+A_Classic_Fairytale-united.name="Oppdrag 4: Sammen står vi sterkt"
+A_Classic_Fairytale-united.desc="Etter den lange reisen er Lekker Mye endelig tilbake i landsbyen. Men det er ingen tid til hvile. Du må forsvare landsbyen mot kannibalenes raseri."
+
+A_Classic_Fairytale-backstab.name="Oppdrag 5: Dolk i ryggen"
+A_Classic_Fairytale-backstab.desc="De grusomme kannibalene jakter på Lekker Mye og vennene hans. Beseir dem nok en gang og beskytt dine allierte. Bruk ressursene dine klokt mot fiendene som strømmer inn!"
+
+A_Classic_Fairytale-dragon.name="Oppdrag 6: Dragens hule"
+A_Classic_Fairytale-dragon.desc="Helten vår må komme seg til den andre siden av innsjøen. Bli en mester med tauet og unngå å bli truffet av fiendens skudd."
+
+A_Classic_Fairytale-family.name="Oppdrag 7: Familiegjenforening"
+A_Classic_Fairytale-family.desc="Helten vår må redde stammen nok en gang. Utslett fiendens pinnsvin og befri kameratene dine. Bruk ressursene forsiktig, for de er begrenset. Bor hull på riktige steder og kom deg nær prinsessen."
+
+A_Classic_Fairytale-queen.name="Oppdrag 8: Lenge leve dronningen"
+A_Classic_Fairytale-queen.desc="Stammen må kjempe igjen. For å vinne må de nedkjempe forræderen og bruke alle tilgjengelige ressurser. Beseir fienden!"
+
+A_Classic_Fairytale-enemy.name="Oppdrag 9: Min fiendes fiende"
+A_Classic_Fairytale-enemy.desc="For en vending! Lekker Mye må kjempe side om side med … «kannibalene» mot en felles fiende: de onde kyborgene!"
+
+A_Classic_Fairytale-epil.name="Oppdrag 10: Epilog"
+A_Classic_Fairytale-epil.desc="Gratulerer! Lekker Mye kan endelig leve i fred og bli hyllet av sine nye venner og sin stamme. Vær stolt av det du har oppnådd! Du kan spille tidligere oppdrag på nytt for å se de andre mulige sluttene."
+
+A_Space_Adventure.name="Et romeventyr"
+A_Space_Adventure-cosmos.name="Meny: Romferd"
+A_Space_Adventure-cosmos.desc="Hogera, pinnsvinenes planet, står i fare for å bli truffet av en gigantisk meteoritt. I dette kappløpet for overlevelse må du lede et modig pinnsvin på oppdrag fra Den planetariske foreningen for pinnsvin (PFP) på en romreise til naboplanetene for å samle alle de 4 delene av den lenge tapte antityngdekraft-enheten."
+A_Space_Adventure-moon01.name="Hovedoppdrag: Første stopp"
+A_Space_Adventure-moon01.desc="Helten vår har landet på månen for å fylle drivstoff på den flygende tallerkenen, men professor Pinnsvond kom dit først og la et bakhold! Redd de fangede PFP-forskerne og jag vekk professor Pinnsvond!"
+A_Space_Adventure-moon02.name="Sideoppdrag: Jakten på det blå pinnsvinet"
+A_Space_Adventure-moon02.desc="Helten vår besøker en eneboer, en gammel PFP-veteran som bor på månen, for å skaffe informasjon om prof. Pinnsvond. Men først må du slå eneboeren Gal Løper i et kappløp!"
+A_Space_Adventure-ice01.name="Hovedoppdrag: Et frossent eventyr"
+A_Space_Adventure-ice01.desc="Velkommen til isplaneten. Her er det så kaldt at de fleste våpen ikke virker. Du må skaffe den tapte delen fra bandittlederen Thanta ved hjelp av våpnene du finner der!"
+A_Space_Adventure-ice02.name="Sideoppdrag: Krevende flyvning"
+A_Space_Adventure-ice02.desc="Helten vår kunne ikke besøke Isplaneten uten å ta turen innom det olympiske stadionet for tallerkenflyvning! I dette oppdraget kan du bevise flyferdighetene dine og kreve din plass blant de beste!"
+A_Space_Adventure-desert01.name="Hovedoppdrag: Letearbeid i støvet"
+A_Space_Adventure-desert01.desc="Du har landet på sandplaneten! Helten vår må finne den savnede delen i de underjordiske tunnelene. Vær forsiktig, for nådeløse smuglere ligger på lur for å angripe og rane deg!"
+A_Space_Adventure-desert02.name="Sideoppdrag: Løp for livet"
+A_Space_Adventure-desert02.desc="Helten vår lette etter delen i tunnelen da den plutselig begynte å oversvømmes! Kom deg til overflaten så fort som mulig, og pass på så du ikke utløser en mine."
+A_Space_Adventure-desert03.name="Sideoppdrag: Presisjonsflyvning"
+A_Space_Adventure-desert03.desc="Helten vår har litt tid til å leke med radiostyrte fly. Fly det radiostyrte flyet og treff alle målene! Vinner du, får du ekstra ammunisjon til hovedoppdraget."
+A_Space_Adventure-fruit01.name="Hovedoppdrag: Dårlig timing"
+A_Space_Adventure-fruit01.desc="På fruktplaneten står ikke alt så bra til. Pinnsvinene høster ikke frukt, men forbereder seg til krig. Du må velge om du vil kjempe eller flykte."
+A_Space_Adventure-fruit02.name="Hovedoppdrag: Veien til enheten"
+A_Space_Adventure-fruit02.desc="Helten vår nærmer seg den tapte delen på Fruktplaneten. Vil kaptein Lime hjelpe deg med å få tak i delen eller ikke?"
+A_Space_Adventure-fruit03.name="Hovedoppdrag: Presisjonsskyting"
+A_Space_Adventure-fruit03.desc="Helten vår gikk seg vill og havnet i bakhold fra De røde jordbærene. Utslett dem og vinn ekstra ammunisjon til oppdraget «Veien til enheten»."
+A_Space_Adventure-death01.name="Hovedoppdrag: Det siste møtet"
+A_Space_Adventure-death01.desc="På Dødsplaneten, den mest golde planeten i området, er helten vår svært nær ved å skaffe den siste delen av enheten! Men en ubehagelig overraskelse venter ..."
+A_Space_Adventure-death02.name="Sideoppdrag: Bekjemp spesialistene"
+A_Space_Adventure-death02.desc="Igjen har helten vår havnet i en vanskelig situasjon. Beseir «De 5 dødelige pinnsvin» i deres eget spill! Vinner du, får du bonuser til hovedoppdraget."
+A_Space_Adventure-final.name="Hovedoppdrag: Det store smellet"
+A_Space_Adventure-final.desc="Helten vår må detonere sprengstoff som er plassert på meteoritten. Fullfør dette oppdraget uten å bli skadet!"

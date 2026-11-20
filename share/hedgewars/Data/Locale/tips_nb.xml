@@ -1,0 +1,91 @@
+<!-- This is not xml actually, but it looks and behaves like it.
+     Including an xml library would need too much resources.
+     Tips between the platform specific tags are shown only on those platforms.
+     Do not escape characters or use the CDATA tag. -->
+<tips>
+    <tip>Bare velg samme farge som en venn for å spille sammen som én klan. Dere styrer fortsatt deres egne pinnsvin, men dere vinner eller taper sammen.</tip>
+    <tip>Noen våpen gjør lite skade, men kan være langt mer ødeleggende i riktig situasjon. Prøv å bruke Desert Eagle til å slå flere pinnsvin i vannet.</tip>
+    <tip>Hvis du er usikker på hva du skal gjøre og ikke vil sløse med ammunisjon, hopp over en runde. Men ikke la for lang tid gå før det blir Brå død!</tip>
+    <tip>Vil du spare på tau? Slipp tauet i løse luften og skyt på nytt. Så lenge du ikke treffer bakken eller bommer, kan du bruke tauet igjen uten å bruke opp ammunisjon!</tip>
+    <tip>Hvis du vil hindre andre fra å bruke ønsket kallenavn på den offisielle serveren, registrer en konto på <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a>.</tip>
+    <tip>Lei av vanlig spillmodus? Prøv et av oppdragene – de gir ulike utfordringer avhengig av hvilket du velger.</tip>
+    <tip>Som standard tar spillet alltid opp det siste spillet som en demo. Velg «Lokalt spill» og trykk på knappen «Demoer» nede til høyre for å spille av eller administrere dem.</tip>
+    <tip>Hedgewars er fri programvare (åpen kildekode) som vi lager på fritiden. Hvis du har problemer, spør på forumet vårt eller besøk IRC-kanalen vår!</tip>
+    <tip>Hedgewars er fri programvare (åpen kildekode) som vi lager på fritiden. Hvis du liker det, støtt oss gjerne med en liten donasjon eller bidra med eget arbeid!</tip>
+    <tip>Hedgewars er fri programvare (åpen kildekode) som vi lager på fritiden. Del det gjerne med familie og venner som du vil!</tip>
+    <tip>Hedgewars er fri programvare (åpen kildekode) som vi lager på fritiden, bare for moro skyld! Møt utviklerne i <a href="irc://irc.libera.chat/hedgewars">#hedgewars</a>!</tip>
+    <tip>Fra tid til annen arrangeres det offisielle turneringer. Kommende arrangementer kunngjøres på <a href="https://www.hedgewars.org/">https://www.hedgewars.org/</a> noen dager i forveien.</tip>
+    <tip>Hedgewars er tilgjengelig på mange språk. Hvis oversettelsen til ditt språk mangler eller er utdatert, ta gjerne kontakt med oss!</tip>
+    <tip>Hedgewars kan kjøres på mange forskjellige operativsystemer, inkludert Microsoft Windows, macOS og GNU/Linux.</tip>
+    <tip>Husk at du alltid kan sette opp dine egne kamper både lokalt og over nettverk/internett. Du er ikke begrenset til «Enkelt spill».</tip>
+    <tip>Koble til én eller flere spillkontrollere før du starter spillet for å kunne tilordne kontrollene til lagene dine.</tip>
+    <tip>Vurder å ta en kort pause minst én gang i timen for å unngå belastning når du spiller.</tip>
+    <tip>Hvis grafikkortet ditt ikke støtter maskinvareakselerert OpenGL, prøv å aktivere lavkvalitetsmodus for bedre ytelse.</tip>
+    <tip>Hvis grafikkortet ditt ikke støtter maskinvareakselerert OpenGL, prøv å oppdatere tilhørende drivere.</tip>
+    <tip>Vi er åpne for forslag og konstruktive tilbakemeldinger. Hvis det er noe du ikke liker eller har en god idé, gi oss beskjed!</tip>
+    <tip>For din egen del ber vi deg være høflig og vennlig når du spiller på serveren vår. Husk også at noen spillere er mindreårige!</tip>
+    <tip>Spesielle spillmoduser som «Vampirisme» eller «Karma» lar deg utvikle helt nye taktikker. Prøv dem i et tilpasset spill!</tip>
+    <tip>Ikke installer Hedgewars på datamaskiner du ikke eier selv (skole, universitet, jobb osv.) uten tillatelse. Vi vil ikke at du skal havne i trøbbel.</tip>
+    <tip>Hedgewars er perfekt for korte kamper i pausen. Bare pass på å ikke legge til for mange pinnsvin eller et altfor stort kart. Å senke tid og helse kan også hjelpe.</tip>
+    <tip>Ingen pinnsvin kom til skade under utviklingen av dette spillet.</tip>
+    <tip>Det finnes tre forskjellige hopp. Trykk [høyt hopp] to ganger for å gjøre et ekstra høyt baklengs hopp.</tip>
+    <tip>Redd for å falle utenfor et stup? Hold inne [presisjon] for å snu deg til [venstre] eller [høyre] uten å flytte deg.</tip>
+    <tip>Noen våpen krever spesielle strategier eller mye øving, så ikke gi opp et verktøy bare fordi du bommer første gang.</tip>
+    <tip>De fleste våpen slutter å virke når de treffer vannet. Den målsøkende bien og kaken er unntak fra dette.</tip>
+    <tip>Gammel limburger gir bare en liten eksplosjon, men den illeluktende skyen som føres med vinden kan forgifte mange pinnsvin samtidig.</tip>
+    <tip>Pianoangrep er det mest ødeleggende luftangrepet. Du mister pinnsvinet som utfører det, så det har også en stor bakside.</tip>
+    <tip>Den målsøkende bien kan være vrien å bruke. Svingradiusen avhenger av farten, så prøv å ikke skyte med full kraft.</tip>
+    <tip>Klebeminer er perfekte for å starte små kjedereaksjoner som sender fiendtlige pinnsvin ut i farlige situasjoner … eller i vannet.</tip>
+    <tip>Hammeren er mest effektiv når den brukes på broer eller bjelker. Pinnsvin som treffes faller rett gjennom bakken.</tip>
+    <tip>Hvis du sitter fast bak et fiendtlig pinnsvin, bruk hammeren til å komme deg fri uten å ta skade fra en eksplosjon.</tip>
+    <tip>Maksimal gangavstand for kaken avhenger av terrenget den må krysse. Bruk [angrep] for å sprenge den tidlig.</tip>
+    <tip>Flammekasteren er et våpen, men kan også brukes til å grave tunneler.</tip>
+    <tip>Bruk Molotovcocktail eller flammekaster for å midlertidig hindre pinnsvin fra å passere gjennom tunneler eller plattformer.</tip>
+    <tip>Liker du Hedgewars? Bli fan på <a href="https://www.facebook.com/Hedgewars">Facebook</a> eller følg oss på <a href="https://twitter.com/hedgewars">Twitter</a>.</tip>
+    <tip>Lag gjerne dine egne gravsteiner, hatter, flagg eller til og med kart og temaer! Husk bare at du må dele dem et sted for å bruke dem på nett.</tip>
+    <tip>Hold skjermkortdriverne oppdatert for å unngå problemer under spilling.</tip>
+    <tip>Kron eller mynt? Skriv «/rnd» i lobbyen for å finne det ut. «/rnd stein saks papir» fungerer også!</tip>
+    <tip>Du kan knytte Hedgewars-filer (lagrede spill og demoopptak) til spillet slik at de åpnes direkte fra filbehandleren eller nettleseren din.</tip>
+    <tip>Defekte miner er ikke ufarlige: Selv om tidsuret er ødelagt, kan de fortsatt eksplodere hvis de tar for mye juling!</tip>
+    <tip>Kjærligheten varmer! Bruk forførelse til å tine opp frosne pinnsvin.</tip>
+    <tip>Røyk fra en tønne betyr at den har lite «helse» igjen, og selv en liten mengde skade kan få den til å eksplodere.</tip>
+    <tip>Tønner starter med 60 helse og tar skade akkurat som pinnsvin, så de tåler litt juling før de sprenges.</tip>
+    <tip>Trenger du mer sprettkraft? Endre sprettstyrken på granater, klasebomber, gammel limburger og miner ved å holde inne [presisjon] og trykke på en av tidsur-tastene.</tip>
+    <tip>Glemte du målene eller spillmodifikatorene underveis i kampen? Trykk på pause- eller avslutningstasten for å se dem igjen!</tip>
+    <tip>Du kan slå, piske og hamre på mer enn bare pinnsvin. Slå løs på alt sammen!</tip>
+    <tip>Hvis ikke annet er nevnt, eksploderer miner vanligvis etter 3 sekunder.</tip>
+    <tip>I kongemodus starter kongen din med mer helse, større styrke og bedre motstand mot skade og støt enn undersåttene.</tip>
+    <tip>I kongemodus tar kongen skade hver runde når det ikke er noen undersåtter igjen på laget.</tip>
+    <tip>Pisken treffer også pinnsvin og gjenstander bak en tynn vegg.</tip>
+    <tip>En kjøttøks gjør mer skade jo raskere den beveger seg.</tip>
+    <tip>Du kan slippe kaker ned fra stup, men du må stå veldig nær kanten, så vær forsiktig.</tip>
+    <tip>Bruk tauet til å dytte andre pinnsvin unna, f.eks. ved å skli langs bakken. Denne teknikken kalles «tauskubbing».</tip>
+    <tip>Ikke stå stille på en isete skråning, ellers sklir du av gårde. Alternativt kan du holde inne [presisjon].</tip>
+    <tip>På Snø- og Julebaner bygger snøen seg opp over tid, med mindre terrenget er uødeleggbart.</tip>
+    <tip>Vær oppmerksom på Snø- og Julebaner, fordi bjelkene der er laget av glatt is.</tip>
+    <tip>Retrettiden avhenger av hvilket våpen du brukte. Vær forsiktig – noen våpen har ingen retrettid og avslutter turen din umiddelbart!</tip>
+    <tip>Med litt øvelse kan du dytte unna pinnsvin ved å hoppe opp under dem.</tip>
+    <tip>Et godt timet angrep med Shoryuken, trykkluftbor eller sinuskanon kan oppheve fallskade.</tip>
+    <tip>Pinnsvinet ditt kolliderer ikke med prosjektiler mens det er i luften.</tip>
+    <tip>Hull fra boreraketter, snikskytterrifler og Desert Eagle er store nok til å skyte portaler gjennom – hvis du sikter presist nok.</tip>
+    <tip>Plukk opp en helsekasse for å kurere det forgiftede pinnsvinet ditt.</tip>
+    <tip>Du kan også samle kasser mens du bruker radiostyrt fly, Shoryuken, trykkluftbor og kamikaze.</tip>
+    <tip>Pass på så du ikke sprenger deg selv når du bruker skjærebrenner for å nå frem til en kasse.</tip>
+    <tip>Luftminer forblir passive de første 5 sekundene av en tur før de begynner å jage pinnsvin.</tip>
+    <tip>Hold trygg avstand til luftminer! Når en luftmine først begynner å jage deg, er det vanskelig å slippe unna uten verktøy.</tip>
+    <tip>Luftminer eksploderer etter en fjerdedel av tiden som er satt for vanlige miner.</tip>
+    <tip>Når en kjøttøks i terrenget tar 30 skade eller mer i ett slag, er det en sjanse for at den faller ned. Sjansen øker med skaden.</tip>
+    <tip>Følg med på vinden, for flammer og enkelte prosjektiler påvirkes av den.</tip>
+    <tip>Bruk skjærebrenner til å dytte pinnsvin og miner med lang tidsinnstilling.</tip>
+    <tip>Å løpe rett inn i en tønne med skjærebrenner er en eksplosiv oppskrift på katastrofe!</tip>
+    <tip>Skriv «/help» i chatten for en liste over chatkommandoer. De gir deg tilgang til spesialfunksjoner som hån og avstemninger.</tip>
+    <windows-only>
+        <tip>Du finner konfigurasjonsfilene til Hedgewars under «Mine dokumenter\Hedgewars». Ta gjerne sikkerhetskopi, men ikke rediger dem manuelt.</tip>
+    </windows-only>
+    <mac-only>
+        <tip>Du finner konfigurasjonsfilene til Hedgewars under «Library/Application Support/Hedgewars» i hjemmemappen din. Ta gjerne sikkerhetskopi, men ikke rediger dem manuelt.</tip>
+    </mac-only>
+    <linux-only>
+        <tip>Du finner konfigurasjonsfilene til Hedgewars under «.hedgewars» i hjemmemappen din. Ta gjerne sikkerhetskopi, men ikke rediger dem manuelt.</tip>
+    </linux-only>
+</tips>

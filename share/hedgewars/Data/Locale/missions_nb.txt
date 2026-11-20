@@ -1,0 +1,98 @@
+Basic_Training_-_Movement.name=Grunnleggende bevegelsestrening
+Basic_Training_-_Movement.desc="Nybegynnere starter her! Lær hvordan du beveger deg i ulikt terreng og bytter mellom pinnsvin."
+
+Basic_Training_-_Bazooka.name=Grunnleggende bazookatrening
+Basic_Training_-_Bazooka.desc="Lær å bruke bazookaen, forstå vinden og ødelegg alle mål."
+
+Basic_Training_-_Grenade.name=Grunnleggende granattrening
+Basic_Training_-_Grenade.desc="Lær alt du trenger å vite om granater og spreng alle mål. Husk: Trekk ut splinten OG kast!"
+
+Basic_Training_-_Rope.name=Grunnleggende tautrening
+Basic_Training_-_Rope.desc="Tauet er et av de mest allsidige verktøyene du har, men det krever mye øvelse. Her lærer du det grunnleggende."
+
+Basic_Training_-_Flying_Saucer.name=Grunnleggende trening med flygende tallerken
+Basic_Training_-_Flying_Saucer.desc="Med en flygende tallerken kan du nå nesten hvor som helst hvis du vet hvordan den styres. Lær å fly, angripe fra den og utføre kule triks."
+
+User_Mission_-_Dangerous_Ducklings.name=Farlige andunger
+User_Mission_-_Dangerous_Ducklings.desc="Greit, rekrutt! På tide å bruke det vi lærte i grunntreningen i praksis!"
+
+User_Mission_-_Diver.name=Dykker
+User_Mission_-_Diver.desc="Denne «amfibieoperasjonen» er vanskeligere enn den ser ut som."
+
+User_Mission_-_Teamwork.name=Lagarbeid
+User_Mission_-_Teamwork.desc="En defekt kyborg vokter en verdifull militær hemmelighet. Led en spesialstyrke på to pinnsvin og utslett fienden for å få tak i den! Det er helt avgjørende for fremtidige operasjoner at begge pinnsvinene overlever."
+
+User_Mission_-_Teamwork_2.name=Lagarbeid 2
+User_Mission_-_Teamwork_2.desc="Vi har lokalisert en hemmelig utpost tilhørende Det kybernetiske imperiet, kun bevoktet av en harmløs vaktrobot. Led spesialstyrken din til å ødelegge den så vi kan overta basen. Som sist må begge pinnsvinene overleve!"
+
+User_Mission_-_Spooky_Tree.name=Skummelt tre
+User_Mission_-_Spooky_Tree.desc="Masse kasser her ute. Får virkelig håpe den fuglen ikke er sulten."
+
+User_Mission_-_Bamboo_Thicket.name=Bambusskogen
+User_Mission_-_Bamboo_Thicket.desc="En kyborg terroriserer bambusskogen og angriper alle innen synsvidde med nærmest perfekt treffsikkerhet. Planlegg fremover, beveg deg raskt og uskadeliggjør fienden fort!"
+
+User_Mission_-_That_Sinking_Feeling.name=Den synkende følelsen
+User_Mission_-_That_Sinking_Feeling.desc="Vannet stiger raskt og tiden er knapp. Mange har prøvd og feilet. Klarer du å redde alle?"
+
+User_Mission_-_Newton_and_the_Hammock.name=Newton og hengekøyen
+User_Mission_-_Newton_and_the_Hammock.desc="Husk, små pinnsvin: Et legemes hastighet forblir konstant med mindre det påvirkes av en ytre kraft!"
+
+User_Mission_-_The_Great_Escape.name=Den store flukten
+User_Mission_-_The_Great_Escape.desc="Røm fra fengselet og ta hevn!"
+
+User_Mission_-_Rope_Knock_Challenge.name=Tauskubbing
+User_Mission_-_Rope_Knock_Challenge.desc="Bruk tauet ditt til å slå alle fiendene i døden."
+
+User_Mission_-_Nobody_Laugh.name=Ingen ler
+User_Mission_-_Nobody_Laugh.desc="Å, disse klovnene tror visst de er så morsomme! De er kanskje flere enn oss, men vi har rikelig med turtid. Ta ut alle disse wannabe-komikerne én etter én til det ikke er noen igjen som ler."
+
+User_Mission_-_RCPlane_Challenge.name=Utfordring med radiostyrt fly
+User_Mission_-_RCPlane_Challenge.desc="Bruk radiostyrte fly til å hente alle kassene. Prøv å bruke så få fly som mulig for bedre rangering. Har du det som skal til for å bli elitepilot?"
+
+Big_Armory.name=Stort våpenlager
+Big_Armory.desc="Du er alene, har et komplett våpenlager og må beseire 8 pinnsvin før tiden renner ut."
+
+Bazooka_Battlefield.name=Bazooka-slagmarken
+Bazooka_Battlefield.desc="Dine lojale pinnsvin har lagt seg i bakhold. Utslett fienden kun med bazookaer! Men ikke nøl for lenge, vannet stiger snart."
+
+Tentacle_Terror.name=Tentakkelterror
+Tentacle_Terror.desc="Under et fryktelig monster gjemmer fienden seg som en feiging og angriper med luftangrep så snart du mister dekning. Vis hvem som egentlig bestemmer i helvete! Du trenger djevelsk gode tauferdigheter for i det hele tatt å ha en sjanse."
+
+ClimbHome.name=Klatre hjem
+ClimbHome.desc="Du er langt hjemmefra og vannet stiger. Klatre så høyt du klarer!"
+
+portal.name=Portal-hjernevrider
+portal.desc="Bruk portalen for å bevege deg raskt og langt. Bruk den til å drepe. Bruk den med varsomhet!"
+
+Target_Practice_-_Bazooka_easy.name=Skyteøvelse: Bazooka (lett)
+Target_Practice_-_Bazooka_easy.desc="Greit, soldat, spreng de målene så fort du klarer!"
+
+Target_Practice_-_Bazooka_hard.name=Skyteøvelse: Bazooka (vanskelig)
+Target_Practice_-_Bazooka_hard.desc="Klarer du å treffe målene selv når de er veldig langt unna?"
+
+Target_Practice_-_Cluster_Bomb.name=Skyteøvelse: Klasebombe
+Target_Practice_-_Cluster_Bomb.desc="Noen trenger en varm dusj! Med klasebomber!"
+
+Target_Practice_-_Shotgun.name=Skyteøvelse: Hagle
+Target_Practice_-_Shotgun.desc="Skyt først, still spørsmål etterpå!"
+
+Basic_Training_-_Sniper_Rifle.name=Skyteøvelse: Snikskytterrifle
+Basic_Training_-_Sniper_Rifle.desc="Dette er den perfekte skytebanen for snikskyttere! Ødelegg alle mål så raskt og treffsikkert som mulig og bli en legende!"
+
+Target_Practice_-_Homing_Bee.name=Skyteøvelse: Målsøkende bie
+Target_Practice_-_Homing_Bee.desc="Å bruke den målsøkende bien er vanskeligere enn det ser ut."
+
+Target_Practice_-_Grenade_easy.name=Skyteøvelse: Granat (lett)
+Target_Practice_-_Grenade_easy.desc="En oppvarmingstrening for den kommende grenaderen."
+
+Target_Practice_-_Grenade_hard.name=Skyteøvelse: Granat (vanskelig)
+Target_Practice_-_Grenade_hard.desc="Dette er ingenting for grønnskollinger! Vi plasserer målene på noen skikkelig vriene steder."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=Tidsprøve: Shoppa-kjærlighet
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Vis kjærligheten din til tausvinging og samle inn noen kasser på et lite kart."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=Tidsprøve: Tau og kasser
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Ta frem tauet og samle alle kasser på dette mellomstore kartet."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=Tidsprøve: Kunden er konge
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Vis at du er en sann konge verdig og samle alle kasser så raskt som mulig på dette store kartet."

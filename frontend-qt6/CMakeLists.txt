@@ -340,6 +340,7 @@ qt_add_translations(hedgewars
     ../share/hedgewars/Data/Locale/hedgewars_ko.ts
     ../share/hedgewars/Data/Locale/hedgewars_lt.ts
     ../share/hedgewars/Data/Locale/hedgewars_ms.ts
+    ../share/hedgewars/Data/Locale/hedgewars_nb.ts
     ../share/hedgewars/Data/Locale/hedgewars_nl.ts
     ../share/hedgewars/Data/Locale/hedgewars_pl.ts
     ../share/hedgewars/Data/Locale/hedgewars_pt_BR.ts
