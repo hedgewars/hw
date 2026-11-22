@@ -721,4 +721,3 @@ redoUnit = do
     string' "var"
     v <- varsDecl True
     return $ Redo (t ++ v)
-
