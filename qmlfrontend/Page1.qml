@@ -76,7 +76,7 @@ Page1Form {
 
     NetSession {
       nickname: "test0272"
-      url: "hwnet://gameserver.hedgewars.org:46632"
+      url: "hwnet://gameserver.hedgewars.org:46631"
     }
   }
 

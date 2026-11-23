@@ -250,7 +250,9 @@ void NetSession::handleLobbyLeft(const QStringList &parameters) {
 }
 
 void NetSession::handleNick(const QStringList &parameters) {
-  if (parameters.length()) setNickname(parameters[0]);
+  if (!parameters.isEmpty()) {
+    setNickname(parameters[0]);
+  }
 }
 
 void NetSession::handleNotice(const QStringList &parameters) {}
