@@ -162,6 +162,10 @@ QString RoomsListModel::protoToVersion(const QString &proto) {
       return QStringLiteral("1.0.0");
     case 60:
       return QStringLiteral("1.1.0-dev");
+    case 61:
+      return QStringLiteral("1.1.0");
+    case 62:
+      return QStringLiteral("1.2.0-dev");
     default:
       return QStringLiteral("Unknown");
   }
