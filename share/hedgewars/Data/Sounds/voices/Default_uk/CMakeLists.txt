@@ -2,7 +2,6 @@ file(GLOB VoiceSounds
 Amazing.ogg
 Boring.ogg
 Brilliant.ogg
-Bugger.ogg
 Byebye.ogg
 Comeonthen.ogg
 Coward.ogg

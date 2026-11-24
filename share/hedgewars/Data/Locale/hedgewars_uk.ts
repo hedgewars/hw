@@ -861,11 +861,11 @@ Last engine message:
     </message>
     <message>
         <source>Click to randomize the map, theme and seed</source>
-        <translation>Натисність, щоб вибрати випадкові мапу, тему і висів</translation>
+        <translation>Натисніть, щоб вибрати випадкові мапу, тему і висів</translation>
     </message>
     <message>
         <source>Click to randomize the theme and seed</source>
-        <translation>Натисність, щоб вибрати випадкові тему і висів</translation>
+        <translation>Натисніть, щоб вибрати випадкові тему і висів</translation>
     </message>
     <message>
         <source>Adjust the complexity of the generated map</source>
@@ -1166,9 +1166,9 @@ Last engine message:
     <message numerus="yes">
         <source>%1 seconds</source>
         <translation>
+            <numerusform>%1 секунда</numerusform>
+            <numerusform>%1 секунди</numerusform>
             <numerusform>%1 секунд</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
         </translation>
     </message>
 </context>
@@ -1453,9 +1453,9 @@ Last engine message:
     <message numerus="yes">
         <source>The best shot award was won by &lt;b&gt;%1&lt;/b&gt; with &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
-            <numerusform>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; пунктами нанесених втрат.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; очком.</numerusform>
+            <numerusform>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; очками.</numerusform>
+            <numerusform>Нагороду за кращий постріл отримує &lt;b&gt;%1&lt;/b&gt; з &lt;b&gt;%2&lt;/b&gt; очками.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
@@ -1502,9 +1502,9 @@ Last engine message:
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; was scared and skipped turn &lt;b&gt;%2&lt;/b&gt; times.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; злякався і пропустив хід &lt;b&gt;%2&lt;/b&gt; разів.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>З переляку команда &lt;b&gt;«%1»&lt;/b&gt; пропускає &lt;b&gt;%2&lt;/b&gt; хід.</numerusform>
+            <numerusform>З переляку команда &lt;b&gt;«%1»&lt;/b&gt; пропускає &lt;b&gt;%2&lt;/b&gt; ходи.</numerusform>
+            <numerusform>З переляку команда &lt;b&gt;«%1»&lt;/b&gt; пропускає &lt;b&gt;%2&lt;/b&gt; ходів.</numerusform>
         </translation>
     </message>
     <message>
@@ -1527,17 +1527,17 @@ Last engine message:
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; thought it&apos;s good to shoot their own hedgehogs for &lt;b&gt;%2&lt;/b&gt; pts.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; вирішив, що це нормально вбивати власних їжаків за &lt;b&gt;%2&lt;/b&gt; очків.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; гадає, що можна вбивати своїх їжаків за &lt;b&gt;%2&lt;/b&gt; очко.</numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; гадає, що можна вбивати своїх їжаків за &lt;b&gt;%2&lt;/b&gt; очки.</numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; гадає, що можна вбивати своїх їжаків за &lt;b&gt;%2&lt;/b&gt; очок.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <source>&lt;b&gt;%1&lt;/b&gt; killed &lt;b&gt;%2&lt;/b&gt; of their own hedgehogs.</source>
         <translation>
-            <numerusform>&lt;b&gt;%1&lt;/b&gt; вбив &lt;b&gt;%2&lt;/b&gt; з власних їжаків.</numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; вбиває &lt;b&gt;%2&lt;/b&gt; свого їжака.</numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; вбиває &lt;b&gt;%2&lt;/b&gt; своїх їжаків.</numerusform>
+            <numerusform>Команда &lt;b&gt;«%1»&lt;/b&gt; вбиває &lt;b&gt;%2&lt;/b&gt; своїх їжаків.</numerusform>
         </translation>
     </message>
     <message>
@@ -1572,11 +1572,11 @@ Last engine message:
     </message>
     <message>
         <source>Save demo</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти демо</translation>
     </message>
     <message>
         <source>Save demo (unavailable because the /lua command was used)</source>
-        <translation type="unfinished"></translation>
+        <translation>Зберегти демо (недоступно, бо вжито команду /lua)</translation>
     </message>
 </context>
 <context>
@@ -1687,7 +1687,7 @@ Last engine message:
     </message>
     <message>
         <source>Start private server</source>
-        <translation>Запутити приватний сервер</translation>
+        <translation>Запустити приватний сервер</translation>
     </message>
 </context>
 <context>
@@ -1994,7 +1994,7 @@ Last engine message:
         <source>%1 players online</source>
         <translation>
             <numerusform>%1 гравець в мережі</numerusform>
-            <numerusform>%1 гравця в мережі</numerusform>
+            <numerusform>%1 гравці в мережі</numerusform>
             <numerusform>%1 гравців в мережі</numerusform>
         </translation>
     </message>
@@ -2302,7 +2302,7 @@ Last engine message:
     </message>
     <message>
         <source>Singleplayer missions: Learn how to play in the training, practice your skills in challenges or try to complete goals in scenarios.</source>
-        <translation>Місії одного гравця: Навчіться грі в тренуванні, тренуйте свої навички у викликах або спробуйте виконати цілі за сценаріями.</translation>
+        <translation>Місії одного гравця: пройдіть базову підготовку, відточіть навички у випробуваннях або спробуйте досягти цілей за сценаріями.</translation>
     </message>
 </context>
 <context>
@@ -2329,7 +2329,7 @@ Last engine message:
     </message>
     <message>
         <source>Pick the challenge to play</source>
-        <translation>Виберіть виклик</translation>
+        <translation>Виберіть випробування</translation>
     </message>
     <message>
         <source>Pick the scenario to play</source>
@@ -2341,7 +2341,7 @@ Last engine message:
     </message>
     <message>
         <source>Challenges</source>
-        <translation>Виклики</translation>
+        <translation>Випробування</translation>
     </message>
     <message>
         <source>Scenarios</source>
@@ -3548,7 +3548,7 @@ Would you like to reconnect securely?</source>
     </message>
     <message>
         <source>Start private server</source>
-        <translation>Запутити приватний сервер</translation>
+        <translation>Запустити приватний сервер</translation>
     </message>
     <message>
         <source>Specify address</source>
@@ -4717,7 +4717,7 @@ If this keeps happening, please click the &apos;%2&apos; button in the main menu
     </message>
     <message>
         <source>Freezer</source>
-        <translation type="vanished">Холодильник</translation>
+        <translation type="vanished">Заморожувач</translation>
     </message>
     <message>
         <source>Frontend / main menu</source>

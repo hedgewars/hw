@@ -1,53 +1,98 @@
-Basic_Training_-_Bazooka.name=Базове тренування з Базукою
-Basic_Training_-_Bazooka.desc="Слідкування за вітром є ключем до перемоги!"
+Basic_Training_-_Movement.name=Базова підготовка: рух
+Basic_Training_-_Movement.desc="Новобранцям — сюди! Навчіться пересуватись різними формами ландшафту й перемикатись між їжаками."
 
-Basic_Training_-_Grenade.name=Базове тренування з Гранатою
-Basic_Training_-_Grenade.desc="Пам'ятай, висмикуєш чеку І кидаєш!"
+Basic_Training_-_Bazooka.name=Базова підготовка: базука
+Basic_Training_-_Bazooka.desc="Опануйте базуку, дізнайтесь про вітер і знешкодьте всі мішені!"
 
-Basic_Training_-_Cluster_Bomb.name=Базове тренування з Кластерною бомбою
-Basic_Training_-_Cluster_Bomb.desc="Хтось потребує гарячий душ!"
+Basic_Training_-_Grenade.name=Базова підготовка: граната
+Basic_Training_-_Grenade.desc="Опануйте особливості гранат і знешкодьте всі цілі. Висмикнувши чеку, не забувайте кинути гранату!"
 
-Basic_Training_-_Shotgun.name=Базове тренування з Рушницею
-Basic_Training_-_Shotgun.desc="Спершу стріляй, потім питай!"
+Basic_Training_-_Rope.name=Базова підготовка: мотузка
+Basic_Training_-_Rope.desc="Мотузка — чи не найкорисніший інструмент з усіх, але вона потребує особливої майстерності. Опануйте базові навички з її використання!"
 
-Basic_Training_-_Sniper_Rifle.name=Базове тренування зі Снайперською гвинтівкою
-Basic_Training_-_Sniper_Rifle.desc="Бах, точно в голову!"
+Basic_Training_-_Flying_Saucer.name=Базова підготовка: НЛО
+Basic_Training_-_Flying_Saucer.desc="НЛО дає змогу дістатись практично будь-куди — якщо ним вміло керувати. Навчіться літати, стріляти в польоті й виконувати пару крутих трюків."
 
-Basic_Training_-_Rope.name=Базове тренування з Мотузкою
-Basic_Training_-_Rope.desc="Розхитуйтся і вилазь!"
+User_Mission_-_Dangerous_Ducklings.name=Небезпечні каченята
+User_Mission_-_Dangerous_Ducklings.desc="Гаразд, новачку! Час застосувати навички базової підготовки на практиці!"
 
-User_Mission_-_Dangerous_Ducklings.name=Місія: Небезпечні каченята
-User_Mission_-_Dangerous_Ducklings.desc="Гаразд, новачок! Час застосувати отримані в Базових тренуваннях уміння на практиці!"
+User_Mission_-_Diver.name=Водолаз
+User_Mission_-_Diver.desc="Морський десант складніше, ніж здається."
 
-User_Mission_-_Diver.name=Місія: Водолаз
-User_Mission_-_Diver.desc="Ця 'десантна атака' є складнішою ніж здається..."
+User_Mission_-_Teamwork.name=Командна гра
+User_Mission_-_Teamwork.desc="Несправний кіборг охороняє цінну військову таємницю. Ви керуєте спецпідрозділом із двох їжаків, чия задача — знищити ворога й роздобути сховане! Для майбутніх операцій критично, щоб обидва їжаки вижили."
 
-User_Mission_-_Teamwork.name=Місія: Командна гра
-User_Mission_-_Teamwork.desc="Інколи, любов підступна."
+User_Mission_-_Teamwork_2.name=Командна гра 2
+User_Mission_-_Teamwork_2.desc="Виявлено таємний об'єкт Кібернетичної імперії. Його охороняє беззбройний робот-вахтер. Допоможіть спецпідрозділу знешкодити його й захопити базу. Як і раніше, обидва їжаки мусять вижити!"
 
-User_Mission_-_Spooky_Tree.name=Місія: Моторошне дерево
-User_Mission_-_Spooky_Tree.desc="Тут багато ящиків. Я сподіваюсь цей птах не зголодніє."
+User_Mission_-_Spooky_Tree.name=Моторошне дерево
+User_Mission_-_Spooky_Tree.desc="Тут багато ящиків. Сподіваюся, цей птах не зголодніє."
 
-User_Mission_-_Bamboo_Thicket.name=Місія: Бамбукові зарослі
-User_Mission_-_Bamboo_Thicket.desc="Смерть приходить зверху."
+User_Mission_-_Bamboo_Thicket.name=Бамбукові хащі
+User_Mission_-_Bamboo_Thicket.desc="Кіборг тероризує бамбукові хащі й нападає на всіх, кого бачить, — влучаючи майже щоразу. Плануйте наперед, не зволікайте й швидко знешкодьте ворога!"
 
-User_Mission_-_That_Sinking_Feeling.name=Місія: Це погане відчуття
+User_Mission_-_That_Sinking_Feeling.name="Відчуття, ніби тонемо"
 User_Mission_-_That_Sinking_Feeling.desc="Вода піднімається і часу обмаль. Багато хто спробував і не зміг. Ти можеш їх врятувати?"
 
-User_Mission_-_Newton_and_the_Hammock.name=Місія: Ньютон і Гамак
+User_Mission_-_Newton_and_the_Hammock.name=Ньютон і гамак
 User_Mission_-_Newton_and_the_Hammock.desc="Пам'ятайте: Швидкість тіла залишається постійною, якщо тіло не знаходиться під впливом зовнішньої сили!"
 
-User_Mission_-_The_Great_Escape.name=Місія: Велика втеча
-User_Mission_-_The_Great_Escape.desc="Ти думаєш що можеш ув'язнити мене!?"
+User_Mission_-_The_Great_Escape.name=Велика втеча
+User_Mission_-_The_Great_Escape.desc="Виберіться з в'язниці й помстіться!"
 
-User_Mission_-_Rope_Knock_Challenge.name=Виклик: Стук мотузки
-User_Mission_-_Rope_Knock_Challenge.desc="Дивись позаду!"
+User_Mission_-_Rope_Knock_Challenge.name=Удар мотузкою
+User_Mission_-_Rope_Knock_Challenge.desc="Відправте ворогів у пекло за допомогою мотузки."
 
-User_Mission_-_Nobody_Laugh.name=Місія: Ніхто не сміється
-User_Mission_-_Nobody_Laugh.desc="Це не жарт."
+User_Mission_-_Nobody_Laugh.name=Смішно не буде
+User_Mission_-_Nobody_Laugh.desc="Ох, ці клоуни ще вважають себе дотепними! Так, їх більше, втім часу на ходи в нас вистачає. Розберіться з кожним горе-коміком по черзі, поки не залишититься кому сміятись."
 
-User_Mission_-_RCPlane_Challenge.name=Виклик: Радіо-керований літак
-User_Mission_-_RCPlane_Challenge.desc="Почуваєшся впевнено, льотчик, га?"
+User_Mission_-_RCPlane_Challenge.name=Радіокерований літак
+User_Mission_-_RCPlane_Challenge.desc="Здобудьте всі ящики за допомогою літачків на пульті. Чим менше літачків використаєте, тим краще результат. Гадаєте, зможете стати елітним пілотом вищого рангу?"
 
-portal.name=Місія: Виклик Розумного порталу
-portal.desc="Скористайся порталом щоб рухатись швидко і далеко, використовуй щоб вбивати, використовуй обережно!"
+Big_Armory.name=Широкий арсенал
+Big_Armory.desc="Ви на самоті з повним арсеналом зброї. Проти вас 8 їжаків. Час спливає."
+
+Bazooka_Battlefield.name=Бій базуками
+Bazooka_Battlefield.desc="Вороги втрапили в засідку! Знищте їх за допомогою базук! Але не зволікайте, вода невдовзі підійметься."
+
+Tentacle_Terror.name=Жахливі щупальця
+Tentacle_Terror.desc="Ворог жалюгідно ховається під прикриттям жахливого чудовиська й викликає повітряні атаки, щойно вас стає видно. Покажіть йому, хто справжній бос пекла! Але щоб мати принаймні шанс, вам знадобляться дияволські навички роботи з мотузкою."
+
+ClimbHome.name=Піднятись додому
+ClimbHome.desc="Ви далеко від дому. Води стає більше. Підійміться якнайвище!"
+
+portal.name=Тактичний портал
+portal.desc="Швидко та вбивчо долайте відстані за допомогою порталу. Але будьте обачні!"
+
+Target_Practice_-_Bazooka_easy.name=Тир: базука (легко)
+Target_Practice_-_Bazooka_easy.desc="Гаразд, солдате, висади ті мішені в повітря так швидко, як тільки можеш!"
+
+Target_Practice_-_Bazooka_hard.name=Тир: базука (складно)
+Target_Practice_-_Bazooka_hard.desc="Чи зможете ви влучити навіть у вкрай віддалені цілі?"
+
+Target_Practice_-_Cluster_Bomb.name=Тир: касетна бомба
+Target_Practice_-_Cluster_Bomb.desc="Гарячий душ з уламків!"
+
+Target_Practice_-_Shotgun.name=Тир: рушниця
+Target_Practice_-_Shotgun.desc="Спершу стріляй, потім питай!"
+
+Basic_Training_-_Sniper_Rifle.name=Тир: снайперська гвинтівка
+Basic_Training_-_Sniper_Rifle.desc="Бах, точно в голову!"
+
+Target_Practice_-_Homing_Bee.name=Тир: навідна бджілка
+Target_Practice_-_Homing_Bee.desc="Скористатись навідною бджілкою складніше, ніж здається."
+
+Target_Practice_-_Grenade_easy.name=Тир: граната (легко)
+Target_Practice_-_Grenade_easy.desc="Розігрів для майбутнього гренадера."
+
+Target_Practice_-_Grenade_hard.name=Тир: граната (складно)
+Target_Practice_-_Grenade_hard.desc="Це не для новобранців! Мішені розташовано доволі підступно."
+
+Challenge_-_Speed_Shoppa_-_Hedgelove.name=На час: шопінг
+Challenge_-_Speed_Shoppa_-_Hedgelove.desc="Вправно користуючись мотузкою, зберіть декілька ящиків на маленькій карті."
+
+Challenge_-_Speed_Shoppa_-_Ropes.name=На час: ящики й мотузки
+Challenge_-_Speed_Shoppa_-_Ropes.desc="Візьміть мотузку й зберіть усі ящики на карті середнього розміру."
+
+Challenge_-_Speed_Shoppa_-_ShoppaKing.name=На час: клієнт понад усе
+Challenge_-_Speed_Shoppa_-_ShoppaKing.desc="Доведіть, що ви король мотузки, якнайшвидше зібравши всі ящики на цій великій карті."
