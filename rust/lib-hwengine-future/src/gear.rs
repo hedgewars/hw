@@ -27,6 +27,11 @@ pub fn max_fall_dy() -> FPNum {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub struct StateFlags(u32);
 
+pub enum FallCheckResult {
+    HitFloor(i32),
+    IndefiniteFall,
+}
+
 bitflags! {
     impl StateFlags: u32 {
         const Drowning       = 0x00000001;
@@ -172,6 +177,20 @@ impl TGear {
         )
     }
 
+    pub fn check_fall(&self, game_field: &GameField, check_limit: i32) -> FallCheckResult {
+        let mut result = 0i32;
+
+        while self.test_vertical_collision_with_offset(game_field, 0, result, 1) == 0 && result <= check_limit {
+            result += 1;
+        }
+
+        if result > check_limit {
+            FallCheckResult::IndefiniteFall
+        } else {
+            FallCheckResult::HitFloor(result)
+        }
+    }
+
     pub fn step(&mut self, game_field: &GameField) -> bool {
         let dir = self.d_x.signum();
         let revert_y = self.y;
@@ -204,13 +223,10 @@ impl TGear {
 
         let mut hit_floor = false;
         let revert_y = self.y;
-        for _ in 0..6 {
-            if self.test_vertical_collision(game_field, 1) == 0 {
-                self.y += fp!(1);
-            } else {
-                hit_floor = true;
-                break;
-            }
+
+        if let FallCheckResult::HitFloor(delta) = self.check_fall(game_field, 6) {
+            self.y += FPNum::from(delta);
+            hit_floor = true;
         }
 
         if !hit_floor {
