@@ -180,7 +180,7 @@ impl TGear {
     pub fn check_fall(&self, game_field: &GameField, check_limit: i32) -> FallCheckResult {
         let mut result = 0i32;
 
-        while self.test_vertical_collision_with_offset(game_field, 0, result, 1) == 0 && result <= check_limit {
+        while result <= check_limit && self.test_vertical_collision_with_offset(game_field, 0, result, 1) == 0  {
             result += 1;
         }
 
