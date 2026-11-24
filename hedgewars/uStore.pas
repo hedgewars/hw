@@ -976,20 +976,23 @@ begin
 
     if checkFails((ProgrTex <> nil) and (LoadingText <> nil), 'Error - Progress or Loading texture is nil!', true) then exit;
 
-    RenderClear();
-    if Step < numsquares then
-        r.x:= 0
-    else
-        r.x:= squaresize;
+    if not cWindowHidden then
+        begin
+        RenderClear();
+        if Step < numsquares then
+            r.x:= 0
+        else
+            r.x:= squaresize;
 
-    r.y:= (Step mod numsquares) * squaresize;
-    r.w:= squaresize;
-    r.h:= squaresize;
+        r.y:= (Step mod numsquares) * squaresize;
+        r.w:= squaresize;
+        r.h:= squaresize;
 
-    DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
-    DrawTexture( -LoadingText^.w div 2, (cScreenHeight - LoadingText^.h) shr 1 - (squaresize div 2) - (LoadingText^.h div 2) - 8, LoadingText);
+        DrawTextureFromRect( -squaresize div 2, (cScreenHeight - squaresize) shr 1, @r, ProgrTex);
+        DrawTexture( -LoadingText^.w div 2, (cScreenHeight - LoadingText^.h) shr 1 - (squaresize div 2) - (LoadingText^.h div 2) - 8, LoadingText);
 
-    SwapBuffers;
+        SwapBuffers;
+        end;
 
     inc(Step);
 end;
@@ -1395,7 +1398,7 @@ end;
 
 procedure SwapBuffers; {$IFDEF USE_VIDEO_RECORDING}cdecl{$ELSE}inline{$ENDIF};
 begin
-    if GameType = gmtRecord then
+    if (GameType = gmtRecord) or cWindowHidden then
         exit;
     SDL_GL_SwapWindow(SDLwindow);
 end;

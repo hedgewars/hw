@@ -79,7 +79,7 @@ if (not CurrentTeam^.ExtDriven) then
 
 if GameType <> gmtRecord then
     begin
-    if Lag > 100 then
+    if (not cWindowHidden) and (Lag > 100) then
         Lag:= 100
     else if (GameType = gmtSave) or (fastUntilLag and (GameType = gmtNet)) or fastForward then
         Lag:= 2500;

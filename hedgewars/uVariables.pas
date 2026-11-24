@@ -194,6 +194,7 @@ var
     cVolumeDownKey  : boolean;
     cMuteToggle     : boolean; // Mute toggle requested
     cHasFocus       : boolean;
+    cWindowHidden   : boolean;
     cInactDelay     : Longword;
 
     bBetweenTurns   : boolean;
@@ -3026,6 +3027,7 @@ begin
     cVolumeDownKey  := false;
     cMuteToggle     := false;
     cHasFocus       := true;
+    cWindowHidden   := false;
     cInactDelay     := 100;
     ReadyTimeLeft   := 0;
 

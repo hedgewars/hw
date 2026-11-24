@@ -120,7 +120,7 @@ begin
             // disable screenshot flash effect when about to make another screenshot
             if flagMakeCapture and (ScreenFade = sfFromWhite) then
                 ScreenFade:= sfNone;
-            if not cOnlyStats then
+            if (not cOnlyStats) and (not cWindowHidden) then
                 // never place between ProcessKbd and DoGameTick - bugs due to /put cmd and isCursorVisible
                 DrawWorld(Lag);
             DoGameTick(Lag);
@@ -134,14 +134,14 @@ begin
             exit(false);
             end;
 
-    if not cOnlyStats then SwapBuffers;
+    if (not cOnlyStats) and (not cWindowHidden) then SwapBuffers;
 
 {$IFDEF USE_VIDEO_RECORDING}
     if flagPrerecording then
         SaveCameraPosition;
 {$ENDIF}
 
-    if flagMakeCapture then
+    if flagMakeCapture and (not cWindowHidden) then
         begin
         flagMakeCapture:= false;
         if flagDumpLand then
@@ -216,6 +216,10 @@ begin
                                 cHasFocus:= false;
                                 onFocusStateChanged();
                                 end;
+                        SDL_WINDOWEVENT_SHOWN:
+                                cWindowHidden:= false;
+                        SDL_WINDOWEVENT_HIDDEN:
+                                cWindowHidden:= true;
 {$IFDEF MOBILE}
 (* Suspend game if minimized on mobile.
 NOTE: Mobile doesn't support online multiplayer yet, so it's not a problem.
