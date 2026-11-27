@@ -25,6 +25,7 @@
 #include <QNetworkProxy>
 #include <QNetworkProxyFactory>
 #include <QStandardItemModel>
+#include <QUuid>
 #include <QVariant>
 #include <utility>
 
@@ -121,6 +122,7 @@ void GameUIConfig::reloadValues(void) {
 
   QString netNick = value("net/nick", getRandomNick()).toString();
   Form->ui.pageOptions->editNetNick->setText(netNick);
+  netToken();
   bool savePwd = value("net/savepassword", true).toBool();
   Form->ui.pageOptions->CBSavePassword->setChecked(savePwd);
 
@@ -579,6 +581,16 @@ QString GameUIConfig::getRandomNick() {
     cachedRandomNick =
         tr("Guest") + QStringLiteral("%1").arg(rand() % 99999 + 1);
   return cachedRandomNick;
+}
+
+QString GameUIConfig::netToken() {
+  QString token = value(QStringLiteral("net/token")).toString();
+  if (token.isEmpty()) {
+    token = QUuid::createUuid().toString(QUuid::WithoutBraces);
+    setValue(QStringLiteral("net/token"), token);
+    sync();
+  }
+  return token;
 }
 
 QByteArray GameUIConfig::netPasswordHash() {

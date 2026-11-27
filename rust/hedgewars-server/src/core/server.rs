@@ -398,6 +398,11 @@ impl HwServer {
             let nick = data.nick.unwrap();
             let mut client = HwClient::new(client_id, protocol.get(), nick);
             client.host = host;
+            client.token = if protocol.get() >= 60 {
+                data.token
+            } else {
+                None
+            };
             client.pings_queue = data.pings_queue;
             client.set_is_registered(data.is_registered);
             client.set_is_contributor(data.is_contributor);
@@ -630,19 +635,58 @@ impl HwServer {
         ),
         JoinRoomError,
     > {
+        self.join_room_impl(client_id, room_id, room_password, false)
+    }
+
+    pub fn rejoin_room(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+    ) -> Result<
+        (
+            &HwClient,
+            Option<&HwClient>,
+            &HwRoom,
+            impl Iterator<Item = &HwClient> + Clone,
+        ),
+        JoinRoomError,
+    > {
+        self.join_room_impl(client_id, room_id, None, true)
+    }
+
+    fn join_room_impl(
+        &mut self,
+        client_id: ClientId,
+        room_id: RoomId,
+        room_password: Option<&str>,
+        bypass_restrictions: bool,
+    ) -> Result<
+        (
+            &HwClient,
+            Option<&HwClient>,
+            &HwRoom,
+            impl Iterator<Item = &HwClient> + Clone,
+        ),
+        JoinRoomError,
+    > {
         use JoinRoomError::*;
         let room = &mut self.rooms[room_id];
         let client = &mut self.clients[client_id];
 
         if client.protocol_number != room.protocol_number && !client.is_admin() {
             Err(WrongProtocol)
-        } else if room.is_join_restricted() && !client.has_super_power() {
+        } else if !bypass_restrictions && room.is_join_restricted() && !client.has_super_power() {
             Err(Restricted)
-        } else if room.is_registration_required() && !client.is_registered() && !client.is_admin() {
+        } else if !bypass_restrictions
+            && room.is_registration_required()
+            && !client.is_registered()
+            && !client.is_admin()
+        {
             Err(RegistrationRequired)
         } else if !client.host.is_empty() && room.bans.contains(&client.host) {
             Err(RoomBanned)
-        } else if room.password.is_some()
+        } else if !bypass_restrictions
+            && room.password.is_some()
             && room_password != room.password.as_deref()
             && !client.has_super_power()
         {
@@ -763,6 +807,36 @@ impl HwServer {
         self.clients
             .iter()
             .find_map(|(_, c)| Some(c).filter(|c| c.nick == nick))
+    }
+
+    pub fn find_client_by_nick_and_token(&self, nick: &str, token: &str) -> Option<ClientId> {
+        self.clients.iter().find_map(|(id, c)| {
+            (c.protocol_number >= 60
+                && c.nick.eq_ignore_ascii_case(nick)
+                && c.token.as_deref() == Some(token))
+            .then_some(id)
+        })
+    }
+
+    pub fn find_rejoin_room_id(&self, client_id: ClientId) -> Option<RoomId> {
+        let client = self.clients.get(client_id)?;
+        let token = client.token.as_deref()?;
+        if client.protocol_number < 60 {
+            return None;
+        }
+        self.rooms.iter().find_map(|(room_id, room)| {
+            let matches_room = room.protocol_number == client.protocol_number
+                && room.players_number < u8::MAX
+                && (client.host.is_empty() || !room.bans.contains(&client.host));
+            let has_team = room.game_info.as_ref().is_some_and(|info| {
+                info.original_teams
+                    .iter()
+                    .any(|(owner_nick, owner_token, _)| {
+                        *owner_nick == client.nick && owner_token.as_deref() == Some(token)
+                    })
+            });
+            (matches_room && has_team).then_some(room_id)
+        })
     }
 
     fn find_client_mut(&mut self, nick: &str) -> Option<&mut HwClient> {
@@ -1670,7 +1744,8 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     client.team_indices = vec![];
 
     #[cfg(feature = "official-server")]
-    let can_rejoin = client.protocol_number >= 48 && client.is_registered();
+    let can_rejoin = client.protocol_number >= 48
+        && (client.is_registered() || (client.protocol_number >= 60 && client.token.is_some()));
 
     #[cfg(not(feature = "official-server"))]
     let can_rejoin = client.protocol_number >= 48;
@@ -1678,11 +1753,23 @@ fn move_to_room(client: &mut HwClient, room: &mut HwRoom) {
     if can_rejoin {
         if let Some(ref mut info) = room.game_info {
             let mut restored_teams = Vec::new();
-            for (owner_nick, team) in &info.original_teams {
-                if *owner_nick == client.nick {
+            for (owner_nick, owner_token, team) in &info.original_teams {
+                let nick_matches = *owner_nick == client.nick;
+                let owner_matches = if client.protocol_number >= 60 {
+                    let token_matches = client.token.is_some() && *owner_token == client.token;
+                    #[cfg(feature = "official-server")]
+                    let reg_matches = client.is_registered() && team.is_owner_registered;
+                    #[cfg(not(feature = "official-server"))]
+                    let reg_matches = false;
+                    token_matches || reg_matches
+                } else {
+                    true
+                };
+                if nick_matches && owner_matches {
                     restored_teams.push(super::room::OwnedTeam {
                         owner_id: client.id,
                         owner_nick: owner_nick.clone(),
+                        owner_token: owner_token.clone(),
                         is_owner_registered: team.is_owner_registered,
                         info: team.info.clone(),
                     });
@@ -1721,6 +1808,7 @@ mod tests {
     fn make_anteroom_client(nick: &str, is_admin: bool) -> HwAnteroomClient {
         HwAnteroomClient {
             nick: Some(nick.to_string()),
+            token: None,
             protocol_number: NonZeroU16::new(58),
             server_salt: String::new(),
             is_local_admin: is_admin,

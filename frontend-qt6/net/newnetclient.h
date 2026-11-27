@@ -56,7 +56,7 @@ class HWNewNet : public QObject {
   HWNewNet(QObject *parent = nullptr);
   ~HWNewNet();
   void Connect(const QString &hostName, quint16 port, bool useTls,
-               const QString &nick);
+               const QString &nick, const QString &token = QString());
   void ContinueConnection();
   void Disconnect();
   void SendPasswordHash(const QString &hash);
@@ -76,6 +76,7 @@ class HWNewNet : public QObject {
  private:
   bool isChief;
   QString mynick;
+  QString mytoken;
   QString myroom;
   QString myhost;
   QSslSocket NetSocket;

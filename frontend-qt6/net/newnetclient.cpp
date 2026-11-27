@@ -87,9 +87,10 @@ HWNewNet::~HWNewNet() {
 }
 
 void HWNewNet::Connect(const QString& hostName, quint16 port, bool useTls,
-                       const QString& nick) {
+                       const QString& nick, const QString& token) {
   netClientState = Connecting;
   mynick = nick;
+  mytoken = token;
   myhost = hostName + QStringLiteral(":%1").arg(port);
   if (useTls) {
     qDebug() << QStringLiteral("Making TLS connection to %1:%2...")
@@ -168,7 +169,10 @@ void HWNewNet::RemoveTeam(const HWTeam& team) {
 }
 
 void HWNewNet::NewNick(const QString& nick) {
-  RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, nick));
+  if (mytoken.isEmpty())
+    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, nick));
+  else
+    RawSendNet(QStringLiteral("NICK%1%2%1%3").arg(delimiter, nick, mytoken));
 }
 
 void HWNewNet::ToggleReady() { RawSendNet(QStringLiteral("TOGGLE_READY")); }
@@ -260,7 +264,11 @@ void HWNewNet::SendPasswordHash(const QString& hash) {
 
 void HWNewNet::ContinueConnection() {
   if (netClientState == Connected) {
-    RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, mynick));
+    if (mytoken.isEmpty())
+      RawSendNet(QStringLiteral("NICK%1%2").arg(delimiter, mynick));
+    else
+      RawSendNet(
+          QStringLiteral("NICK%1%2%1%3").arg(delimiter, mynick, mytoken));
     RawSendNet(QStringLiteral("PROTO%1%2").arg(delimiter, cProtoVer));
     m_game_connected = true;
     Q_EMIT adminAccess(false);
@@ -279,6 +287,13 @@ void HWNewNet::ParseCmd(const QStringList& lst) {
     mynick = lst[1];
     m_playersModel->setNickname(mynick);
     m_nick_registered = false;
+    return;
+  }
+
+  if (lst[0] == QLatin1String("TOKEN")) {
+    if (lst.size() >= 2 && !lst[1].isEmpty()) {
+      mytoken = lst[1];
+    }
     return;
   }
 

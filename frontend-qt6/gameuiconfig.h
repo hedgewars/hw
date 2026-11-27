@@ -58,6 +58,7 @@ class GameUIConfig : public QSettings {
   quint8 timerInterval();
   QString netNick();
   QString getRandomNick();
+  QString netToken();
   QByteArray netPasswordHash();
   int netPasswordLength();
   void clearPasswordHash();

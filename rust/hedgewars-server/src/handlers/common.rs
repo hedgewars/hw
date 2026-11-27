@@ -412,7 +412,6 @@ pub fn remove_client_by_id(
         "Client '{}' (id: {}) quit the server: {}",
         nick, client_id, msg
     );
-    anteroom.forget_nick(&nick);
 
     if let HwRoomOrServer::Room(mut control) = server.get_room_control(client_id) {
         let room_id = control.room().id;
@@ -598,7 +597,7 @@ where
 pub fn get_active_room_teams(room: &HwRoom, destination: Destination, response: &mut Response) {
     match room.game_info {
         Some(ref info) => get_teams(
-            info.original_teams.iter().map(|(_, team)| &team.info),
+            info.original_teams.iter().map(|(_, _, team)| &team.info),
             destination,
             response,
         ),

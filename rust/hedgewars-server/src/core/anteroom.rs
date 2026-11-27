@@ -3,13 +3,11 @@ use super::{
     types::ClientId,
 };
 use crate::utils::loc;
-use base64::encode;
-use log::*;
-use rand::{thread_rng, RngCore};
-use std::{collections::HashMap, net::IpAddr, num::NonZeroU16};
+use std::{net::IpAddr, num::NonZeroU16};
 
 pub struct HwAnteroomClient {
     pub nick: Option<String>,
+    pub token: Option<String>,
     pub protocol_number: Option<NonZeroU16>,
     pub server_salt: String,
     pub is_local_admin: bool,
@@ -34,7 +32,6 @@ pub struct HwAnteroom {
     pub bans: BanCollection,
     pub joins_monitor: JoinsMonitor,
     pub no_anon: NoAnonList,
-    nicks: HashMap<String, String>,
 }
 
 impl HwAnteroom {
@@ -45,7 +42,6 @@ impl HwAnteroom {
             bans: BanCollection::new(),
             joins_monitor: JoinsMonitor::new(),
             no_anon: NoAnonList::load(),
-            nicks: Default::default(),
         }
     }
 
@@ -74,6 +70,7 @@ impl HwAnteroom {
     ) {
         let client = HwAnteroomClient {
             nick: None,
+            token: None,
             protocol_number: None,
             server_salt: salt,
             is_local_admin: is_local,
@@ -112,30 +109,6 @@ impl HwAnteroom {
 
     pub fn find_ban(&mut self, addr: IpAddr) -> Option<String> {
         self.bans.find_ip_ban(addr)
-    }
-
-    pub fn register_nick_token(&mut self, nick: &str) -> Option<&str> {
-        debug!("Registering token for {}", nick);
-        let mut bytes = [0u8; 18];
-        thread_rng().fill_bytes(&mut bytes);
-        self.nicks.insert(nick.to_string(), encode(bytes));
-        self.get_nick_token(nick)
-    }
-
-    pub fn remember_nick(&mut self, nick: String) {
-        self.nicks.insert(nick, String::new());
-    }
-
-    pub fn forget_nick(&mut self, nick: &str) {
-        self.nicks.remove(nick);
-    }
-
-    pub fn get_nick_token(&self, nick: &str) -> Option<&str> {
-        self.nicks.get(nick).map(|s| &s[..])
-    }
-
-    pub fn nick_taken(&self, nick: &str) -> bool {
-        self.nicks.contains_key(nick)
     }
 
     pub fn has_client_nick(&self, nick: &str) -> bool {

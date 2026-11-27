@@ -259,6 +259,100 @@ fn get_recipients(
     }
 }
 
+fn generate_reconnection_token() -> String {
+    let mut bytes = [0u8; 16];
+    thread_rng().fill_bytes(&mut bytes);
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+    format!(
+        "{:02x}{:02x}{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}-{:02x}{:02x}{:02x}{:02x}{:02x}{:02x}",
+        bytes[0], bytes[1], bytes[2], bytes[3],
+        bytes[4], bytes[5], bytes[6], bytes[7],
+        bytes[8], bytes[9], bytes[10], bytes[11],
+        bytes[12], bytes[13], bytes[14], bytes[15],
+    )
+}
+
+fn finish_client_login(
+    state: &mut ServerState,
+    client_id: ClientId,
+    mut client: crate::core::anteroom::HwAnteroomClient,
+    response: &mut Response,
+) {
+    let is_checker = client.is_checker;
+    let proto = client.protocol_number.map_or(0, |p| p.get());
+    let nick = client.nick.clone().unwrap_or_default();
+    let host = client.host_string();
+
+    if is_checker {
+        state.server.add_client(client_id, client);
+        info!(
+            "Checker '{}' (id: {}, proto: {}) joined the server",
+            nick, client_id, proto
+        );
+        return;
+    }
+
+    if proto < 60 {
+        client.token = None;
+    } else if let Some(ref token) = client.token {
+        if let Some(existing_id) = state.server.find_client_by_nick_and_token(&nick, token) {
+            info!(
+                "Client '{}' (id: {}) reconnected with matching token, kicking existing client (id: {})",
+                nick, client_id, existing_id
+            );
+            let mut kick_response = Response::new(existing_id);
+            common::remove_client_by_id(
+                &mut state.server,
+                &mut state.anteroom,
+                existing_id,
+                &mut kick_response,
+                loc("Reconnected from another client").to_string(),
+            );
+            for (ids, msg) in kick_response.extract_messages(&state.server) {
+                response.add(msg.send_many(ids));
+            }
+            for removed_id in kick_response.extract_removed_clients() {
+                response.remove_client(removed_id);
+            }
+        }
+    } else {
+        let token = generate_reconnection_token();
+        client.token = Some(token.clone());
+        response.add(Token(token).send_self());
+    }
+
+    state.server.add_client(client_id, client);
+    info!(
+        "Client '{}' (id: {}, host: {}) joined the server",
+        nick, client_id, host
+    );
+    common::get_lobby_join_data(&state.server, response);
+
+    if proto >= 60 {
+        if let Some(rejoin_room_id) = state.server.find_rejoin_room_id(client_id) {
+            let protocols = state.server.all_client_protocols();
+            if let Ok((client, master, room, room_clients)) =
+                state.server.rejoin_room(client_id, rejoin_room_id)
+            {
+                info!(
+                    "Client '{}' automatically rejoined room '{}' (id: {})",
+                    client.nick, room.name, room.id
+                );
+                response.add(Joining(room.name.clone()).send_self());
+                common::get_room_join_data(
+                    &mut protocols.into_iter(),
+                    client,
+                    master,
+                    room,
+                    room_clients,
+                    response,
+                );
+            }
+        }
+    }
+}
+
 pub fn handle(
     state: &mut ServerState,
     client_id: ClientId,
@@ -295,23 +389,7 @@ pub fn handle(
                 ) {
                     LoginResult::Unchanged => (),
                     LoginResult::Complete(client) => {
-                        let is_checker = client.is_checker;
-                        let proto = client.protocol_number.map_or(0, |p| p.get());
-                        let nick = client.nick.clone().unwrap_or_default();
-                        let host = client.host_string();
-                        state.server.add_client(client_id, client);
-                        if !is_checker {
-                            info!(
-                                "Client '{}' (id: {}, host: {}) joined the server",
-                                nick, client_id, host
-                            );
-                            common::get_lobby_join_data(&state.server, response);
-                        } else {
-                            info!(
-                                "Checker '{}' (id: {}, proto: {}) joined the server",
-                                nick, client_id, proto
-                            );
-                        }
+                        finish_client_login(state, client_id, client, response);
                     }
                     LoginResult::Exit => {
                         state.anteroom.remove_client(client_id);
@@ -601,14 +679,7 @@ pub fn handle_io_result(
                 };
                 response.add(AskPassword(salt).send_self());
             } else if let Some(client) = state.anteroom.remove_client(client_id) {
-                let nick = client.nick.clone().unwrap_or_default();
-                let host = client.host_string();
-                info!(
-                    "Client '{}' (id: {}, host: {}) joined the server",
-                    nick, client_id, host
-                );
-                state.server.add_client(client_id, client);
-                common::get_lobby_join_data(&state.server, response);
+                finish_client_login(state, client_id, client, response);
             }
         }
         IoResult::Account(None) => {
@@ -641,14 +712,7 @@ pub fn handle_io_result(
                 client.is_registered = info.is_registered;
                 client.is_admin = info.is_admin;
                 client.is_contributor = info.is_contributor;
-                let nick = client.nick.clone().unwrap_or_default();
-                let host = client.host_string();
-                info!(
-                    "Client '{}' (id: {}, host: {}) joined the server",
-                    nick, client_id, host
-                );
-                state.server.add_client(client_id, client);
-                common::get_lobby_join_data(&state.server, response);
+                finish_client_login(state, client_id, client, response);
                 if proto < 48 && info.is_admin {
                     response.add(AdminAccess.send_self());
                 }
@@ -790,5 +854,313 @@ mod test {
         assert!(!handle_client_accept(
             &mut state, 2, &mut resp2, v6_ip2, false
         ));
+    }
+
+    fn test_login(
+        state: &mut ServerState,
+        client_id: ClientId,
+        nick: &str,
+        token: Option<&str>,
+        proto: u16,
+    ) -> Vec<(Vec<ClientId>, HwServerMessage)> {
+        let ip = format!("10.0.0.{}", client_id).parse::<IpAddr>().unwrap();
+        let mut resp = Response::new(client_id);
+        assert!(handle_client_accept(state, client_id, &mut resp, ip, false));
+        handle(
+            state,
+            client_id,
+            &mut resp,
+            HwProtocolMessage::Nick(nick.to_string(), token.map(str::to_string)),
+        );
+        handle(state, client_id, &mut resp, HwProtocolMessage::Proto(proto));
+        #[cfg(feature = "official-server")]
+        {
+            let tasks: Vec<_> = resp.extract_io_tasks().collect();
+            if tasks
+                .iter()
+                .any(|t| matches!(t, IoTask::CheckRegistered { .. }))
+            {
+                handle_io_result(
+                    state,
+                    client_id,
+                    &mut resp,
+                    IoResult::AccountRegistered(false),
+                );
+            }
+        }
+        resp.extract_messages(&state.server).collect()
+    }
+
+    fn make_team(name: &str, color: u8) -> Box<hedgewars_network_protocol::types::TeamInfo> {
+        use hedgewars_network_protocol::types::{HedgehogInfo, TeamInfo};
+        Box::new(TeamInfo {
+            owner: String::new(),
+            name: name.to_string(),
+            color,
+            grave: "Statue".to_string(),
+            fort: "Plane".to_string(),
+            voice_pack: "Default".to_string(),
+            flag: "hedgewars".to_string(),
+            difficulty: 0,
+            hedgehogs: std::array::from_fn(|i| HedgehogInfo {
+                name: format!("h{}", i + 1),
+                hat: "NoHat".to_string(),
+            }),
+            hedgehogs_number: 4,
+        })
+    }
+
+    #[test]
+    fn token_assigned_for_proto_60_and_skipped_for_old_proto_or_checker() {
+        let mut state = ServerState::new(16, 16);
+
+        // Compatible client without token gets a random token assigned
+        let msgs = test_login(&mut state, 1, "Alice", None, 60);
+        let assigned_token = msgs
+            .iter()
+            .find_map(|(ids, m)| match m {
+                Token(t) if ids == &vec![1] => Some(t.clone()),
+                _ => None,
+            })
+            .expect("Expected server to assign a token");
+        assert!(!assigned_token.is_empty());
+        assert_eq!(
+            state.server.client(1).token.as_deref(),
+            Some(assigned_token.as_str())
+        );
+
+        // Incompatible client (proto < 60) does not get or keep a token
+        let old_msgs = test_login(&mut state, 2, "Bob", Some("client-tok"), 59);
+        assert!(!old_msgs.iter().any(|(_, m)| matches!(m, Token(_))));
+        assert_eq!(state.server.client(2).token, None);
+
+        // Checker does not get a token
+        let ip = "10.0.0.2".parse::<IpAddr>().unwrap();
+        let mut checker_resp = Response::new(3);
+        assert!(handle_client_accept(
+            &mut state,
+            3,
+            &mut checker_resp,
+            ip,
+            false
+        ));
+        handle(
+            &mut state,
+            3,
+            &mut checker_resp,
+            HwProtocolMessage::Checker(60, "checker".to_string(), "pw".to_string()),
+        );
+        #[cfg(feature = "official-server")]
+        handle_io_result(
+            &mut state,
+            3,
+            &mut checker_resp,
+            IoResult::CheckerAccount {
+                is_registered: true,
+                is_admin: true,
+            },
+        );
+        let checker_msgs: Vec<_> = checker_resp.extract_messages(&state.server).collect();
+        assert!(!checker_msgs.iter().any(|(_, m)| matches!(m, Token(_))));
+    }
+
+    #[test]
+    fn duplicate_nick_with_same_token_kicks_existing_player() {
+        let mut state = ServerState::new(16, 16);
+        let _ = test_login(&mut state, 1, "Alice", Some("tok-a"), 60);
+        assert!(state.server.has_client(1));
+
+        // Different token cannot take the active nick
+        let ip = "10.0.0.2".parse::<IpAddr>().unwrap();
+        let mut bad_resp = Response::new(2);
+        assert!(handle_client_accept(
+            &mut state,
+            2,
+            &mut bad_resp,
+            ip,
+            false
+        ));
+        handle(
+            &mut state,
+            2,
+            &mut bad_resp,
+            HwProtocolMessage::Nick("Alice".to_string(), Some("tok-b".to_string())),
+        );
+        handle(&mut state, 2, &mut bad_resp, HwProtocolMessage::Proto(60));
+        let bad_msgs: Vec<_> = bad_resp.extract_messages(&state.server).collect();
+        assert!(bad_msgs
+            .iter()
+            .any(|(_, m)| matches!(m, Notice(n) if n == "0")));
+        assert!(state.server.has_client(1));
+        assert!(state.anteroom.has_client(2));
+
+        // Matching nick and token kicks existing player 1 and lets player 3 in
+        let mut ok_resp = Response::new(3);
+        assert!(handle_client_accept(&mut state, 3, &mut ok_resp, ip, false));
+        handle(
+            &mut state,
+            3,
+            &mut ok_resp,
+            HwProtocolMessage::Nick("Alice".to_string(), Some("tok-a".to_string())),
+        );
+        handle(&mut state, 3, &mut ok_resp, HwProtocolMessage::Proto(60));
+        #[cfg(feature = "official-server")]
+        handle_io_result(
+            &mut state,
+            3,
+            &mut ok_resp,
+            IoResult::AccountRegistered(false),
+        );
+
+        let removed: Vec<_> = ok_resp.extract_removed_clients().collect();
+        let ok_msgs: Vec<_> = ok_resp.extract_messages(&state.server).collect();
+        assert!(removed.contains(&1));
+        assert!(!state.server.has_client(1));
+        assert!(state.server.has_client(3));
+        assert_eq!(state.server.client(3).token.as_deref(), Some("tok-a"));
+        assert!(ok_msgs
+            .iter()
+            .any(|(ids, m)| ids == &vec![1] && matches!(m, Bye(_))));
+        assert!(!ok_msgs
+            .iter()
+            .any(|(ids, m)| ids.contains(&3) && matches!(m, LobbyLeft(_, _))));
+        assert!(!ok_msgs.iter().any(|(_, m)| matches!(m, Token(_))));
+    }
+
+    #[cfg(feature = "official-server")]
+    #[test]
+    fn token_does_not_bypass_password_validation() {
+        let mut state = ServerState::new(16, 16);
+        let ip = "10.0.0.1".parse::<IpAddr>().unwrap();
+
+        // Registered user logs in with token
+        let mut resp1 = Response::new(1);
+        assert!(handle_client_accept(&mut state, 1, &mut resp1, ip, false));
+        handle(
+            &mut state,
+            1,
+            &mut resp1,
+            HwProtocolMessage::Nick("RegUser".to_string(), Some("tok-reg".to_string())),
+        );
+        handle(&mut state, 1, &mut resp1, HwProtocolMessage::Proto(60));
+        handle_io_result(&mut state, 1, &mut resp1, IoResult::AccountRegistered(true));
+        handle_io_result(
+            &mut state,
+            1,
+            &mut resp1,
+            IoResult::Account(Some(AccountInfo {
+                is_registered: true,
+                is_admin: false,
+                is_contributor: false,
+                server_hash: Sha1Digest([0; 20]),
+            })),
+        );
+        assert!(state.server.has_client(1));
+
+        // Second client with same nick + token must still pass password check
+        let mut resp2 = Response::new(2);
+        assert!(handle_client_accept(&mut state, 2, &mut resp2, ip, false));
+        handle(
+            &mut state,
+            2,
+            &mut resp2,
+            HwProtocolMessage::Nick("RegUser".to_string(), Some("tok-reg".to_string())),
+        );
+        handle(&mut state, 2, &mut resp2, HwProtocolMessage::Proto(60));
+        handle_io_result(&mut state, 2, &mut resp2, IoResult::AccountRegistered(true));
+        let ask_msgs: Vec<_> = resp2.extract_messages(&state.server).collect();
+        assert!(ask_msgs.iter().any(|(_, m)| matches!(m, AskPassword(_))));
+        assert!(state.server.has_client(1));
+
+        // Wrong password fails and does not kick existing user
+        handle_io_result(&mut state, 2, &mut resp2, IoResult::Account(None));
+        assert!(state.server.has_client(1));
+        assert!(!state.server.has_client(2));
+    }
+
+    #[test]
+    fn unregistered_player_auto_rejoins_running_game_with_matching_token() {
+        let mut state = ServerState::new(16, 16);
+        let _ = test_login(&mut state, 1, "Master", Some("tok-m"), 60);
+        let _ = test_login(&mut state, 2, "Guest", Some("tok-g"), 60);
+
+        let mut resp = Response::new(1);
+        handle(
+            &mut state,
+            1,
+            &mut resp,
+            HwProtocolMessage::CreateRoom("SecretRoom".to_string(), Some("pw123".to_string())),
+        );
+        handle(
+            &mut state,
+            1,
+            &mut resp,
+            HwProtocolMessage::AddTeam(make_team("TeamM", 0)),
+        );
+
+        let mut resp2 = Response::new(2);
+        handle(
+            &mut state,
+            2,
+            &mut resp2,
+            HwProtocolMessage::JoinRoom("SecretRoom".to_string(), Some("pw123".to_string())),
+        );
+        handle(
+            &mut state,
+            2,
+            &mut resp2,
+            HwProtocolMessage::AddTeam(make_team("TeamG", 1)),
+        );
+        handle(&mut state, 2, &mut resp2, HwProtocolMessage::ToggleReady);
+
+        handle(
+            &mut state,
+            1,
+            &mut resp,
+            HwProtocolMessage::ToggleRestrictJoin,
+        );
+        handle(
+            &mut state,
+            1,
+            &mut resp,
+            HwProtocolMessage::ToggleRegisteredOnly,
+        );
+        handle(&mut state, 1, &mut resp, HwProtocolMessage::StartGame);
+
+        // Guest disconnects mid-game
+        let mut loss_resp = Response::new(2);
+        handle_client_loss(&mut state, 2, &mut loss_resp);
+        assert!(!state.server.has_client(2));
+
+        // Wrong token with same nick does NOT auto-rejoin
+        let wrong_msgs = test_login(&mut state, 3, "Guest", Some("wrong-tok"), 60);
+        assert_eq!(state.server.client(3).room_id, None);
+        assert!(!wrong_msgs.iter().any(|(_, m)| matches!(m, Joining(_))));
+
+        // Disconnect wrong-token client so nick is free
+        let mut loss_resp3 = Response::new(3);
+        handle_client_loss(&mut state, 3, &mut loss_resp3);
+
+        // Real Guest reconnects with matching nick and token -> auto-joins running game
+        let rejoin_msgs = test_login(&mut state, 4, "Guest", Some("tok-g"), 60);
+        let room_id = state
+            .server
+            .find_room("SecretRoom")
+            .expect("room exists")
+            .id;
+        assert_eq!(state.server.client(4).room_id, Some(room_id));
+        assert_eq!(state.server.client(4).teams_in_game, 1);
+        assert!(state.server.client(4).is_in_game());
+        assert!(rejoin_msgs.iter().any(|(ids, m)| {
+            ids == &vec![4] && matches!(m, Joining(name) if name == "SecretRoom")
+        }));
+        assert!(rejoin_msgs
+            .iter()
+            .any(|(ids, m)| ids == &vec![4] && matches!(m, RunGame)));
+        let expected_g = crate::utils::to_engine_msg(std::iter::once(b'G').chain("TeamG".bytes()));
+        assert!(rejoin_msgs.iter().any(|(_, m)| matches!(
+            m,
+            ForwardEngineMessage(ems) if ems.contains(&expected_g)
+        )));
     }
 }

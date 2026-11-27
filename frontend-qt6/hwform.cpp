@@ -1629,7 +1629,7 @@ void HWForm::_NetConnect(const QString &hostName, quint16 port, bool useTls,
   ui.pageRoomsList->setUser(nickname);
   ui.pageNetGame->setUser(nickname);
 
-  hwnet->Connect(hostName, port, useTls, nickname);
+  hwnet->Connect(hostName, port, useTls, nickname, config->netToken());
 }
 
 int HWForm::AskForNickAndPwd(void) {

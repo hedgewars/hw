@@ -77,15 +77,21 @@ fn get_completion_result(
     client_id: ClientId,
     response: &mut super::Response,
 ) -> LoginResult {
-    let (mut nick, proto, is_checker, web_password) = {
+    let (mut nick, proto, is_checker, web_password, mut token) = {
         let client = anteroom.get_client(client_id);
         (
             client.nick.as_ref().unwrap().clone(),
             client.protocol_number.map_or(0, |p| p.get()),
             client.is_checker,
             client.web_password.clone(),
+            client.token.clone(),
         )
     };
+
+    if !is_checker && proto < 60 && token.is_some() {
+        anteroom.get_client_mut(client_id).token = None;
+        token = None;
+    }
 
     if !is_checker {
         if let Some(reason) = anteroom.bans.find_nick_ban(&nick) {
@@ -101,9 +107,10 @@ fn get_completion_result(
     }
 
     if !is_checker
-        && server
-            .iter_clients()
-            .any(|c| c.nick.eq_ignore_ascii_case(&nick))
+        && server.iter_clients().any(|c| {
+            c.nick.eq_ignore_ascii_case(&nick)
+                && (proto < 60 || token.is_none() || c.token.as_deref() != token.as_deref())
+        })
     {
         if proto < 38 {
             warn!(
@@ -193,7 +200,7 @@ pub fn handle(
             response.add(Bye(msg).send_self());
             LoginResult::Exit
         }
-        HwProtocolMessage::Nick(mut nick, _token) => {
+        HwProtocolMessage::Nick(mut nick, token) => {
             if anteroom.get_client(client_id).nick.is_some() {
                 warn!(
                     "Client {} failed to set nickname: already provided",
@@ -219,6 +226,7 @@ pub fn handle(
                 }
                 let client = anteroom.get_client_mut(client_id);
                 client.nick = Some(nick.clone());
+                client.token = token.filter(|t| !t.is_empty());
                 let has_proto = client.protocol_number.is_some();
                 response.add(Nick(nick).send_self());
 
@@ -359,7 +367,7 @@ pub fn handle(
                     warn!("Checker failed to join server: bad protocol number (malformed)");
                     response.error(BAD_NUMBER);
                 }
-                ["NICK", _] => {
+                ["NICK", ..] => {
                     if anteroom.get_client(client_id).nick.is_some() {
                         warn!(
                             "Client {} failed to set nickname: already provided",

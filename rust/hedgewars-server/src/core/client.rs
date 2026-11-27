@@ -23,6 +23,7 @@ pub struct HwClient {
     pub room_id: Option<usize>,
     pub room_joined_at: Option<std::time::Instant>,
     pub nick: String,
+    pub token: Option<String>,
     pub host: String,
     pub protocol_number: u16,
     pub flags: ClientFlags,
@@ -40,6 +41,7 @@ impl HwClient {
         HwClient {
             id,
             nick,
+            token: None,
             host: String::new(),
             protocol_number,
             room_id: None,

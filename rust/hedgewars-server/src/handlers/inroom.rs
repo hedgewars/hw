@@ -928,6 +928,7 @@ mod tests {
     fn make_client(nick: &str, host: &str, is_admin: bool) -> (HwAnteroomClient, String) {
         let client = HwAnteroomClient {
             nick: Some(nick.to_string()),
+            token: None,
             protocol_number: NonZeroU16::new(58),
             server_salt: String::new(),
             is_local_admin: is_admin,
