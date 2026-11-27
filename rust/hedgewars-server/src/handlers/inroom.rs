@@ -52,7 +52,9 @@ fn by_msg(source: &[u8]) -> ByMsg<'_> {
 
 const VALID_MESSAGES: &[u8] =
     b"M#+LlRrUuDdZzAaSjJ,NpPwtgfhbc12345\x80\x81\x82\x83\x84\x85\x86\x87\x88\x89\x8A";
-const NON_TIMED_MESSAGES: &[u8] = b"M#hb";
+// '#' advances the 16-bit tick frame counter (hiTicks) by 65,536 ticks, so it must count
+// as timed to invalidate any older '+' heartbeat cached in GameInfo::sync_msg.
+const NON_TIMED_MESSAGES: &[u8] = b"Mhb";
 
 fn is_msg_valid(msg: &[u8], team_indices: &[u8]) -> bool {
     match msg {
@@ -1406,5 +1408,156 @@ mod tests {
         assert!(!end_msgs.iter().any(|(targets, m)| {
             targets.contains(&0) && matches!(m, TeamRemove(name) if name == "TeamBob")
         }));
+    }
+
+    #[test]
+    fn test_disconnect_after_tick_frame_marker_does_not_log_stale_sync_msg() {
+        use hedgewars_network_protocol::types::{HedgehogInfo, TeamInfo};
+
+        let make_team = |name: &str, color: u8| {
+            Box::new(TeamInfo {
+                owner: String::new(),
+                name: name.to_string(),
+                color,
+                grave: "Statue".to_string(),
+                fort: "Plane".to_string(),
+                voice_pack: "Default".to_string(),
+                flag: "hedgewars".to_string(),
+                difficulty: 0,
+                hedgehogs: std::array::from_fn(|i| HedgehogInfo {
+                    name: format!("h{}", i + 1),
+                    hat: "NoHat".to_string(),
+                }),
+                hedgehogs_number: 4,
+            })
+        };
+
+        let setup_started_game = || {
+            let (mut server, mut anteroom, room_id) = setup_room_with_master();
+            add_joined_client(&mut server, 1, "bob", "10.0.0.2", room_id, false);
+            dispatch_in_room(
+                &mut server,
+                &mut anteroom,
+                0,
+                HwProtocolMessage::AddTeam(make_team("TeamMaster", 0)),
+            );
+            dispatch_in_room(
+                &mut server,
+                &mut anteroom,
+                1,
+                HwProtocolMessage::AddTeam(make_team("TeamBob", 1)),
+            );
+            dispatch_in_room(
+                &mut server,
+                &mut anteroom,
+                1,
+                HwProtocolMessage::ToggleReady,
+            );
+            dispatch_in_room(&mut server, &mut anteroom, 0, HwProtocolMessage::StartGame);
+            (server, anteroom, room_id)
+        };
+
+        let old_plus = vec![3, b'+', 0xFF, 0x00];
+        let frame_marker = vec![3, b'#', 0xFF, 0xFF];
+        let new_plus = vec![3, b'+', 0x00, 0x10];
+        let bob_left_msg = to_engine_msg(once(b'F').chain("TeamBob".bytes()));
+
+        // Case 1: '+' followed by '#' in separate EngineMessages, then client disconnects.
+        // The stale '+' from before '#' must not be written after '#'.
+        let (mut server, mut anteroom, room_id) = setup_started_game();
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::EngineMessage(encode(&old_plus)),
+        );
+        assert_eq!(
+            server
+                .room(room_id)
+                .game_info
+                .as_ref()
+                .and_then(|g| g.sync_msg.as_deref()),
+            Some(encode(&old_plus).as_str())
+        );
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::EngineMessage(encode(&frame_marker)),
+        );
+        assert_eq!(
+            server
+                .room(room_id)
+                .game_info
+                .as_ref()
+                .and_then(|g| g.sync_msg.as_ref()),
+            None
+        );
+
+        let mut resp = Response::new(1);
+        crate::handlers::common::remove_client(
+            &mut server,
+            &mut anteroom,
+            &mut resp,
+            "Ping timeout".to_string(),
+        );
+        let log = &server.room(room_id).game_info.as_ref().unwrap().msg_log;
+        assert_eq!(log, &vec![encode(&frame_marker), bob_left_msg.clone()]);
+
+        // Case 2: '+' followed by '#' in the same EngineMessage clears sync_msg.
+        let (mut server, mut anteroom, room_id) = setup_started_game();
+        let mut combined_before = old_plus.clone();
+        combined_before.extend_from_slice(&frame_marker);
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::EngineMessage(encode(&combined_before)),
+        );
+        assert_eq!(
+            server
+                .room(room_id)
+                .game_info
+                .as_ref()
+                .and_then(|g| g.sync_msg.as_ref()),
+            None
+        );
+
+        // Case 3: '#' followed by '+' keeps only the post-'#' '+' in sync_msg,
+        // and flushing on disconnect logs '#', new '+', then 'F<team>'.
+        let mut combined_after = frame_marker.clone();
+        combined_after.extend_from_slice(&new_plus);
+        dispatch_in_room(
+            &mut server,
+            &mut anteroom,
+            0,
+            HwProtocolMessage::EngineMessage(encode(&combined_after)),
+        );
+        assert_eq!(
+            server
+                .room(room_id)
+                .game_info
+                .as_ref()
+                .and_then(|g| g.sync_msg.as_deref()),
+            Some(encode(&new_plus).as_str())
+        );
+
+        let mut resp = Response::new(1);
+        crate::handlers::common::remove_client(
+            &mut server,
+            &mut anteroom,
+            &mut resp,
+            "Ping timeout".to_string(),
+        );
+        let log = &server.room(room_id).game_info.as_ref().unwrap().msg_log;
+        assert_eq!(
+            log,
+            &vec![
+                encode(&frame_marker),
+                encode(&frame_marker),
+                encode(&new_plus),
+                bob_left_msg,
+            ]
+        );
     }
 }
